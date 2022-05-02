@@ -1,0 +1,27 @@
+#列表
+#在python中，用【】中括号表示，用逗号来分格
+Brands=['apple','xiaoMi','huawei','meizu']
+print(Brands)#将会直接显示列表内的所有元素
+#索引是由0开始的，所以可以如下
+print(Brands[0])
+#也可以加上.title()函数
+print(Brands[0].title())
+print(Brands[-1])#python内元素-1为最后的元素
+#便可以使用列表元素来组成句子
+print("my first cell phone was a "+Brands[1].title())
+#修改列表元素
+Brands[0]="Hammer"
+print(Brands)
+#由上可看出，只要定义了列表的元素，就可以改掉某个元素
+#添加元素
+Brands.append('apple')
+print(Brands)
+#用append()函数来加上元素
+Earphones=[]
+Earphones.append('Bose')
+Earphones.append('Sony')
+Earphones.append('senheisei')
+print(Earphones)
+#用insert函数来在特定位置添加元素
+Earphones.insert(0,'Fill')
+print(Earphones)

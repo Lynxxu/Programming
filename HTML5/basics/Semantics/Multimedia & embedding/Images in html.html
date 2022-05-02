@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Images in HTML</title>
+</head>
+<body>
+<h1>
+    Adding Images on a webpage
+</h1>
+<p>
+    加入图片时，我们使用<code>&ltimg&gt</code>来添加图片，使用<code>width</code>，<code>height</code>,以及<code>figure</code>等attribute来改变/添加属性。
+</p>
+<h2>The <code>img</code> tag</h2>
+<p>
+    <code>&ltimg&gt</code>类似<code>a</code>(超链接)，里面也有<code>src</code> attribute代表图片的路径。类似之前提到的，路径可以为网上的absolute URL(不建议，因为会使浏览器做无用功），也可以是电脑内图片路径, 比如我引用"D:\Programming\Imgs\2021121623318.png"会有以下结果：
+    <img src=D:\Programming\Imgs\2021121623318.png>
+</p>
+<h3>Alternative text <code>alt</code></h3>
+<p>
+    <code>img</code>有一个自带的attribute名为<code>alt</code>，这个属性带来的，当某些原因无法正常放出图片时，展示的图片文字描述。这个原因可以是以下几种：
+    <ul>
+        <li>Visually impaired user with <strong>screenreader</strong></li>
+        <li>wrong spelling & path name</li>
+        <li>browser doesn't support displaying image(text only browser)</li>
+        <li>For search engine optimization</li>
+        <li>没流量的倒霉人关了图片显示</li>
+    </ul>
+</p>
+<p>
+    使用alt attribute时，根据图片目的来决定里面究竟该写什么。 比如以装饰性目的的可以留空(建议直接使用<strong>CSS</strong>)，对于含有内容的图片，可以留下一段简短的图片描述，或者直接塞在正文内。对于含有<strong>链接</strong>的图片，在alt内带上链接内容。
+</p>
+<h3>Image width & height</h3>
+<p>
+    HTML内的图片自带有width和height attribute，可以用于调整图片的长宽。如下：
+    <img src=D:\Programming\Imgs\2021121623318.png width="724" height="362" alt="爷和女仆大人">
+    <br>
+    但是我们可以发现，html的图片长宽设置并不好，没有根据页面大小respond等等，建议直接使用CSS
+</p>
+
+<h3>Image titles</h3>
+<p>
+    和链接一样，html可以使用<code>title</code> attribute来展示悬浮窗文字。 但是screenreader并不一定会百分百展示出悬浮窗的内容，所以最好的办法依然是将图片标题带入正文中。
+</p>
+
+<h2>Annotation of images with figures</h2>
+<p>
+    若想给图片加上解释<i>caption</i>，可以使用最原始的办法，也就是在图片下面带上一段话，如<br>
+    <code>
+        &ltdiv class = "figure"&gt<br>
+        &ltimg src = "source.jpg"&gt<br>
+        &ltp&gtcaption&ltp&gt<br>
+        &lt/div&gt<br>
+    </code>
+    但是很明显，这并不会给caption带来semantics，也就是说accessibility有可能无法解读字幕和图片的关系。
+</p>
+<p>
+    为了解决这个问题，我们有<code>&ltfigute&gt</code>和&lt<strong>figcaption</strong>&gt。将以上的代码以figure代替，我们有：<br>
+    <code>
+        &ltfigure&gt<br>
+        &ltimg src = "source.jpg"&gt<br>
+        &ltfigaption&gtcaption&ltfigcaption&gt<br>
+        &lt/figure&gt
+    </code>
+</p>
+<p>
+    figure不一定非得是图片，它可以是一块independent content，占据大块内容，提供关键信息并且有效的解释你的想法，如下:
+    <ul>
+        <li>code snippet</li>
+        <li>audio</li>
+        <li>video</li>
+        <li>table</li>
+    </ul>
+</p>
+<h2>CSS background image</h2>
+<p>
+    前面提到，在html内添加图片的主要目的是解释内容。而对于装饰性的图片，我们使用css来添加。语法如下：<br>
+    <pre>
+        p{
+            background-image: url("yoursourceofimage.jpg");
+        }
+    </pre>
+</p>
+</body>
+</html>

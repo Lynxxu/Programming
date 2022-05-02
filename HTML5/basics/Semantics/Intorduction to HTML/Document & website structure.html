@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Document & Website structure</title>
+</head>
+<body>
+<h1>Document and Website structure</h1>
+    每个网页的样式和版样都不同，但是他们一般都有相似的components，比如header，footer，navi menu等等。
+    <h2>Basic sections of document</h2>
+        <p>
+            基本的文档会有以下几个sections：
+            <dl>
+                <dt><b>header</b></dt>
+                <dd>The big strip across top with heading, logo. tagline etc, this should be same at the same website</dd>
+                <dt><b>navigation bar</b></dt>
+                <dd>导航栏，连接至网站的主页面。一般来说导航栏也会是consistent的.类似网页最上方的几个按钮，比如homepage，contact等等</dd>
+                <dt><b>main conten</b></dt>
+                <dd>主要内容，也就是body部分，可以是文字视频图片等你想展示在页面的内容。</dd>
+                <dt><b>sidebar</b></dt>
+                <dd>相关内容，比如quotes，links等等。一般来说sidebar里面的内容会与main content有关，比如里面提到的新闻，quote的来源等等</dd>
+                <dt><b>footer</b></dt>
+                <dd>页面最下方内容，含有copyright，contact等等，一般会放相同的内容across website但是并不是那么重要。有的时候footer也会帮助SEO（search engine optimization)，也就是帮助浏览器更好的搜索或者爬取内容</dd>
+            </dl>
+        </p>
+    <h2>HTML for structure</h2>
+        <p>
+            如上说的，我们需要使用正确的semantics，每一个大的section都有相对应的几个tags如下：
+            <ul>
+                <li><strong>header:</strong>&ltheader&gt</li>    
+                <li><strong>navigation bar:</strong>&ltnav&gt</li>
+                <li><strong>main content:</strong>&ltmain&gt, 以及content的subsection如&ltarticle&gt, &ltsection&gt, &ltdiv&gt</li>
+                <li><strong>sidebar:</strong>&ltaside&gt, 一般在&ltmain&gt内</li>
+                <li><strong>footer:</strong>&ltfooter&gt</li>
+            </ul>
+        </p>
+
+    <h2>HTML layout specific details</h2>
+        <p>
+            <ul>
+                <li>&ltmain&gt每个web仅有一个，可以有很多subsection，此main应在body内</li>
+                <li>&ltarticle&gt为related content，这一整个content应独立也可以看得懂，比如一个blog post</li>
+                <li>&ltsection&gt与article类似，但是section更类似小标题，将许多parts集合在一起。sections与articles可以被nested。</li>
+                <li>&ltaside&gt为相关联内容，但是并不是直接与内容有关。一般来说类似glossory，authory，related links等等</li>
+                <li>&ltheader&gt代表了开头内容，如果在body内，则是global header，若是在article或section内，则是该section的指定header。</li>
+                <li>&ltnav&gt则是main navigation。Secondary links不会在此内</li>
+                <li>&ltfooter&gt代表了尾部内容</li>
+            </ul>
+        </p>
+
+    <h2>Non semantic wrappers</h2>
+        <p>
+            有的时候我们不需要一个含有semantic意义的tag。比如我想给某个词带<span class="float" title="float definition">float definition</span>或者css以及js赋值。在应对这两种情况时，我们有&ltdiv&gt和&ltspan&gt，分别代表了block和inline level的non-seamantic wrapper。 
+            <div class="example class">而div是一个block level的non-semantic element。 当我们无法想到含有semantic意义的element时再使用。比如一个浮空的购物车，他不是页面的一部分，也不完全和页面有关系，所以<code>aside</code>和<code>section</code>都不能使用</div>
+        </p>
+
+    <h2>Planning a simple website</h2>
+        当设计网页时，我们首先需要设计他的结构，这个过程叫做information architecture
+        <p>
+            <ol>
+                <li>
+                    先注意不变的内容，比如navigation, header和footer, 列下这几个element的内容，比如header可含有title，logo，footer含有copyright，contact，language，accessibility等
+                </li>
+                <li>
+                    规划一下网页的结构，画一个大概的样式，指定每一个block所代表的内容
+                </li>
+                <li>
+                    定一个列表，里面包含了网页内的所有内容（不一定common across page）并将他们分类到subsections
+                </li>
+                <li>
+                    画一个类似思维导图的网页结构，以homepage为首导引到不同的section。
+                </li>
+            </ol>
+        </p>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vector Graphics</title>
+</head>
+<body>
+<h1>Embedding: Vector</h1>
+    This page goes through <b>raster image</b> and <b>Vector Image</b>, 分别对于光栅图和矢量图。<br>
+    Raster image includes png, jpg and gif, which is a representation of image using fixed grid of pixels.<br>
+    Vector Images contains path and shape definition for the image, which the computer will process and render <i>in situ</i>
+<h2>Vector: SVG</h2>
+<p> 
+    SVG为基于XML的矢量图格式，有的人会使用adobe illustrator来制造svg files。SVG的好处是可以一体化，矢量图内的每一个元素（包括文字）都是可以单独拆分并且被搜索到的<i>SEO</i>，并且也可以使用css以及js来进行styling。 
+    <br>但是复杂的svg图像需要很大的储存空间以及渲染时间，并且svg不被老版本浏览器支持，创造svg格式也比光栅图要难很多。
+
+</p>
+<h2>嵌入SVG：<code>img</code></h2>
+<p>
+    插入svg最快的方式为img，与图片类似。<br>
+    <img src="D:/Programming/Imgs/Starsvg.svg" 
+    alt="A hexagonal star with bold blue boundary and green fill"
+    height="87">
+    <br>
+    具体语法与插入普通图片类似，为:<br>
+        <code>
+        &ltimg src="D:/Programming/Imgs/Starsvg.svg" 
+        alt="A hexagonal star with bold blue boundary and green fill"
+        height="87"&gt
+        </code>
+    <p>
+        <b>Pros</b>
+        <ul>
+            <li>快，简单</li>
+            <li>可以将svg当做hyperlink使用，用<code>&lta&gt</code>来生成超链接</li>
+            <li>svg可在浏览器内缓存<i>Cache</i>住，以后再次打开便快速加载</li>
+        </ul>
+        <b>Cons</b>
+        <p>无法使用JS来更改，操作图像。并且需要将css styles内嵌在svg代码内（external reference不起作用）。且不能用CSS pseudoclasses来更改格式</p>
+        </p>
+</p>
+<h3>Troubleshooting, Cross-browser support</h3>
+<p>对于不支持SVG图片的浏览器，可以使用<code>srcset</code> attribute来reference svg图片，支持svg的浏览器将会从srcset来提取，而不支持的可以使用原本的png格式。具体操作详见<a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Adding_vector_graphics_to_the_Web#troubleshooting_and_cross-browser_support">MDN</a></p>
+<h2>Inline SVG</h2>
+<p>因为svg类似markup langague，不一定非要external ref，可以在html文件内inline defined。确保svg图片由&ltsvg&gt和&lt/svg&gt tag开头/结尾。<br>
+<svg version="1.1"
+     baseProfile="full"
+     width="300" height="200"
+     xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="black" />
+  <circle cx="150" cy="100" r="90" fill="blue" />
+</svg>
+</p>
+<p>
+    Pros
+    <ul>
+        <li>将svg设为inline可以节省一次http请求，加快加载速度</li>
+        <li>可以对svg图片添加属性以及id <code>class, id</code>。因此css可以操作svg图片</li>
+        <li>inline svg是唯一能使用css交互的svg嵌入方法</li>
+        <li>可以对svg图片使用超链接</li>
+    </ul>
+    Cons
+    <ul>
+        <li>若在多出使用了同一个svg，浏览器会加载多次，比较浪费资源</li>
+        <li>Inline svg会增加html文件的大小</li>
+        <li>不像普通图片，inline svg在每次html加载都会重复一次，因此并不会缓存下来，以后也不会快多少</li>
+        <li>若遇到不支持的浏览器，的确可以使用<code>&ltforeignObject&gt</code>来生成fallback image，但是即使是支持svg的浏览器仍会下载fallback image，产生资源浪费</li>
+    </ul>
+<p>另外，还有使用<code>Iframe</code>嵌入svg的方法，但是不推荐使用因为<br>1.iframe的fallback mechanism不完整，不能针对svg的fallback生成image。<br>2. 除非svg及网页拥有相同的来源，不然也不能使用JS操作svg</p>
+</p>
+</body>
+</html>

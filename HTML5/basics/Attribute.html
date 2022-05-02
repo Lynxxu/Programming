@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Attribute</title>
+</head>
+
+<body>
+<p><h1>Attribute</h1>
+    <h2>Definition:</h2>
+    Attribute为element的additional properties.比如&ltimg src ="路径"&gt内的src="路径"就是attribute name pair。下面我将展示一张阿符睡觉的图片并且设为的1920 x 960的长宽比,并且在无法展示时展示“阿符睡觉”的字样</p>
+    
+    <img src="D:\Programming\Imgs\阿符睡觉.jpg" width="960" height="1920" alt="阿符睡觉">
+
+    <p>代码为：&ltimg src="D:\Programming\Imgs\阿符睡觉.jpg" width="960" height="1920" alt="阿符睡觉"&gt，这里就有4个attribute分别代表图源，宽长和alternative display（即图片消失时展示的） </p>
+
+    <p>也有一些只有name的attribute，一般称为<b>Boolean attribute</b>，比如input，可以作出各种各样的responsives, 比如设置checkbox默认勾选等等:<br>
+    checkbox checked <input type="checkbox" checked><br>
+    input box required <input type="email" required><br>
+    disabled submit button <input type="submit" disabled><br>
+    readonly text input <input type="text" value= "readonly" readonly><br>
+    </p>
+
+    <p><h2>General purpose attribute/global attribute</h2>
+        也有部分attribute为全局的，也就是不论什么element都可以用，比如:</p>
+    <p>id attribute,类似给一个变量，全局有且只能有一个，代表了一个element的unique identifier</p>
+    <p>还有class，这个就和py等语言的class一样，可以套用在多个element内，注意，一般来说class和id都要存在header内</p>
+    <p>以及title,这里说的title是指element的title，可以将鼠标指针附在上面后浮出字样类似<b title="我爱小识">这样</b></p>
+    <p>Style 则是和css有关的，设置元素的风格，比如色彩，字体，border等等，比如<b style="color:blue">这句话就使用了style</b></p>
+</body>
+</html>

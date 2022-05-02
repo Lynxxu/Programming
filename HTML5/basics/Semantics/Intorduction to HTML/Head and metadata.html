@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <html lang="en-US">
+    <!--  Enable this for CSS stylesheet and JavaScript
+    <link rel="stylesheet" href="D:\Programming\HTML5\basics\Semantics\file\style.css">
+    <script src="D:\Programming\HTML5\basics\Semantics\file\script.js" defer></script>
+    -->
+    <meta name="description" content="This page illustrates the head and metadata of HTML">
+    <meta name="author" content="Xiangbo Xu">
+    <link rel="icon" type="favicon.ico" href="1st_favicon.ico">
+    <title>Head and metadata</title>
+</head>
+<body>
+    <h1>Head and metadata</h1>
+    <p><h2>Head</h2>
+        Head is the content of %lthead%gt element, it is not displayed on the page. It contains the <b title="Data that describe other data">metadata</b> of the document. 
+    </p><br>
+    <p><h2>Metadata in head</h2>
+        <b>Title:</b> There are two titles in a HTML document. One stands for the title as a metadata(in the head), which shows the title as the name for the tab. Another title is the title attribute in element, it shows the content when cursor is on the item.<br> <br>
+        <b>Meta element:</b> The meta element offers us a way to add metadata into a document. For example the &ltmeta charset="utf-8"&gt element specifies the character encoding of the document. 当我输入像中文等语言时，因为utf8内包含了他，我们才不会得到一堆乱码，日本語は同じです。
+    </p><br>
+    <p><h2>Some examples of meta data</h2>
+        许多meta元素包含了name和content的attribute.<b>name</b>代表的是metadata的种类，包含了什么信息。<b>content</b>则是actual metadata。<br>
+        当我们写description时，description其实是包含在了搜索引擎界面的，具体见<a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/The_head_metadata_in_HTML#adding_an_author_and_description" title="MDN">MDN website</a>
+    <h3>Other metadata</h3>
+        一个site肯定还有其他的metadata。比如我分享某个页面到qq或者其他social media上面，那个页面肯定不只是一个网址，而是一个包含了网页，简介的精美链接。这便也是一种metadata。 facebook和twitter均有他们自己的proprietary metada protocol.</p>
+    <p><h3>Adding icons to the site</h3>
+        当我们创建网页时，可以选择一个favicon(favorite icon)也就是收藏夹里面的图标。 <br>
+        加入favicon的方式是：将icon存在html的相同目录，使用以下代码加入html内:<br>
+        &ltlink rel="icon" href="favicon.ico(icon名）" type="image/x-icon"&gt</p>
+    <p><h3>Setting primary language for the page</h3>
+        <span lang="zh">可以给页面设置主要语言，设置主要语言可以使得搜索引擎更有效的找到并display你的页面，当然，也可以设置subsection语言，比如这个文档有中日英三语，可以设置两个subsection<br><br>
+
+        主语言将在head里面使用&lthtml lang="en-US"&gt元素，而subsection则可以加入&ltspan lang = "zh"&gt这是中文&lt/span&gt来穿插其他语言，这里语言代码使用的是<a href="https://en.wikipedia.org/wiki/ISO_639-1">ISO 639-1</a>标准</span></p>
+    <p><h2>CSS and Javascript in HTML</h2></p>
+        在HTML内，我们会使用CSS来装饰页面，用javascript带来交互元素。而这两个都将在head内加入。<br>
+        <b>CSS</b>将使用&ltlink&gt加入，类似&ltlink rel="stylesheet" href="my-css-file.css"&gt。link元素必须在head内，两个attribute各代表了link的类型（stylesheet）和其路径<br><br>
+        <b>Javascript</b>将使用&ltscript&gt加入，并且也在head内。而script有两个attribute，一个是src，代表JS的文件路径。另一个则是defer，Boolean attribute，他使浏览器延后解析JavaScript文件（等html全parsing完）以避免奇奇怪怪的error。代码为：&ltscript scr="my-js-file.js" defer&gt &lt/script&gt<br>
+        具体加入的方式可见本文档源码上方注释所disable的内容
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Video & audio</title>
+</head>
+<body>
+<h1>Video and audio on web</h1>
+<p>
+    很久以前，HTML没有自带的video tag，所以人们需要Flash等等。但是现在HTML自带有<code>video</code>和<code>audio</code> tag。JS也可以控制他们*不深入讲这个
+</p>
+<h2>Video element</h2>
+
+简单的<code>video</code> tag，语法如下：<br>
+<pre>
+    &ltvideo src="maid.mp3" controls&gt
+        &ltp&gt Your browerser does not support HTML5 video, here's a &lta href="link.com"&gtlink&lta&gt to the video
+    &lt/video&gt
+</pre>
+具体解释如下：
+<dl>
+    <dt>src</dt>
+    <dd>类似<code>img</code>，src即路径</dd>
+    <dt>controls</dt>
+    <dd>这个是html自带的控制视频attribute，使用户可以控制视频快进/退/暂停/音量等。也可以自己写JS的API界面，反正不论如何得有一个interface</dd>
+    <dt>video tag内的p段落</dt>
+    <dd>称为<strong>fallback content</strong>，也就是当网页无法解析html录像时提供的语句。一般来说会留下另一个获得视频内容的方式，比如direct link</dd>
+</dl>
+<p>
+    一个以以上语法写出的embedded video会类似下面:
+    <video controls width="798">
+        <source src="D:\Programming\HTML5\basics\Semantics\file\Genshin 2022-01-12 19-17-48.mp4" type="video/mp4">
+        <p>Your browser does not support HTML embedded video, please refer to <a href="www.acron.utoronto.ca">here</a> for a direct link</p>
+    </video>
+</p>
+<h3>Inserting multiple sources of media</h3>
+<p>
+    视频有很多种编码形式，而我上面的视频是MP3格式。许多老浏览器无法支持某种编码格式，所以一般来说要插入多种格式的多媒体文件。
+</p>
+<h4>contents of media file</h4>
+<p>
+    类似MP3，MP4，WebM等格式被称为<strong>container formats</strong>, 以webM举例，其可以包含音轨(audio track)，视频内容(video tracks)及字幕(text track), 其中不一定只包含一种，比如可以有多个音轨代表不同语言的电影。
+</p>
+<p>
+    当我们谈论MP3，FLAC，H.264等等格式时，其实他们代表的是一种编码器(Codec)。上文提到的container format则包含了特定编码的音视频文件如下：
+    <ul>
+        <li>WebM: 包含Vorbis/Opus音频，VP8/VP9视频文件，绝大多数现代浏览器均支持</li>
+        <li>MP4: 打包AAC/MP3音频和H.264视频文件，基本上均支持</li>
+        <li>Ogg: 使用Vorbis音频和Theora视频文件，一般使用在Firefox和Chrome浏览器上。目前基本被WebM代替</li>
+    </ul>
+</p>
+<p>
+    有一些特殊的编码是不需要存在container内的，比如FLAC就以单独的FLAC编码存在。有趣的是MP3其实全称为MPEG-1 Audio Layer III，也就是存在MPEG或MPEG2 container内的音轨文件。但是即使绝大部分浏览器不支持MPEG格式，他们却均可以支持MP3格式。
+</p>
+<h4>Media files support</h4>
+<p>
+    <i>前情提要：因为MP3，H.264等格式被专利所保护，浏览器使用此类解码器需要付很多钱。而为了少花点钱，很多人/浏览器使用开源解码器</i>
+</p>
+<p>
+    一般来说，用户会使用各种奇奇怪怪的浏览器，若想要媒体文件被百分百播放，一般需要提供多种不同格式的文件。具体详见<a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Video_and_audio_content">MDN</a>
+</p>
+<p>
+    若想在html内加入多个不同编码的视频，需要<code>src</code>以及<code>type</code> attribute来添加。src就不提了，<code>type</code> attribute需要填入<a href = "https://developer.mozilla.org/en-US/docs/Glossary/MIME_type">MIME</a>文件格式名，比如MP4就应该是type="video/mp4"。
+</p>
+
+<h3>Extra video attributes</h3>
+<p>除了以上提到的<code>src</code>,<code>controls</code>,<code>type</code>等等，还有以下的格式：</p>
+<dl>
+    <dt>width and height</dt>
+    <dd>即视频窗口的长宽，也可以使用CSS来改动。注意需要保持正确的<strong>aspect ratio</strong>，即长宽比例，若比例不对，将会自动使用纯色填满</dd>
+    <dt>autoplay</dt>
+    <dd>as name suggests，页面还在加载时就自动播放视频（建议不用，很烦人）</dd>
+    <dt>loop</dt>
+    <dd>自动循环播放，建议不要</dd>
+    <dt>muted</dt>
+    <dd>播放视频时自动静音</dd>
+    <dt>poster</dt>
+    <dd>视频封面，暂停时是不会播放的</dd>
+    <dt>preload</dt>
+    <dd>用于缓冲大文件，可以有三个值
+        <ul>
+            <li><code>none</code>不缓冲</li>
+            <li><code>auto</code>自动缓冲</li>
+            <li><code>metadata</code>仅缓冲元数据，类似视频标题，时间，等等其他数据</li>
+        </ul>
+    </dd>
+</dl>
+<h3>audio</h3>
+<p>和<code>video</code>元素一模一样，除了<code>width/height</code>,<code>poster</code>这俩attribute不能用外。语法如下：</p>
+<pre>
+<audio controls title="Black：Magnam">
+  <source src="D:\Ω\Extra songs\Tracks\Black：Magnam.mp3" type="audio/mp3">
+  <source src="viper.ogg" type="audio/ogg">
+  <p>Your browser doesn't support HTML5 audio. Here is a <a href="viper.mp3">link to the audio</a> instead.</p>
+</audio>
+</pre>
+
+<h3>Display video text tracks</h3>
+<p>
+    video text track，即transcript，caption，字幕。一般因各种原因加入，比如懒得听声音，听力障碍，语言字幕等等。加入video text track的元素为<code>track</code>元素和<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API">WebVTT</a>字幕文件
+</p>
+<p>
+    WebVTT的格式具体就不讲了，但是需要知道vtt格式有以下三种类型：
+    <dl>
+        <dt><strong>subtitles</strong></dt>
+        <dd>外语翻译</dd>
+        <dt><strong>captions</strong></dt>
+        <dd>Transcript，传统意义的字幕</dd>
+        <dt><strong>timed description</strong></dt>
+        <dd>类似额外补充信息，补充给看不了视频的人听</dd>
+    </dl>
+</p>
+<p>
+    使用<code>track</code>元素时，将其放在vide元素内，source元素后面，并且使用<code>kind</code> attribute来指定vtt类型。使用<code>srclang</code>以及<code>label</code> attribute来指定字幕格式的语言，第一个指代给浏览器，告诉浏览器具体语言。第二个则是告诉reader
+</p>
+</body>
+</html>

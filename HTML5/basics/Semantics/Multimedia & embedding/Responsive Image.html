@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Responsive images</title>
+    <style>
+          img {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+      }
+    </style>
+</head>
+<body>
+<h1>Responsive image</h1>
+    <br>Take a look at this <a href="https://mdn.github.io/learning-area/html/multimedia-and-embedding/responsive-images/not-responsive.html">website</a>. The image at header is responsive because it will change with the web size. However, the image in the content page is not responsive, that is to say, the image will shrink as the page is decreasing and thus makes the face unclear. Note that 随页面缩小的效果。body内容的最大宽度以及centering header为CSS style带来的。
+<h2>History and informations</h2>
+<p>
+    The problem of wanting to show differently cropped image to server different layout of devices is known as the <b>Art Direction problem</b>
+</p>
+<p>
+    Another problem is known as <b>resolution switching problem</b>, this is how we wish to embed different images to different devices with resolution difference. A possible way to solve the problem is using vector image, which is definitely true <i>to an extent</i>, it can be used for logos, simple patterns and other simple display elements. However, it can not be applied to photos and other complex images.
+</p>
+<h2>Creating responsive images</h2>
+<p>
+    <i>This section is only the method of creating responsive images via HTML method and <code>img</code> elements. There are better methods of optimization via CSS</i><br></p>
+<h3>Resolution switching: different size</h3>
+<p>
+    The two new attributes - <code>srcset</code> and <code>sizes</code> are used for creating responsive images:<br>
+    <code>srcset</code> defines the set of images that the browser will choose to display. It requires a file name (Noelle_to_wadashi.png), followed by the intrinsic width, (2048w),以及另外一个，此处define的为切换的像素大小。
+    <img srcset="../file/2021121623254.png 2048w,
+                 ../file/2021121623254-reduced.png 724w"
+         sizes="(max-width:1024px) 724px, 2048px" 
+         src="../file/2021121623254.png">
+</p>
+<p>
+    以上诺艾尔与爷的图片，在view port为1024px时会自动改变像素，具体语法如下：
+    <pre>
+    &ltimg srcset="../file/2021121623254.png 2048w,
+                   ../file/2021121623254-reduced.png 724w"
+           sizes="(max-width:1024px) 724px, 2048px" 
+           src="../file/2021121623254.png"&gt
+    </pre>
+    其中，srcset是两个不同size的图片，第一个是2048像素，第二个是724w。而sizes内的<code>(max-width:1024px)</code>便是探测viewport的尺寸，当尺寸大于1024时，自动放出2048px的图片，小于1024时放出724px的图片，由此解决resolution switching problem。<i>改变图片大小</i>
+</p>
+<h3>Resolution switching: Same size</h3>
+    <p>
+        与上个办法相反，此办法使用多个不同尺寸的图片，然后根据屏幕resolution来切换图片。比如下面的图片，若在1080p的屏幕上显示，则会显示出724px的图片。但是若切换至2k屏幕（比如我手机），则将会自动显示2倍像素的图片（原图）
+        <img srcset="../file/2021121623254-reduced.png,
+                     ../file/2021121623254.png 2x"
+             src="../file/2021121623254.png"
+             alt="万能maid">
+    </p>
+    <p>
+        以上的语法为
+    <pre>
+    &ltimg srcset="../file/2021121623254-reduced.png,
+                   ../file/2021121623254.png 2x"
+           src="../file/2021121623254.png"
+           alt="万能maid"&gt
+    </pre>
+        其中，<code>srcset</code>一样提供的是不同文件的路径，而第二个文件后面的<code>2x</code>告诉浏览器，当resolution是原图的两倍时，选择第二个文件。当浏览器不支持srcset时，将直接显示src原图
+    </p>
+<h3>Art Direction Problem</h3>
+    <p>
+        使用<code>&ltpicture&gt</code> wrapper来解决<i>art direction problem</i>
+        <picture>
+            <source media="(max-width: 1024px)"
+            srcset="../file/83622913-cropped.jpg">
+            <source media="(min-width:1025px)"
+            srcset="../file/83622913.jpg">
+            <img src="../file/83622913.jpg" alt="Fuhua">
+        </picture>
+    </p>
+    <p>
+        上面的图片在1024和1025px时会自动切换到剪切过的图片。语法如下：
+        <pre>
+        &ltpicture&gt
+            &ltsource media="(max-width: 1024px)"
+            srcset="../file/83622913-cropped.jpg"&gt
+            &ltsource media="(min-width:1025px)"
+            srcset="../file/83622913.jpg"&gt
+            &ltimg src="../file/83622913.jpg" alt="Fuhua"&gt
+        &lt/picture&gt
+        </pre>
+        此处使用的source element有自带的<code>media</code> attribute，而当media括号内的判断为真，则将会自动切换至该source内的图片展示。第一个media="(max-width: 1024px) 便是判断是不是超过了1024px，若没超过，则展示cropped image。 相反，超过了，则是第二个source为真，展示原图。 注意必须要加<code>img</code> element，不然无法正常显示图片
+    </p>
+    <h3>Why not CSS or JS?</h3>
+    <p>
+        当浏览器开始加载页面时，它会下载JS和CSS所需要的图片以及其他资源。一般来说这种机制可以减少加载时间，但是对于responsive images就不行了：你不能先加载图片，再detect viewport width。 如果要达成目的的话，需要将不同source的图片一起下载，然后据情况展示（not desired）
+    </p>
+</body>
+</html>                  

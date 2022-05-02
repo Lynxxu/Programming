@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="minimal-table.css" rel="stylesheet" type="text/css">
+        <style>
+            tbody {
+              font-size: 95%;
+              font-style: italic;
+            }
+
+            tfoot {
+              font-weight: bold;
+            }
+        </style>
+        <title>Table advanced features & accessibility</title>
+    </head>
+    <body>
+        <h1>HTML Tables: advanced features and accessibility</h1>
+        <p>
+            这个文档将会介绍更多html的tags，比如captions，groups等等，以及accessibility应用
+        </p>
+            <h2>Adding caption to the table</h2>
+            <p>
+                <table>
+                    <caption>This table lists all seven countries on Teyvat, fictional world in Genshin Impact</caption>
+                    <tr>
+                        <th scope="col">Teyvat countries and people</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mondstadt</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Liyue</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Inazuma</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Sumerur</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Fotaine</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Natlan</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Snezhnaya</th>
+                    </tr>
+                </table>
+            </p>
+            <p>
+                在表格上面的一串文字便是caption，提供该表格的简短描述。注意其有semantics meaning，所以对accessibility有好处。
+            </p>
+        <h2>Structural Definition with tables</h2>
+        <p>
+            使用<code>&ltthead&gt</code> <code>&lttfoot&gt</code> and <code>&lttbody&gt</code>来markup header，footer以及body section，这些elements并没有semantics意义，也没有accessiblility的意义，但是可以在css styling的时候很有用（act as hook when using as long tables that requires heading fixed at top)
+        </p>
+        <p>
+            使用方法：将thead设为第一个wrapper，放在col/colgroup（如果有)内。然后使用tfood当作第二个wrapper，包含footer的info。最后使用tbody element，包含其他parts。 注意<i>tbody</i>会implicitly defined如果code内没有使用，
+        </p>
+        <p>
+            看以下表格，没有使用tbody，thead和tfoot三个element，导致table缺少结构，使用以上三个element可以使得整个表格更加有序
+        </p>
+        <table>
+            <caption>How I chose to spend my money</caption>
+              <tr>
+                <th>Purchase</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Evaluation</th>
+                <th>Cost (€)</th>
+              </tr>
+              <tr>
+                <td>SUM</td>
+                <td>118</td>
+              </tr>
+              <tr>
+                <td>Haircut</td>
+                <td>Hairdresser</td>
+                <td>12/09</td>
+                <td>Great idea</td>
+                <td>30</td>
+              </tr>
+              <tr>
+                <td>Lasagna</td>
+                <td>Restaurant</td>
+                <td>12/09</td>
+                <td>Regrets</td>
+                <td>18</td>
+              </tr>
+              <tr>
+                <td>Shoes</td>
+                <td>Shoeshop</td>
+                <td>13/09</td>
+                <td>Big regrets</td>
+                <td>65</td>
+              </tr>
+              <tr>
+                <td>Toothpaste</td>
+                <td>Supermarket</td>
+                <td>13/09</td>
+                <td>Good</td>
+                <td>5</td>
+              </tr>
+        </table>
+
+        <table>
+            <caption>How I chose to spend my money, optimized</caption>
+            <thead>
+              <tr>
+                <th>Purchase</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Evaluation</th>
+                <th>Cost (€)</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td colspan="4">SUM</td>
+                <td>118</td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr>
+                <td>Haircut</td>
+                <td>Hairdresser</td>
+                <td>12/09</td>
+                <td>Great idea</td>
+                <td>30</td>
+              </tr>
+              <tr>
+                <td>Lasagna</td>
+                <td>Restaurant</td>
+                <td>12/09</td>
+                <td>Regrets</td>
+                <td>18</td>
+              </tr>
+              <tr>
+                <td>Shoes</td>
+                <td>Shoeshop</td>
+                <td>13/09</td>
+                <td>Big regrets</td>
+                <td>65</td>
+              </tr>
+              <tr>
+                <td>Toothpaste</td>
+                <td>Supermarket</td>
+                <td>13/09</td>
+                <td>Good</td>
+                <td>5</td>
+              </tr>
+          </tbody>
+        </table>
+        <p>
+            以上两个表格的不同就体现了structure element的重要性，并且，当使用css stydling时，可以针对header，footer以及别的table structure进行specific styling。因此表格结构元素极其重要
+        </p>
+        <h2>Nesting tables</h2>
+        <p>
+            可以在表格内创建表格-嵌套表。使用table element内再嵌入table element，但是一般不建议这样使用，因为会带来accessibility issue以及confusion
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">Mihoyo games</th>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <caption>Honkai series</caption>
+                        <tr>
+                            <td>Honkai impact</td>
+                            <td>Genshin impact</td>
+                            <td>Honkai II</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Tears of Themis</td>
+            </tr>
+        </table>
+        <h2>Accessibility & Tables</h2>
+        <p>
+            表格十分实用，前提是你看得见。但是对于使用screenreader的accessible用户，依然有办法能够使他们获得更加良好的体验。
+        </p>
+            <h3>使用Column/row headers</h3>
+            <p>
+                使用row/column header之后，screenreader用户可以看得出来每个cell和header之间的联系，前提是headers是使用&ltth&gt写出来的，具有semantics意义的header
+            </p>
+            <h3>使用Scope attribute</h3>
+            <p>
+                使用<code>scope</code> attribute在table header内，可以使screenreader理解表格的结构。<br>
+                scope有几个value： <code>col</code>，<code>row</code>，<code>rowgroup</code>，<code>colgroup</code>，对应column，header以及他们的group（类似多个subheading的heading）
+            </p>
+            <h3>使用id， header attribute</h3>
+            <p>
+                类似scope，可以给每一个header指定一个id，每个cell指定一个header。类似<code> &lttd headers="cost primogen"&gt160&lt/td&gt</code> 以及<code>&ltth id="game"&gtPurchase&lt/th&gt</code>。这种方法非常精确，但是很耗时间写，并且写完后不易更改。建议使用scope
+            </p>
+    </body>
+    </html>

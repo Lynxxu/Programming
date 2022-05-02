@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style> iframe { border: none } </style>
+    <title>Other embedding tech</title>
+</head>
+<body>
+<h1>Other embedding technologies</h1>
+除了图片，视频，音频等，还可以使用如<code>iframe</code>,<code>embed</code>,<code>obejct</code>来添加其他东西，比如pdf，svg，甚至flash
+
+<h2>Embedding Background knowlegde</h2>
+<p>
+    很早以前，<strong>frames</strong>非常受欢迎，其为网页的小部分。frames被存在<strong>frameset</strong>内，frameset类似一个主网页（master document）定义了每一个part在页面的所在位置。在当时网速并没有那么块，小块内容的确可以加快加载速度，但是到了现在差不多就被淘汰了
+</p>
+<p>
+    21世纪初期，类似Java applets, Flash之类的插件十分流行，这些插件使得插入视频动画在网页内变得可能。使用这种插件的办法有<code>object</code>和没那么多人用的<code>embed</code>，不过到了今日，结合前几天chrome停止支持flash新闻就知道，flash等插件已经块outdated了
+</p>
+<p>
+    最后, 到了现在，<code><strong>iframe</strong></code>以及许多嵌入元素(<code>canvas</code>, <code>video</code>)等等。这些元素甚至可以直接在网页内嵌入另一个网页，现在用的很多。
+</p>
+
+<h2>iframes</h2>
+<p>首先可以了解一下，嵌入油管视频和google map的方式:从视频/所需分享页面找到embed。直接copy paste，如下：</p>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.2361672958286!2d-79.39785467629109!3d43.664057906471456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34b8f331fd9b%3A0x8d1d9bb6765a76f7!2sUniversity%20of%20Toronto%20-%20St.%20George%20Campus!5e0!3m2!1sen!2sca!4v1642306973510!5m2!1sen!2sca" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+</iframe>
+<!--油管share
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/UPICfwDirEY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
+-->
+<p>而iframe，由于可以任意嵌入其他网页的document，十分方便。但是其有安全问题,在此暂且不提。<code>&ltifrmes&gt</code>的example code如下：</p>
+<pre>
+&ltiframe src="https://developer.mozilla.org/en-US/docs/Glossary"
+        width="100%" height="500" allowfullscreen sandbox&gt
+    &ltp&gt
+      &lta href="/en-US/docs/Glossary"&gt
+         Fallback link for browsers that don't support iframes
+    &lt/a&gt
+    &lt/p&gt
+&lt/iframe&gt
+</pre>
+<ul>
+    <li><code>border: none</code>：不设置任何边界(最好不要边界)</li>
+    <li><code>allowfullscreen</code>：设置后，可以使得iframe全屏，需要Fullscreen API</li>
+    <li><code>sandbox</code>:下章节细讲，用于</li>
+</ul>
+<h3>Security concerns</h3>
+很多黑客<strong>hacker,crackers</strong>会以iframes为目标(<strong>attack vector</strong>)来恶意篡改网页，泄露敏感信息等等。以下是一些加强安全性的方法：
+<h4>Embed when necessary</h4>
+<p>简单来说就是少嵌入第三方信息，部分原因是因为安全原因，还有的是知识版权问题。绝大部分图片以及网上的内容皆有版权。若网页内容被licensed，则必须要根据license的方式来引用</p>
+<h4>使用HTTPS</h4>
+<p>HTTPS为加密后的HTTP，尽量使用HTTPS因为其减少了信息<strong>传输期间</strong>被解密的可能，且可以封上通过嵌入内容来获取母文档的可能性</p>
+<p>打开HTTPS需要安装特殊的安全证书，但是很多主机提供商会直接给你准备好</p>
+
+<h4>使用<code>sandbox</code>attribute</h3>
+<p>请给予你的嵌入内容仅限于他职责所在的权限。这样子黑客无法对此frame之外的内容动手动脚，这个办法则是<code>sandbox</code>属性。必要时可以在后面加上sandbox可给予的属性权限</p>
+
+<h2>Embed与object</h2>
+<p>
+    iframe提供的是嵌入其他网页内容的方式，而<code>embed</code>和<code>object</code>则是其他内容，比如pdf等等
+</p>
+<p>但是一般来说这俩是不太会用到的，这些其他内容一般都是提供陪外部链接的。以前这俩元素还可以用于辅助外部插件如flash，但是现在以及过时了。具体的应用方法请见<a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Other_embedding_technologies">MDN</a></p>
+</body>
+</html>

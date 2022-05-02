@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta lang="en-US">
+    <meta name="author" content="Xiangbo Xu">
+    <title>HTML Text fundamentals</title>
+</head>
+<body>
+<h1>Text fundamentals</h1>
+    <p><h2>Heading & paragraph</h2>
+        像以前提到过的，heading由&lth1&gt到&lth6&gt共有六个大小。段落则使用&ltp&gt来定义。使用heading与paragraphs可以带来良好的structure，记住使用hierarchy of structure（比如先用h1，然后h2)<br>
+        良好的struture可以帮助浏览器index你的网页，也可以使serach engine更快找到相关内容。CSS与JS也会与良好struture相得益彰，当然，最重要的还是严谨的结构让读者看的更舒服更有效
+    </p>
+    <p><h2>Lists</h2>
+        使用html做出一个列表：
+        <h3>Unordered无序列表</h3>
+            使用&ltul&gt和&lt/ul&gt来define无序列表。列表内的元素使用&ltli&gt&lt/li&gt隔开，比如以下列表<br>
+            Genshin GEO characters:
+            <ul>
+                <li>Noelle</li>
+                <li>Gorou</li>
+                <li>Zhongli</li>
+                <li>Albedo</li>
+            </ul>
+            其对应代码为：<br>
+            &ltul&gt<br>
+            &ltli&gtNoelle&lt/li&gt<br>
+            &ltli&gtGotou&lt/li&gt<br>
+            ....<br>
+            &lt/ul&gt</p>
+        <p><h3>Ordered有序列表</h3>
+            有序列表，类似无序，为ordered list&ltol&gt，使用方法和无序列表<b>完全相同</b>，例如以下列表：<br><br>
+            Chicken tofu recipe:
+            <ol>
+                <li>Prepare all the ingredients</li>
+                <li>Warm up the oil on a pan</li>
+                <li>fry the tofu until it gets golden and hard</li>
+                <li>put tofu to another separate container for later use</li>
+                <li>stir fry chicken until it turns white</li>
+                <li>Add all the flavoring and spice, add tofu</li>
+                <li>stir fry untill scent are diffused</li>
+                <li>add water to the amount that just covers the food and let it boil until no water left</li>
+                <li>congrats, you have a perfect tofu chicken</li>
+            </ol></p>
+    <h3>Nested list</h3>
+    <p>当然也可以有nested list，只需要在所需分点的item处再加入&ltul&gt即可,比如：<br><br>
+    Provinces and theri universities:
+    <ul>
+        <li>Ontario</li> 
+            <ul>
+                <li>U of T</li>
+                <li>McMaster uni</li>
+                <li>Uni of Queens</li>
+            </ul>
+        <li>BC</li>
+            <ul>
+                <li>UBC</li>
+                <li>Simon Frasfer Uni</li>
+            </ul>
+    </ul></p>
+    <p><h2>Emphasis强调体</h2>
+    想要强调某个词，某句话时，可以使用underline，bold，italics，stress等等。在HTML内，这些都能通过某些tag实现
+    <h3>Emphasis</h3>
+        Emphasis在html内为重读的表现，使用&ltem&gt实现，类似<em>斜体</em>。但注意<em>不要</em>为了斜体的目的而使用&ltem&gt。因为此类emphasis可能带有讽刺意味。若需要斜体，可以使用&ltspan&gt或者css
+    <h3>Strong importance</h3>
+        类似上面，但没有讽刺意味，仅强调。此类强调使用黑体，用&ltstrong&gt实现，类似emphasis, <strong>不要</strong>为了黑体而使用strong tag，因为screen reader等会有不同的解读。可以使用&ltb&gt或者css来实现黑体
+    <h3>Italics, etc with<strong>less</strong> semantics</h3>
+        之前讲到的&ltem&gt和&ltstrong&gt均含有semantics意义（即有强调或改变语义的可能，而不是一个空的tag）<br><br>
+        但是，在HTML5内，还有&lti&gt, &ltb&gt和&ltu&gt，分别代表了<i>斜体</i>, <b>粗体</b>和<u>下划线</u>。 在HTML5之前他们均不包含semantics意义，但是目前的建议是，在没有其他选择时在使用他们。
+        <ul>
+            <li>&lti&gt代表的为传统意大利斜体：外来词，分类词（taxonomic），专业词汇，想法等</li>
+            <li>&ltb&gt代表的为黑体传统：关键词，产品名，leading sentence等</li>
+            <li>&ltu&gt则是下划线, 用于proper name，错误拼写等（目前建议<strong>只用于external link)</strong></li>
+        </ul>
+    </p>
+
+
+</body>
+</html>

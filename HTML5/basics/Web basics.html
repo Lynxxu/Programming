@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>How the Web works</title>
+</head>
+<body>
+    <h1>网页的基本原理</h1>
+    <h2>客户端与服务端</h2>
+        <p>连上网的电脑有客户端client和服务端server之分，客户端的电脑发出request，而server则是发出回应，将webpage送到client处</p><br>
+    <h2>客户端与服务端的“桥梁”</h2>
+        <p>除了客户端和服务端外，我们还需要：<br>
+            <b>Internet connection:</b> 将设备链接并传输数据<br>
+            <b>TCP/IP:</b> Transmission Control Protocol and Internet Protocol, 他们为传输协议，定义数据传输方式的，即一种transport mechanism<br>
+            <b>DNS:</b>Domain Name Servers:即网站的域名，可以理解为地址，当我们将网址输入浏览器时，浏览器会先找到网站的域名，然后才能传输HTTP数据。<br>
+            <b>HTTP:</b>Hypertext Transfer Protocol，超文本传输协议，定义了客户端和服务端交流语言<br>
+            <b>Component files:</b>分为code files和assets，code file为网站的编程骨架，比如HTML，CSS，JavaScript等。而asset则是其他资源，比如图片，音乐，pdf文件等等<br>
+        </p>
+        <br>
+    <h2 id="Web procedures">具体流程</h2>
+        <p>
+        1. 浏览器连上DNS，找到服务器的地址<br>
+        2. 浏览器发送HTTP需求给服务器，要求服务器发送一份网站给客户端，这份网站，以及其他有关数据，均使用TCP/IP协议经过网络传输<br>
+        3. 服务器同意请求后，发送一个“200 OK”给客户端。服务器然后将网页的文件以小文件形式发出（称为data packets<br>
+        4. 浏览器将data packets组装成网页</p>
+        <p><b>解析Parsing:</b><br>
+            当HTML文件被传送到浏览器，浏览器需要解析(parse)并载入文件，而顺序如下：<br>
+            1. 解析HTML文件，让其认出一些CSS的external stylesheet link或者scripts<br>
+            2. 解析HTML时，浏览器要求客户端传送在link或script文件内所需的CSS JavaScript 文件，然后解析他们<br>
+            3. 浏览器生成一个in memory DOM tree（Document Object Model,将网页和scripts或者编程语言链接，生成一个tree of objects，包含许多node和每一个元素。 在记忆内生成CSS object model(CSS object的API)<br>
+            </p>
+            <br>
+    <h2>DNS and packets:</h2>
+        <p><b>DNS：</b>
+            真正的域名其实是几个随机的数字，称为IP address，他们代表了网页的独特地址，但是不好记住，所以人们发明了DNS Domain name server，类似www.baidu.com，此为DNS，但是对应的是ip地址，当然，也可以直接输入ip地址进行链接<br><br>
+        <b>packets:</b>
+            当传输数据时，数据被分为了几千几万块的小数据，如果在传输过程中有数据丢失，小文件更容易重新传输。并且小文件使网站可以处理多用户的同时下载请求，如果是单个大文件，只有一个用户可以下载
+        </p>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Xiangbo Xu">
+    <title>Hyperlinks</title>
+</head>
+<body>
+<h1 id="Heading">Hyperlinks</h1>
+    Hyperlinks超链接可以被设为任意web content，并且指向另一位给web address(URL).一个URL可以是任意网络内容，比如html文件，音视频文件等。如果浏览器无法解析URL，浏览器会将其下载或换app打开。
+    <h2>Basic link</h2>
+    <p>link可以使用&lta&gt和它的attribute href(hypertext reference)组成，比如<a href="https://www.pixiv.net/en/">色图中心</a>。 类似前面提到的，也可以加入title attribute来解释链接的含义(cursor)。</p>
+        <h3>Block level links</h3>
+        当然，也可以使用别的内容充当超链接，比如一个图片如下：
+        <a href="https://houkai3rd.fandom.com/wiki/Fu_Hua" title="FuHua Wiki"><img src="D:\Programming\Imgs\小识猫猫.jpg"></a>
+        具体的语法为，将需要插入超链接的物体放在&lta&gt和&lt/a&gt之间
+    <h2>URLs and paths</h2>
+    <p>URL, uniform resource locator, 为一串定义资源位置的字符。URL使用path来寻找资源，而path则是文件的系统路径，比如在C盘的某个文件："D:\Programming\Imgs\PC wallpaper\80644926_p1.jpg"就是一个path, 而这个path的根目录(root)就是文件所在的位置-PC wallpaper。</p>
+    <p>在同一个根目录下，我们可以创建各种超链接，可以是子目录，也可以是parent目录。比如本文档在file根目录，我想hyperlink其他的文档，当然可以。
+        <ul>
+            <li>same directory: 直接打<a href="Text fundamentals.html">a href="Text fundamentals.html"（文件名）</a></li>
+            <li>Subdirectories:往下一层，带上子目录名字：<a href="file/83622913_p0.jpg"> href="file/83622913_p0.jpg"</a></li></ul></p>
+            <li>Parent directories:使用..来代表向上指引。<a href="../myfirstpage.html">../myfirstpage.html"</a>，注意不需要具体指示上一层的名字</li>
+    <h3>Document fragments</h3>
+        <p>类似pubchem那种，可以使用超链接到文档的特殊区域，比如某个heading。要做到这样，需要给所引用处一个ID<a href="../Web basics.html#Web procedures" >web procedure</a></h2></p>
+        <p>同理，也可以引用该文档的特定部位，比如我想<a href="#Heading">回到开头</a></p>
+    <h3>Absoulte & relative URLs</h3>
+        <p>URL分为<b>absoulte</b>绝对URL和<b>relative</b>相对URL
+            <ul>
+                <li>Absoulte URL: 从根目录到地址，\Programming\Imgs\小识猫猫.jpg,加上域名，我们就有了绝对URL：https://www.xxbxuxiangbo.com/programming/Img/小识猫猫.jpg。这一段指向的永远为相同位置</li>
+                <li>Relative URL：类似上提到的path，subdirectory和parent directory。为相对的地址（从所链接的位置），比如这个文档的目录下还有许多许多文件，则直接就可以<a href="Hummus recipe.html" target="_blank">Hummus recipe.html</a>，若是在file子目录下的某个文件，则是<a href="file/83622913_p0.jpg">file/83622913_p0.jpg</a>，很明显，relative URL会和目前文档的位置有关系，若我将本文档转至其他目录，则很有可能hyperlink会失效</li>
+            </ul>
+        </p>
+    <h3>Linking practices</h3>
+        <h4>Clear link wording</h4>
+            <p>选择hyperlink连接词时，尽量使得每一个user都可以有良好体验（记住accessibility。以下建议：
+                <ul>
+                    <li><b>不要</b>将URL标成超链接，太长了并且让screen reader效率极慢</li>
+                    <li><b>不要</b>加入类似“链接”link之类的字样在超链接内，没用，浪费空间</li>
+                    <li>将超链接做的尽可能短，此为对screen reader更好</li>
+                    <li>最好不要重复使用相同链接词，不要各种<a href="Hummus recipe.html">click here</a> <a href="Hummus recipe.html">click here</a> <a href="Hummus recipe.html">click here</a> <a href="Hummus recipe.html">click here</a> 
+                    </li>
+                </ul>
+            </p>
+    <h3>链接到非HTML资源</h3>
+        <p>当链接到非HTML资源时，留下清楚的指引。比如<br>
+        <a href="some example">Download the academic report(PDF, 10MB)</a><br>
+        <a href="some example">Play the car game (requires Flash)</a></p>
+        <h4>Download Attribute</h4>
+            当使用下载链接时，可以带上download attribute，此会使你自定义来下载后的的文件名
+        <h4>Email links</h4>
+            可以通过超链接实现一键发邮件给某个人。使用mailto：address来实现。具体样式类似：<a href="mailto:xiangboxu2002@gmail.com">send email to Xiangbo Xu</a>
+            <p>也可以添加抄送人CC，标题subject和主题body等等，使用?隔开主URL，后使用&链接其他field。效果类似：<a href="mailto:xiangboxu2002@gmail.com?cc=xiangbo.xu@mail.utoronto.ca&subject=Inquiry on HTML&body=Hi xiangbo!">send author an email for inquiry on HTML</a><br>
+                其中的参数为mailto:xiangboxu2002@gmail.com?cc=xiangbo.xu@mail.utoronto.ca&subject=Inquiry on HTML&body=Hi xiangbo!"
+            </p>
+
+</body>
+</html>
