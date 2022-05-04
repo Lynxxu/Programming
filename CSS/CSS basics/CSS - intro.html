@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+    h1{
+        color:red;
+        font-size:5em;
+    }
+    </style>
+    <title>What is CSS</title>
+</head>
+<body>
+    <h1>What is CSS</h1>
+    <p>
+        Cascading Style Sheet, known as css, 用于网页的装饰以及html网页的元素。相对应的，html用于定义网页基本结构以及骨架。但是一个没有css的html网页会非常无聊，类似<a href="../../HTML5/basics/Web basics.html">这样</a>。因为默认html的style，即default style，是由浏览器定义的一个css style sheet，而当网页没有定义css时，浏览器会选择默认的style。
+    </p> 
+    <p>
+        浏览器也被称为user agent，而一个document（文档，网页，一般由html，svg或者xml构成）会在浏览器内展示出来，css则可以更改文档内的元素的size，color，生成layout，甚至是生成简单动画。
+    </p>
+        <h2>CSS Syntax</h2>
+        <p>
+            CSS是<i>rule-based language</i>，在css内，我们通过定义某个特定的html的元素（组）的style来进行styling。
+        </p>
+        <p>
+            假设我想把大标题改成红色，5em尺寸（1em=16px），则这个特殊的css rule为： 
+            <code>
+                <pre>
+                    h1{
+                        color:red;
+                        font-size:5em;
+                    }
+                </pre>
+            </code>
+        </p>
+        <p>
+            上面的css rule由一个selector开始，选择某个需要的html元素。在这个例子里面我们选择的是<code>h1</code>
+        </p>
+        <p>
+            然后，property-value pair，即想要更改的属性以及更改的内容。比如<code>color:red;</code>，都会在大括号内包括，而这就是全部的css语法。
+        </p>
+        <h2>CSS modules</h2>
+        <p>
+            css的语言本身是由很多模块组成的，比如定义背景和边界会有一个专属的模块<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Backgrounds_and_Borders">CSS Backgrounds and Borders</a>。因此当寻找某个specific的css properties时，可以通过这种方式找到其所在的模块
+        </p>
+        <h2>CSS specification</h2>
+        <p>
+            类似<i>html</i>和其他的语言，css也有specification，即官方文档。定义一切关于css的东西。css是由<a href="https://www.w3.org/Style/CSS/">W3C</a>开发的。但是注意官方文档会十分bulky且麻烦，一般来说并不是学习语言的好路程，但是可以当作dict使用，毕竟其包含了底层机制。
+        </p>
+        <h2>Browser support</h2>
+        <p>
+            注意，使用css的时候需要检查browser support，因为并不是每个浏览器都会支持某个css rule。有的时候某些浏览器无法implement，或者说，对于某个css rule是incompatible的，则他不会显示出来
+        </p>
+</body>
+</html>
