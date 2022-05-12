@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSS - Start of Journey</title>
+    <style type="text/css">
+        li{
+            list-style-type: none;
+        }
+        .OrangeParagraph{
+            color: orange;
+        }
+        a:link{
+            color:blue;
+        }
+        a:visited{
+            color:green;
+        }
+        a:hover{
+            text-decoration:none;
+        }
+        h1 + p{
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Example document from MDN</h1>
+    <h1>I am a level one heading</h1>
+
+    <p>This is a paragraph of text. In the text is a <span>span element</span> and also a <a href="https://example.com">link</a>.</p>
+
+    <p>This is the second paragraph. It contains an <em>emphasized</em> element.</p>
+
+    <ul>
+        <li>Item <span>one</span></li>
+        <li>Item two</li>
+        <li>Item <em>three</em></li>
+    </ul>
+    
+    <h2>Ways of adding CSS to document</h2>
+    <p>
+        总的来说，有三个向html内加入css的方法：
+        <ol>
+            <li>External：在header内使用&ltlink&gt element来引用外部的独立css stylesheet</li>
+            <li>Internal：在header内使用&ltstyle&gt元素，在&ltstyle&gt内输入css</li>
+            <li>inline：在特定的html元素内使用style attribute，让其只对该元素生效</li>
+        </ol>
+    </p>
+    <h2>Styling HTML elements</h2>
+    <p>
+        类似在<a href="css - intro.html">css intro</a>内，可以使用css来style某个html文档的全部特定元素。比如我想将这个文档内的所有段落都变成绿色，则是使用p selector，color property和green value 如下:
+        <pre>
+            p{
+                color:green;
+            }
+        </pre>
+        也可以使用多个selector，比如p，li
+    </p>
+    <h2>Override default behavior of element</h2>
+    <p>
+        对于一个结构完整的html文档来说，浏览器会有内置的默认styling，比如标题会是黑体大写的，超链接会有颜色等等。但是有的时候我们可以更改，或者覆写浏览器的某些默认css rules。而办法则是使用特殊的property，如下：
+        <pre>
+            li{
+                list-style-type: none;
+            }
+        </pre>
+        以上css指定的是li selector，即list里面的每个term，而<code>list-style-type</code>则是其marker的style。<code>none</code> value则是不设置marker。效果如下：
+        <ol> 
+            <li>item 1</li>
+            <li>Item 2</li>
+        </ol>
+    </p>
+    <h2>Adding a class</h2>
+    <p>
+        以上的办法会使html文档内的某个特定element全部生效，但是一般来说我们会需要部分element有特殊的style。而使用<code>class</code>便可以满足这个需求
+    </p>
+    <p>
+        使用<code>class</code> attribute加入想要更改的element，同时在css 内指定该特殊class的 style，则可以更改被指定了class的元素，比如我想要更改下一个段落为橘色的，则我需要在段落内加上<code>class = "OrangeParagraph"</code>，然后在css内加入以下代码：
+        <pre>
+            .OrangeParagraph{
+                color:orange;
+            }
+        </pre>
+    </p>
+    <p class="OrangeParagraph">Orange Paragraph</p>
+    <p>
+        记得使用css的指定class时，需要在前面加入一个句号，<code>full stop character
+        </code>以指定是使用class。另外可以使用类似p.OrangeParagraph来指定这个class只能限定于p element内。
+    </p>
+    <h2>Styling based on state</h2>
+    <p>
+        某些元素会有不同的state，比如一个超链接可以变色（点进去前vs进去后），而css可以对不同状态进行不同的styling。
+    </p>
+    <p>
+        举&lta&gt为例子，假设我想设置超链接为蓝色，点击后变为绿色，然后当鼠标浮在上面的时候去掉下划线，则使用以下的语法：
+    </p>
+    <p>
+        <pre>
+            a:link{
+                color:blue;
+            }
+            a:visited{
+                color:green;
+            }
+            a:hover{
+                text-decoration:none;
+            }
+        </pre>
+    </p>
+    
+    <h2>Combining selectors</h2>
+    <p>
+        有的时候可以将多个selector以特定形式结合，限定具体情况的styling。比如<code>article p span{...}</code>就是选择article内的p内的span。而<code>h1 + ul + p{...}</code>则选择h1后面的ul后面的p进行styling
+    </p>
+    <p>
+        复杂一点的则是全部加起来，比如body h1 + p .OrangeParagraph{...}则是body内，h1后面的p内的OrangeParagraph class
+    </p>
+</body>
+
+</html>
