@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+        .outer{
+            border: 6px dashed blue;
+        }
+        .box{
+            padding: 10px;
+            width: calc(90% - 30px);
+            background-color: darkred;
+            color: white;
+        }
+        .boxRotate{
+            margin: 10px;
+            width: 100px;
+            height: 200px;
+            background-color: blue;
+            transform: rotate(45deg);
+        }
+        body {
+          background-color: pink;
+        }
+
+        @media (min-width: 50em) {
+        body {
+            background-color: white;
+            }
+        }
+    </style>
+    <title>How CSS is structured</title>
+</head>
+<body>
+    <h1>How is css structured?</h1>
+    <p>
+        This article specifies the structure of CSS
+    </p>
+        <h2>Applying CSS to HTML: 3 methods</h2>
+        <p>
+            As mentioned in <a href="css - basics.html">css basics</a>, CSS可以有三种加入方式：
+            <ol>
+                <li>External:在html header内使用link 进行外部引用，最佳方式，一个css style sheet可以应用至多个文档，保证了一致性。</li>
+                <li>Internal: 在html的header内写入css，仅对该文档生效</li>
+                <li>Inline：在单独的元素内使用，非常麻烦，仅在特殊情况使用</li>
+            </ol>
+        </p>
+        <h2>Selectors</h2>
+        <p>
+            selectors具体的definition已经在前面讲过了。但是如果我们遇到了以下的情况，css会怎么抉择呢？
+            <pre>
+                .OrangeParagraph{
+                    color:orange;
+                }
+                p{
+                    color:blue;
+                }
+            </pre>
+            在以上情况，css会使用.OrangeParagraph，即class的css，因为其更specific，范围更小，这称为rule of specificty
+            <pre>
+                p{
+                    color:red;
+                }
+                p{
+                    color:blue;
+                }
+            </pre>
+            而在以上情况，两个相同的selectors，不同的property-value pair，后面的会生效，这被称为rule of cascade  
+        </p>
+        <h2>Properties and values</h2>
+        <p>
+            除了header以外，css还需要property-value pair，定义selector的特殊styel，以及style的属性。当property value pair被组合到了一起，比如:background-color:yellow;则他们被称为<i>CSS Declaration</i>，而花括号内的则被称为<i>CSS Declaration block</i>。当加上了selector，则他们被称为<i>css rulesets</i>
+        </p>
+        <h2>Functions</h2>
+        <p>
+            一般来说，values都是简单的关键词或者数值。不过有的时候他也可以是function
+        </p>
+            <h3><code>calc() Function</code></h3>
+            <p>
+                <code>calc()</code> function需要一个expression当parameter。这个expression可以是各种operators的组合，比如<code>100%-30px</code>就是将box填满，然后减去30像素的大小
+            </p>
+            <div class="outer"><div class="box">100% -30px</div></div>
+            <h3><code>Transform</code> functions</h3>
+            <p>
+                另一个例子是<code>Transform</code> function，可以接受许多value，例如<code>rotate()</code>
+            </p>
+            <div class="boxRotate"></div>
+        <h2>@rules</h2>
+            <p>@rules provides instruction on how css should perform，有些很简单，比如<code>@import</code>便是import一个stylesheet进另一个stylesheet。
+            <pre>@import 'stylesheet.css'</pre>
+        </p>
+        <p>
+            又或者，@rules的有用的例子为@media。这个rule也被称为media queries，一般用于针对设备来调整网页/app的特征，比如这个网页便设定了基础背景色为白色，但是当屏幕尺寸小于50em （即900px）时，将会转为粉色背景。同理可以更改字体，图标等等。
+        </p> 
+        <h2>Shorthands</h2>
+        <p>
+            有许多css selectors比如font，padding，可以有简化过的properties<i>shorthand properties</i>，比如<code>padding:10px 20px 15px 10px</code>相对应
+            <pre>
+                padding-top: 10px
+                padding-right: 20px
+                padding-bottom: 15px
+                padding-left: 10px
+            </pre>
+        </p>
+        <h2>注释</h2>
+        <p>
+            HTML的注释为&lt!-- --&gt，而css的注释由/*开始，由*/结束，类似<code>/*This is CSS comments*/</code>，注释可以用于暂时disable部分代码，加详解等等。
+        </p>
+        
+</body>
+</html>
