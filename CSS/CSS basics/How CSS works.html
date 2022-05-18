@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How css works</title>
+</head>
+<body>
+    <h1>CSS - General mechanism</h1>
+    <p>
+        当浏览器展现出某个document，它必须将style与content相结合，也就是html和css的结合。虽然每个浏览器处理的方式都不同，但是基本逻辑如下：
+        <ol>
+            <li>浏览器收到html，并且加载hmtl框架</li>
+            <li>浏览器将html转化成DOM(document object model, 文档对象模型），而DOM以电脑内存的方式展示出文档</li>
+            <li>转化时，浏览器将会获取html所需要的资源，比如嵌入文档，图片，视频<b>以及CSS</b>，JS也会在这个过程中渲染</li>
+            <li>当CSS资源获取成功，浏览器将解析CSS，并且根据css的逻辑来将每一个css rules应用到对应的DOM 节点(nodes)，这一步被称为render tree</li>
+            <li>当所有的css rules均被应用完，render tree将会被放在structure内。最后</li>
+        </ol>
+    </p>
+        <h2>DOM specifics</h2>
+        <p>
+            DOM, <code>document object model</code>，是一种梳妆的数据结构。HTML内的每一个元素，特质以及文字均会变成DOM内的一个node。这些nodes会与其他node相联系，分成子/母node。
+        </p>
+        <p>
+            DOM即是文档的内容和css结合在一起的地方，当使用浏览器的DevTools时，选择浏览器的某个item便是选择了某个DOM位置的item。
+        </p>
+            <h3>DOM representation example</h3>
+            <p>
+                首先看以下html代码：
+                <pre>
+                    &ltp&gt
+                        Lets use:
+                        &ltspan&gtHonkai&ltspan&gt
+                        &ltspan&gtImpact&ltspan&gt
+                        &ltspan&gtIII
+                </pre>
+            </p>
+</body>
+</html>
