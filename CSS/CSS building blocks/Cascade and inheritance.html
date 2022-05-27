@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+        body{
+            color: grey;
+        }
+        
+        span{
+            color: black;
+        }
+
+        .my-class-1 a {
+            color: inherit;
+        }
+     
+        .my-class-2 a {
+            color: initial;
+        }
+        
+        .my-class-3 a {
+            color: unset;
+        }
+        .my-class-4 a {
+            color: revert;
+        }
+        blockquote{
+            background-color: darkred;
+            border: 2px solid blue;
+        }
+        .reset{
+            all: unset;
+        }
+        
+    </style>
+    <title>Cascade and inheritance</title>
+</head>
+<body>
+<h1>Cascade and inheritance</h1>
+    <h2>Conflicting rules</h2>
+    <p>
+        当使用css时，若部分rules有冲突，则根据specificity和cascade rule来决定哪个是生效的。
+    </p>
+    <p>
+        像<a href="../CSS basics/css structures.html">前文</a>提到过的一样，当两个rule拥有相同的优先级，则后面的rule会生效，此为cascade rule。而当两个rule同时对一个元素进行styling，而这两rule一个更general，一个更specific，则范围更小的，更specific的会生效，此为specificity rule.
+    </p>
+    <h2>Inheritance</h2>
+    <p>
+        当是对某个包含许多子元素的元素进行styling时，其styling会自动继承到子元素。比如我这个文档的body内容就设置了灰色的字体，但是body内的一切内容，除了<span>span指定位置</span>，由于都属于body的子元素，均会变为灰色。
+    </p>
+    <p>
+        某些特性是不能继承的，比如我设置一个元素的width为50%，但他分支下大的元素并不会获得50%的width。
+    </p>
+        <h3>Controlling inheritance</h3>
+        <p>
+            css有四个控制inheritance的通用特性如下：
+            <ol>
+                <li>Inherit: 将property设置成和parent element一样的属性，即“打开inheritance开关”</li>
+                <li>initial: 将property设置成其的默认值，</li>
+                <li>revert: 将property设置成浏览器的默认style值</li>
+                <li>revert-layer: 将property设置成上一个cascade layer的值。</li>
+                <li>unset: 将一个property设置成其的自然值，比如body内的p会继承，但是如果不会自动继承，便是默认值。</li>
+            </ol>
+            <ul>
+                <li>Default <a href="#">link</a> color</li>
+                <li class="my-class-1">Inherit the <a href="#">link</a> color</li>
+                <li class="my-class-2">Reset the <a href="#">link</a> color</li>
+                <li class="my-class-3">Unset the <a href="#">link</a> color</li>
+                <li class="my-class-4">revert the <a href="#">link</a> color</li>
+            </ul>
+        </p>
+        <p>
+            另外还有<code>all</code> 属性，可以使用在以上几个inheritance value之前，用于一次性清空一切style。比如
+            <blockquote>
+                Styled BLOCKQUOTE
+            </blockquote>
+            <blockquote class="reset">
+                unstyled blockquote
+            </blockquote>
+        </p>
+    <h2>Cascade</h2>
+    <p>
+        像前面提到过的，cascade决定了你的哪一个css rule会生效，而这取决于以下几个要素，从上往下比重更高
+        <ol>
+            <li>Source order</li>
+            <li>Specificity：</li>
+            <li>Importance</li>
+        </ol>
+    </p>
+        <h3>Source order</h3>
+        <p>
+            像前面提过很多次一样，即出现的顺序，假设相同的优先级，则最后的rule生效
+        </p>
+        <h3>Specificty</h3>
+        <p>
+            在css内，specificity是有一个比重系统的，所有selector以及id，style等等都有自带的权重，若权重越高，则优先级高。
+        </p>
+        <ol>
+            <li>Thousand:若decalration内含有了inline styling，则加1000</li>
+            <li>Hundreds:若含有一个id selector，则加100</li>
+            <li>Tens：对于每个class selector，attribute selector，加10</li>
+            <li>ones：对于general的element selector，加1</li>
+        </ol>
+        <p>
+            比如： #id a{} 便是101的specificity，而#id #id2 a{}则比前面的优先级高一个id，也即是202。以此类推，会有各种组合的specificity，而最高的specificity则是最高的优先级。
+        </p>
+        <h3>!important</h3>
+        <p>
+            使用!important可以override一切其他元素，除非有另外一个比他优先级更高的！important，但是建议不使用这个rule因为他限制太大了，且会使得css的debug十分困难
+        </p>
+        <h3>Overriding declaration</h3>
+        <p>
+            当用户的自定义stylesheet与web的冲突时，会以以下顺序来生效：
+            <ol>
+                <li>Declaration in user agent stylesheet：浏览器默认</li>
+                <li>User设置的自定义style sheet</li>
+                <li>Normal stylesheet by web，也就是我们写的css </li>
+                <li>Important declaration in web</li>
+                <li>Important declaration in user sheets</li>
+            </ol>
+        </p>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+    .highlight{
+        background-color: powderblue;
+    }
+    </style>
+    <title>CSS selectors</title>
+</head>
+<body>
+    <h1>CSSS selectors</h1>
+    <p>
+        CSS selectors已经在前面介绍过了，也就是开头的第一个选择element(s)的part。而被选择的则被称为<i>subject of the selector</i>，在<a href="https://www.w3.org/TR/selectors-3/">W3C</a>可以找到支持的selectors
+    </p>
+        <h2>Types of selectors</h2>
+        <p>
+        Selectors可以有很多种，比如最普通的element name，可以是某个property的 attribute，也可以是id，pseudo class等等，而他们每一个都有自己的
+        </p>
+            <h3>Type, Class, ID</h3>
+            <p>
+            此种selectors是比较大的类别，用法也比较类似
+            </p>
+                <h4>Type selectors</h4>
+                <p>
+                    type selector，也被称为<i>Tag name selector, element selector</i>，因为其选择html的某一个tag或者element，比如&ltp&gt，&ltspan&gt等等
+                </p>
+                <h4>Universal selector</h4>
+                <p>
+                    <i>universal selector</i>由星号来指定，将会选择文档内的一切内容，包括子内容以及各种嵌套结构。比如<pre>
+                        * {
+                            margin: 0;
+                        }
+                    </pre>
+                    便选择了整个文档的element，去掉了全部的间距
+                </p>
+                <p>
+                    一般来说，universal selector用于想要选择比较大类的用法，比如我想要一个article内的每一个firstchild,也就是每一个子类，都是黑体，则使用article *:first-child作为selector
+                </p>
+                <h4>Class selector</h4>
+                <p class="highlight">
+                    class selector由一个点开始<code>.</code>其会选择一切在class内的元素，比如我设置此段落的class为highlight，而在此段落内的每一个元素均会是我设置的对应style。包括部分会继承的子元素
+                </p>
+</body>
+</html>
