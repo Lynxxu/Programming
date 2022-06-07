@@ -4,9 +4,42 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
+    .special::first-line{
+        font-weight: bold;
+    }
+
     .highlight{
         background-color: powderblue;
     }
+
+     table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200,200,200);
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+
+    td, th {
+      border: 1px solid rgb(190,190,190);
+      padding: 10px 20px;
+    }
+
+    th {
+      background-color: rgb(235,235,235);
+    }
+
+    td {
+      text-align: center;
+    }
+
+    caption {
+      padding: 10px;
+    }
+
+    .addbefore::before{
+        content:"This is added before the class addbefore"
+    }
+
     </style>
     <title>CSS selectors</title>
 </head>
@@ -27,6 +60,7 @@
                 <p>
                     type selector，也被称为<i>Tag name selector, element selector</i>，因为其选择html的某一个tag或者element，比如&ltp&gt，&ltspan&gt等等
                 </p>
+
                 <h4>Universal selector</h4>
                 <p>
                     <i>universal selector</i>由星号来指定，将会选择文档内的一切内容，包括子内容以及各种嵌套结构。比如<pre>
@@ -39,9 +73,168 @@
                 <p>
                     一般来说，universal selector用于想要选择比较大类的用法，比如我想要一个article内的每一个firstchild,也就是每一个子类，都是黑体，则使用article *:first-child作为selector
                 </p>
+
                 <h4>Class selector</h4>
                 <p class="highlight">
                     class selector由一个点开始<code>.</code>其会选择一切在class内的元素，比如我设置此段落的class为highlight，而在此段落内的每一个元素均会是我设置的对应style。包括部分会继承的子元素
                 </p>
+                    <h5>Target specific class in element</h5>
+                    <p>
+                        当然，也可以target特定的element内的元素，使用<code>.</code>来完成。比如我想要段落内的highlight，就是p.highlight{}，那么比如我在标题内的<code>highlight</code> class便是无效的。
+                    </p>
+                    <h5>Target element with multiple classes</h5>
+                    <p>
+                        也可以使用多个class叠加，比如我想要highlight不同颜色，则可以使用.highlight.blue{color:blue}生成css。那么只有使用了 <code>class = highlight blue</code>的元素才会生效，而单独使用其中一个的都无法生效
+                    </p>
+
+                <h4>ID selectors</h4>
+                <p>
+                    ID selector的用法和class基本一样，但是一个id只能在整个document使用一次，类似class，也可以使用type selector来缩小范围，比如h1#headings
+                </p>
+
+            <h3>Attribute selectors</h3>
+            <p>
+                Attribute selectors是针对某个元素的attribute，以及更细的，value的attribute。
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Selectors</th>
+                        <th scope="col">E.g</th>
+                        <th scope="col">Des.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>[attr]</code></td>
+                        <td><code>a[title]</code></td>
+                        <td>style含有该attribute的元素</td>
+                    </tr>
+                    <tr>
+                        <td><code>[attr=value]</code></td>
+                        <td><code>a[href="https://www.lynx1027.com/"]</code></td>
+                        <td>style含有该attribute，且attribute的值完全相同的元素</td>
+                    </tr>
+                    <tr>
+                        <td><code>[attr~=value]</code></td>
+                        <td><code>p[class~="highlight"]</code></td>
+                        <td>style含有该value的元素，可以是exact，也可以是含有value的list</td>
+                    </tr>
+                    <tr>
+                        <th colspan="3">Substring</th>
+                    </tr>
+                    <tr>
+                        <td><code>[attr|=value]</code></td>
+                        <td><code>[class|=para]</code></td>
+                        <td>style含有exact，或者由此value开头，后面跟着hypen的值，比如para-highlight,para-any都可以</td>
+                    </tr>
+                    <tr>
+                        <td><code>[attr^=value]</code></td>
+                        <td><code>p[class^="para"]</code></td>
+                        <td>style含有exact，或者由此value开头的值，与上一个不同的是，上一个必须由hyphen跟在后面才行</td>
+                    </tr>
+                    <tr>
+                        <td><code>[attr$=value]</code></td>
+                        <td><code>p[class$="light"]</code></td>
+                        <td>style由此value结尾的元素</td>
+                    </tr>
+                    <tr>
+                        <td><code>[attr*=value]</code></td>
+                        <td><code>p[class*="para"]</code></td>
+                        <td>style含有此value的attribute的元素，可以是任意的位置，只要含有即可</td>
+                    </tr>
+                </tbody>
+            </table>
+
+                <h4>Case-sensitivity</h4>
+                <p>
+                    attribute selectors一般是分大小写的, 但是可以使用<code>i</code>来取消case-sensitivity，比如li[class^="n" i]{}便是选择含有由n开头的class的element，而这个n可以是大写或者小写。
+                </p>
+
+            <h3>Pseudo-class</h3>
+            <p>
+                pseudo class是一种比较特殊的selector，他们会选择满足某种条件的元素，比如每个元素的第一个子元素，每段的第一行以及其他条件，类似给某个元素assign class
+            </p>
+            <p>
+                Psuedo class 由一个colon<code>:</code>开头，全格式为：<code>:pseudo-class-name</code>
+            </p>
+            <p>
+                假设我想选择article的第一个段落，一般的方式是将其单独设为一个class，或者id，然后调整相对应的css。但是假设我又在开头加了一个段落，则需要重新分配class。但是使用pseudoclass，<code>article p:first-child</code>便会选择article内的首个子元素，且必须是p。若去掉p则是选择article的任意首要元素
+            </p>
+                <h4>User-action pseudo class</h4>
+                <p>
+                    某些pseudoclass仅在用户有输入指令的时候才会运行，他们被称为<code>pseudo-class</code>，比如<code>:hover</code><code>:focus</code>，分别对应了鼠标悬浮在上面<code>(一般是link)</code>以及鼠标点到，或者选择上面。
+                </p>
+
+            <h3>Psuedo-element</h3>
+            <p>
+                psuedo element与pseudo-class总的来说是相同的使用方式，但是pseudo-element由两个colon开头。<code>::psuedo-element-name</code>但是pseudo element更类似创建一个虚假的element，而不是选择某个已有的元素并assign class，也就是说，一个是fake class，而另一个是 fake element
+            </p>
+            <p>
+                举个例子，使用psuedo calss的时候，pseudo class会在某种条件下被assign给某个元素，但是pseudo element像是创建了一个虚假的元素，而不是创建fake class。
+            </p>
+            <p class="special">
+                This is a example paragraph that demonstrates the use of pseudo element ::first-line, in which the first line of this paragraph will be bold. 此段使用了一个特殊class，并且使用<code> p+.special::first-line</code>来特殊target此段落
+            </p>
+
+            <h3>结合pseudoclass以及pseudoelement</h3>
+            <p>
+                结合pseudoelement和pseudoclass的办法很简单，假设我想要一个article内的第一个子元素的第一行一直为黑体，则可以使用
+                <pre>
+                article p:first-child::first-line{
+                    font-weight: bold;
+                }
+                </pre>
+            </p>
+
+            <h3>使用<code>::before</code>和<code>::after</code>自动生成内容</h3>
+            <p>
+                有两个特殊的pseudo element，当和<code>content</code>一起使用时可以自动在指定位置（元素的前后）自动生成内容，比如自动生成logo等等，注意这个一般对accessbsility是没用的，screen reader无法读出。所以这个feature一般用于logo
+            </p>
+            <p class="addbefore">
+                具体用法如下：
+                <pre>
+                .addbefore::before{
+                    content:"This is added before the class addbefore"
+                }
+                </pre>
+                而使用after的语法基本一样，但是还是需要注意，这个办法对accessibility不友好，建议不使用或者只是用logo
+            </p>
+        <h2>Combinators</h2>
+        <p>
+            Combinators将不同的selectors组合起来，以更好的target所想要的范围
+        </p>
+            <h3>Desecedant combinator</h3>
+            <p>
+                The desecedant combinator由空格隔开，将所有selectors以descendant关系来连接起来，比如<code>body article p</code>就是选择body内的article元素内所有的p元素的所有文字。
+            </p>
+            <h3>Chlid combinator</h3>
+            <p>
+                child combinator由<code>></code>来链接，只选择direct child of mother element。比如我使用一个nested list 如下：
+                <ul>
+                    <li>Unordered item</li>
+                    <li>Unordered item
+                        <ol>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                        </ol>
+                    </li>
+                </ul>
+                可以看出这个ul内嵌入了一个ol，若使用descendant combinator选择li，则会选择ul内的一切li。但是使用child combinator的话便可精确的选择前两个紧跟在后的li
+            </p>
+
+            <h3>Adjacent sibling combinator</h3>
+            <p>
+                adjacent sibling combinator为加号链接，选择由第一个后面紧跟的第二个selector。 假设我想要每一个h1开头的第一段均为黑体，则使用h1 + p{font-weight:bold}便可以解决问题
+            </p>
+            <h3>General sibling combinator</h3>
+            <p>
+                与adjacent不同，general将会选中任何在第一个element之后的指定元素，使用~来指定。比如我需要h1以后的任意p元素，则语法为h1 ~ p
+            </p>
+            <p>
+                一般来说，可以使用不同的selectors以及combinator来选中特殊的element。但是对于特别复杂的文档来说，使用class未曾不必是更好的一个选择
+            </p>
+
+
 </body>
 </html>
