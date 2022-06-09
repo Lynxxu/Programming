@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The box model</title>
+</head>
+<body>
+<h1>The box model</h1>
+<p>
+    css的一切均有一个box包围，理解这些box是css的必备的要求。
+</p>
+    <h2>Block and inline boxes</h2>
+    <p>
+        CSS 拥有两种不同的boxes，分为<code>block boxes</code>，<code>inline boxes</code>，而box还可以分为inner display type和out display type。 
+    </p>
+    <p>
+        如果一个box拥有outer display type为<code>block</code>，则其拥有以下的特性：
+        <ul>
+            <li>box会生成新行</li>
+            <li>box将会在inline方向extend直至fill全部的container。一般来说，将会与容器同款</li>
+            <li><code>width</code>和<code>height</code>有效，且会固定在你设置的值</li>
+            <li>padding, margin, border将会使得其他相邻元素被推至box外的范围</li>
+        </ul>
+        部分html元素自带的就是block display style，比如<code>h1</code>和<code>p</code>
+    </p>
+    <p>
+        若box为inline的type，则：
+        <ul>
+            <li>box不会开一个新行</li>
+            <li>width以及height特性无效</li>
+            <li>Vertical padding, margins以及border会有效，但是不会使得其他元素从box内推出（类似overlay）。</li>
+            <li>horizontal padding, margins, borders会生效，且会将其他inline boxes推出该box的范围内</li>
+        </ul>
+        默认设置为inline display style的有很多元素，比如<code>a</code>, <code>span</code>, <code>strong</code>等等。
+    </p>
+    <p>
+        box的种类与元素的<code>display</code>属性相关，而<code>display</code>可以有block和inline的value，注意此仅与display的<code>outer</code> value有关
+    </p>
+    
+</body>
+</html>
