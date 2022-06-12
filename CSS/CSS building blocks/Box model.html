@@ -4,6 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>The box model</title>
+    <style type="text/css">
+  .parent {
+    margin-top: 300px;
+  }
+  .child {
+    margin-top: 24px;
+  }
+</style>
+    </style>
 </head>
 <body>
 <h1>The box model</h1>
@@ -37,6 +46,170 @@
     <p>
         box的种类与元素的<code>display</code>属性相关，而<code>display</code>可以有block和inline的value，注意此仅与display的<code>outer</code> value有关
     </p>
-    
+    <h2>Inner与outer display</h2>
+    <p>
+        像上文提到的，<code>outer</code> display代表的是box的inline或block属性。但是相对的，也有inner display type。
+    </p>
+    <p>
+        默认来说，boxes的inline display为<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Normal_Flow">normal flow</a>， 也就是默认的元素展示方式（没有css时）。当然，也可以改成其他属性，比如flex，grid等等，此处按着不提
+    </p>
+        <h3>不同的display type例子</h3>
+        <p style="padding: .5em; border: 2px solid blue">
+            This is a paragraph (block) containing two span tags, one in <span>here</span>, with default style. One in <span style="display:block; border: 2px solid red;">here</span>, which was styled with block display. 
+        </p>
+        <p style="padding: .5em; border: 2px solid blue; display: inline;">
+            This is another paragraph (but inline) containing two span tags, one in <span>here</span>, with default style. One in <span style="display:inline; border: 2px solid red;">here</span>, which was styled with block display. Shrink the page layout and u will see how the elements are collapsed 
+        </p>
+    <h2>CSS box model - what is it</h2>
+    <p>
+        对于block display来说，css box model是完美适应的，但是inline box只会有部分适用。这个model定义了一个box的不同部分，以及这些部分是如何创造出一个完美的box的。以及两种格式：standard & alternate box model
+    </p>
+        <h3>Parts of boxes</h3>
+        <ul>
+            <li>content box: 内容展出的位置，可以使用width，height来调整大小</li>
+            <li>Padding box: 即content边上一圈的padding（内边距），可以使用<code>padding</code>以及相关的特性来更改</li>
+            <li>border box: 也就是边界，将padding和content一起包起来，可以使用border特性来调整</li>
+            <li>Margin box: 最外圈的一层，以whitespace的形式将一切内容全部包起来，可使用margin 特性来调整</li>
+        </ul>
+        <img src="../../Imgs/boxmodel.png" style="display: block; margin: auto;">
+        以上便是一切box均有的属性（layers），而box还分有两种：standard以及alternate
+        <h3>Standard box model</h3>
+        <p>
+            Standard box内，使用width和height attribute只会更改<code>content</code> box的尺寸，而padding以及border则是另算的。假设一个standard box的设定如下：
+            <pre>
+                .box{
+                    width:350px;
+                    height:150px;
+                    margin:10px;
+                    padding: 25px;
+                    border: 5px solid black;
+                }
+            </pre>
+            则这个box的真正尺寸为width = 350 + 25 + 25 + 5 + 5 = 410px，而height = 150 + 25 + 25 + 5 + 5 = 210 px。
+        </p>
+        <h3>Alternative box model</h3>
+        <p>
+            在html内，默认的box model便是standard box model，但是算真正的box面积时却很麻烦，因此还有第二个model，即alternative model。在alternative model内，使用width和height时，代表的是整个box的内容（不是content）。比如我写以下代码：
+            <pre>
+            .box {
+              border: 5px solid rebeccapurple;
+              background-color: lightgray;
+              padding: 40px;
+              margin: 40px;
+              width: 300px;
+              height: 150px;
+            }
+
+            .alternate {
+              box-sizing: border-box;
+            }
+            </pre> 
+            则，&ltdiv class="box"&gt会给出一个390 x 240的box&lt/div&gt，对应以上的所有参数。但是&ltdiv class="box alternate"&gt会给出一个300 x 150的box，因为box-sizing: border-box设置了alternate格式，所以整个box便是height 和width所定义的格式。注意padding以及border依然有效，但是总面积由长宽决定。&lt/div&gt
+        </p>
+        <h2>Margins,padding, and borders</h2>
+        <p>
+            margin，padding，border的作用已经在上文讲过了，但是那些只是shorthand form，他们有更加严谨的属性以及控制方法。
+        </p>
+            <h3>Margin</h3>
+            <p>
+                Margin为外边距，也就是整个box外的间隙，但是margin是可以有更细的更改的，具体来说，是以下几个properties：
+                <ul>
+                    <li>margin-top</li>
+                    <li>margin-right</li>
+                    <li>margin-bottom</li>
+                    <li>margin-left</li>
+                </ul>
+            </p>
+                <h4>Margin collapse</h4>
+                <p>
+                    既然提到了margin，则margin collapse的概念也要被带起来。当我们有两个margin相重叠，则会选择更小的margin。去这便是margin collapse的概念。
+                </p>
+                <ul>
+                    <li><b>Adjacent sibling</b> 一个box的top对一个box的bottom会collapse</li>
+                    <li><b>Empty blocks</b> 假设一个block没有border，padding，inline content，height等元素来分开block的margin-top 和margin-bottom，则该block自己的上下margin会collapse</li>
+                    <li><b>No content separating parent and descendants</b> 假设我们有一个parent element，其中什么都没有但是有一个子元素，则子元素的margin无法与parent元素的margin分开，则bottom & top 元素均会collapse</li>
+                </ul>
+                <p>
+                    注意margin collapse时，若包含多个margin，则选择最大的margin。若有负数包含，则将最大的正数以及最小的负数相加便便是最终的collapse。假设全是负数，则选择最小的负数（绝对值最大的）
+                </p>
+            <h3>Borders</h3>
+            <p>
+                border即边界，在margin和padding之间。使用standard box model时，border的宽度独立于width和height，使用alternative box model时，border的宽度包含在width和height内。
+            </p>
+            <p>
+                类似margin，border也可以单独控制，并且每一条border均可自定义style，width，color等等。当然也可以一次性操纵所有的border（使用<code>border</code>特性
+            </p>
+            <ul>
+                <li>border-top</li>
+                <li>border-right</li>
+                <li>border-right</li>
+                <li>border-left</li>
+            </ul>
+            然后可以使用以下的properties来更改：
+            <ul>
+                <li>border-width</li>
+                <li>border-style</li>
+                <li>border-color</li>
+            </ul>
+            而调整某个单独的border时，将其组合起来便可。比如<code>border-top-width</code>，<code>border-left-style</code>等等
+            <h3>Padding</h3>
+            <p>
+                padding为内边距，也就是content与border之间的填充。padding不能有负值i，且任何背景都会显示在padding后面。
+            </p>
+            <p>
+                类似border，padding也可以单独调整
+            </p>
+            <ul>
+                <li>padding-top</li>
+                <li>padding-right</li>
+                <li>padding-bottom</li>
+                <li>padding-left</li>
+            </ul>
+            <p>
+                注意调整padding时，会将content从border往内缩小（假设其他全部不动）。假设我们有一个container内包含了另一个box，则调整该container的margin时会将里面的box缩小。
+            </p>
+        <h2>box model & inline boxes</h2>
+        <p>
+            以上说的model均对block boxes生效，但是有部分也对inline boxes生效，比如由<code>span</code>生成的元素。
+        </p>
+        <p>
+            This is a paragraph in which a 
+            <span style="
+              margin: 20px;
+              padding: 20px;
+              width: 1000px;
+              height: 500px;
+              background-color: lightblue;
+              border: 2px solid blue;">
+            span</span> element was nested in, even if i assign it a width and height, they will not work as span is of inline display. The inline display style would only take up the needed content space, paadding and margin. Margin与padding只会会自动将左右两边的元素推远（inline的特性），而vertical则会overlap
+        </p>
+            <h3>inline-block</h3>
+            <p>
+                除了block以及inline，还有一种display的方式结合了两个之间。他们被称为inline-block。此种display与block display完全一样，但是他不会单独空行。
+            </p>
+            <p>
+                This is a paragraph in which a 
+                <span style="
+                  margin: 20px;
+                  padding: 20px;
+                  width: 20px;
+                  height: 20px;
+                  background-color: lightblue;
+                  border: 2px solid blue;
+                  display: inline-block;">
+                span</span> element was nested in, However this time it will act as a block that is placed between lines as I have assigned it a inline block display. 除了会空行以外，基本上与block display 一致
+            </p>
+            <h3>Example</h3>
+            <p>
+                一般来说，使用inline-block的地方有导航栏，用于放button，link等等。比如我想要一个link to <a href="https://www.lynx1027.com/" 
+                style="display:inline-block;
+                  margin: 5px;
+                  padding: 10px;
+                  width: 40px;
+                  height: 20px;
+                  background-color: lightblue;
+                  border: 2px solid blue;">Home</a>，那么使用inline block便会很方便
+            </p>
+
 </body>
 </html>
