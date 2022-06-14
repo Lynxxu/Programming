@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Scroll exmaple</title>
+    <style type="text/css">
+        article {
+            flex: 1;
+            height: 400px;
+            background-color: rgba(0,0,0,0.5);
+            background-image: url(../Resources/1598603974816.jpeg);
+            background-size: 400px 400px;
+            background-repeat: no-repeat;
+            background-position: top center;
+            padding: 1%;
+            overflow: auto;
+            color: white;
+        }
+
+        article pre{
+            height: 800px;
+        }
+
+        .fixed {
+          background-attachment: fixed;
+        }
+
+        section{
+            display: flex;
+        }
+        
+        .scroll {
+          background-attachment: scroll;
+        }
+
+        .local {
+          background-attachment: local;
+        }
+
+        body{
+            height: 3000px;
+        }
+
+    </style>
+</head>
+<body>
+    <section>
+        <article class="scroll">
+            this is a sample paragraph showing how scroll is used as a background-attachment property for a constant image across both the element and the page when it was scrolled. Note that the blank space here was achieved by using the <code>pre</code> element<pre> </pre>
+        </article>
+
+        <article class="fixed">
+            this is a sample paragraph showing how fixed is used as a background-attachment property for a image in which the image will respond as the page scrolls, so it is relatively fixed on the page. <pre></pre>
+        </article>
+        <article class="local">
+            this is a sample paragraph showing how local is used as a background-attachment property for a image which would repsond and scroll when the element is scrolled.<pre></pre>
+        </article>
+    </section>
+</body>
+</html>

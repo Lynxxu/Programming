@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Background and borders</title>
+    <style type="text/css">
+
+        .box-a{
+            height: 452px;
+            width: 559px;
+            padding: 10px;
+            margin: 10px;
+            box-sizing: border-box;
+            background-image: url("../Resources/2021121623254-reduced.png");
+            display: block;
+            background-repeat: no-repeat;
+
+        }
+        .box-b{
+            height: 452px;
+            width: 529px;
+            padding: 10px;
+            margin: 10px;
+            box-sizing: border-box;
+            background-image: url("../Resources/97774287_p0.jpg");
+            display: block;
+            background-repeat: no-repeat;
+        }
+
+        .container-cover{
+            display: block;
+            height: 200px;
+            width: 500px;
+            background-size: cover;
+        }
+
+        .multiple-image{
+            display: block;
+            height: 500px;
+            width: 1000px;
+            background-image: url("../Resources/2021121623254-reduced.png"), url("../Resources/1598603974816.jpeg");
+            background-repeat: no-repeat;
+
+        }
+
+        .gradient-box{
+            background-image: linear-gradient(135deg, rgba(0,249,255,1) 40%, black 90%);
+            height: 100px;
+            width: 200px;
+        }
+
+        .container-contain{
+            display: block;
+            height: 200px;
+            width: 500px;
+            background-size: contain;
+        }
+
+        .roundbox{
+            display: block;
+            height: 20px;
+            width: 250px;
+            border-radius: 10px;
+            background-color: grey;
+            color: white;
+            text-align: center;
+        }
+
+        .roundboxsingle{
+            display: block;
+            height: 20px;
+            width: 250px;
+            border-top-left-radius: 10px;
+            background-color: grey;
+            text-align: center;
+            color: white;
+        }
+
+        .roundboxsecond{
+            display: block;
+            height: 20px;
+            width: 250px;
+            border-top-left-radius: 30px 10px;
+            background-color: grey;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>Background and borders</h1>
+<p>
+    css可以给html上背景，也可以改变border的style。更具体一点还可以有特殊的自定义背景比如渐变色。
+</p>
+    <h2>Styling backgrounds</h2>
+    <p>
+        CSS有一个property叫做<code>background</code>的property，类似border等等，这也是一个shorthand form。这里先看单独的properties
+    </p>
+        <h3>Background colors</h3>
+        <p style="background-color: lightgrey;">
+            <code>background-color</code>属性定义任意一个element的背景色，此属性可以接受任意一个有效的颜色，并且将覆盖box里面的content和padding。比如这个段落以及这个<span style="background-color: blue;">span</span>便是设置了一个color的。注意可以使用<code>rgba</code>来生成特定的颜色以及透明度，比如我想要一个半透明的黑色，则使用如下：<code>rgba(0,0,0,0.5)</code>
+        </p>
+
+        <h3>Backgroud image</h3>
+        <p>
+            <code>background-image</code>属性可以给元素设置特定背景图片如下：
+            <div class="box-a" style="background-repeat: repeat-y;"></div>
+            <div class="box-b"></div>
+        </p>
+        <p>
+            注意看两张图片，第一张是基本上全显示了，并且还有一点多余的重复位置，但是第二张明显是crop成小块了。这是因为给的box尺寸相同，但是图片的尺寸不同，尺寸小的会repeat并多次显示，但是大的便只会展示部分。
+        </p>
+            <h4>Controlling <code>background-repeat</code></h4>
+            <p>
+                使用<code>background-repeat</code>来控制背景repeat behavior。具体有以下的几个属性：
+                <ul>
+                    <li>no-repeat 关闭所有重复</li>
+                    <li>repeat-x 只重复x轴</li>
+                    <li>repeat-y 只重复y轴</li>
+                    <li>repeat 默认，开启全部重复</li>
+                </ul>
+            </p>
+            <h4>Sizing background image</h4>
+            <p>
+                就像上面的俩图片，我们不可能为了每一个图片去做一个特别的container，所以一般我们会调整图片的size。使用<code>bacakground-size</code>属性。此属性接受<code>cover</code>以及<code>contain</code> value。cover将会沾满给的box，并且保持原本的长宽比例，因此一般会超出box一些。而contain便是把图片放在box的范围内，因此有可能会有空余的位置。
+                    <div class="box-a container-cover"></div>
+                    <div class="box-a container-contain"></div>
+            </p>
+            <p>
+                看以上的两个图片，都是相同的container尺寸，相同的图片尺寸但是不同的background-size, 第一个是cover，第二个是contian。很明显第一个是有一部分被裁掉了。这是因为<code>cover</code>将会以box的尺寸为准，但是contain却是以图片显示完全为准(即使这样会无法占满格子）。
+            </p>
+            <h4>Positioning the background image</h4>
+            <p>
+                虽然上面讲过了如何sizing，但是还有positioning。使用<code>background-position</code>来更改背景图片在box内的位置。一般来说他会接受两个值，分别代表horizontal以及vertical value。可以接受的值如下：
+                <ul>
+                    <li>使用关键词<code>top</code>和<code>right</code>，<code>center</code>等等来更改位置</li>
+                    <li>也可以使用length，percentage的形式，比如20px，10%等等来代表box的位置，从默认的左上角来算。</li>
+                    <li>background-position也可以接受4个值，相对应从某个border开始的距离，比如background-position: top 20px right 10px对应的便是从上往下20px，从右往左10px的位置</li>
+                </ul>
+            </p>
+        <h3>Gradient Background</h3>
+        <p>
+            Gradient类似background-image，以下的渐变是使用<code>
+            background-image: linear-gradient(135deg, rgba(0,249,255,1) 40%, black 90%)</code>来生成的。仔细看可以发现，第一个值是代表了gradient的形式，里面的values则是代表了gradient的开始和结束颜色以及他们对应的浓度。具体更详细的gradient可以在<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient">MDN</a>内查出来。
+            <div class="gradient-box"></div>
+        </p>
+        <h3>Multiple background images</h3>
+        <p>
+            当然，也可以在一个box内添加多个背景，具体方法就是在background-image属性内添加多个值，使用逗号隔开。如此便会生成layered背景图片，顺序与图片的顺序相同，最后的图片在layer的最下面。
+        </p>
+        <p>
+            值得一提的是，每一个背景图片的properties也可以单独设置，在对应的特性里面使用逗号隔开，比如三个图片，便可以使用<code>backgroundj-repeat:no-repeat, repeat-x, no-repeat;</code>来分别对应第一二三张图片。以下的图片便是使用了多个layer得出的，第一张原神图片便是在第一位，第二个折木就是在第二个位置的图片。
+            <div class="multiple-image"></div>
+        </p>
+
+        <h3>Background attachment</h3>
+        <p>
+            还有几个关于背景的特性，说准确一点应该是背景与鼠标滑动的互动。使用<code>background-attachement</code>特性，接受以下几个值：
+            <ul>
+                <li><code>scroll</code>:使元素的背景随着页面的滚动而滚动，即使content动了图片也不会动。背景图片固定位置。</li>
+                <li><code>fixed</code>:使背景图固定，即使页面滚动，背景仍会留在位置上。</li>
+                <li><code>local</code>:新的css值，会使得该元素的背景只与元素的content相关，整个页面的滚动不会影响，但是元素内的内容滚动时会随着滚动。</li>
+            </ul>
+        </p>
+        <p>具体的例子可以看这个<a href="Scroll example.html">page</a></p>
+        
+        <h3>using shorthand <code>background</code></h3>
+        <p>
+            虽然之前提到的属性都可使用，但还有一种shorthand可以使用，那就是<code>background</code> 属性，有以下几条rules:
+            <ul>
+                <li><code>background-color</code>必须在最后一位</li>
+                <li><code>background-size</code>只能在background-position后面，并且使用/隔开。leisi<code>center/80%</code></li>
+            </ul>
+            以下的代码便是一个例子，
+            <pre>
+                background:   
+                    linear-gradient(105deg, rgba(255,255,255,.2) 39%, rgba(51,56,57,1) 96%) center center / 400px 200px no-repeat, url(big-star.png) center no-repeat, rebeccapurple;
+            </pre>
+            分别对应了gradient，也就是第一个图片，其位置，大小以及repeat的value。以及第二个图片， 图片的位置，以及repeat的属性以及色彩
+        </p>
+        <h3>Accessibility consideration with backgrounds</h3>
+        <p>
+            使用背景图片时，一定要注意图片和文字的对比度，使所有用户都看得清楚。注意对于screenreader用户来说，背景图片是无法被解读的，所以所有的重要内容必须要在html的content内。
+        </p>
+    <h2>Borders</h2>
+    <p>
+        在之前提到过的box model内也包含一个重要的要素：border。具体加border的方式在<a href="Box model.html">box model</a>内讲过了，简单来说就是可以使用简单的<code>border</code>来控制全部四个边，也可以单独控制某个边。
+    </p>
+        <h3>Rounded corners</h3>
+        <p>
+            可以使用border-radius，以及有关的longhand来调整圆角。使用该属性的方法有两个，如下：
+            <div class="roundbox"><code>border-radius:10px;</code></div>
+        </p>
+        以及:
+        <div class="roundboxsingle"><code>border-top-left-radius:10px;</code></div>
+        分别对应了一次性控制全部边以及单独控制某两条边的角，甚至还可以调整某个边界的比重，比如：
+        <div class="roundboxsecond"><code>border-top-left-radius: 30px 10px;</code></div>
+</body>
+</html0
