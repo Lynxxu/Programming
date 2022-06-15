@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Different text directions</title>
+</head>
+<body>
+<h1>Handling different text directions</h1>
+<p>
+    之前学到的内容基本上都是基于屏幕的物理尺寸来的，比如使用top，left等指向来代表box的某条边。而css以及浏览器默认是基于<code>left-to-right</code>语言的支持。
+</p>
+<p>
+    但是在近几年， css对于其他书写方式的支持变得越来越高了，而且不仅是从右到左（阿拉伯语），还有从上到下（日语），这些书写方式被称为<code>writing mode  </code>
+</p>
+    <h2>Writing modes</h2>
+    <p>
+        在css内，<code>writing mode</code>代表了文字的方向，也是一个属性。比如我可以使用<code>writing-mode: vertical-rl</code><span style="writing-mode: vertical-rl;">让这句话从上到下</span>
+    </p>
+    <p>
+        <code>writing-property</code>可以接受以下几个值：
+        <ul>
+            <li><code><b>horizontal-tb</b></code>：block从上到下，而句子由水平方向走（英语）</li>
+            <li style="writing-mode: vertical-rl;"><code><b>vertical-rl</b></code>：block从右到左，（所以是rl），句子vertical走<p>类似这样(这是另一个block</p></li>
+            <li style="writing-mode:vertical-lr;"><code><b>vertical-lr</b></code>:block从左到右，句子vertical<p>也就是和rl相反的</p></li>
+        </ul>
+    </p>
+    <p>
+        当我们改变writing mode的时候，其实我们顺便改变了block以及inline的配置。当使用默认的mode时，inline方向即是句子的方向（从左到右）， 而block的方向则是从上到下。但是当我们改成vertical-rl时，inline则变成了从上到下的方向，而block则是从right到left，vertical-lr同理。
+    </p>
+    <h2>Logical properties and values</h2>
+    <p>
+        之前讲过了如何调整border，margin等等box的性质，但是他们都是基于horizontal的书写模式，也就是基于电脑的物理屏幕尺寸。
+    </p>
+    <p>
+        但是当使用vertical modes时，原本的box特性比如<code>width</code>,<code>height</code> 依旧有效，但是对于vertical来说却是相反的。因此css在最近发明了新的办法：<code>logical</code>，or <code>flow</code> relative properties,当使用这些新的properties时，box的尺寸是相对于writing mode来说的，而不是对于电脑屏幕的左右。具体对应的如下：
+        <ul>
+            <li><code>inline-size</code>: inline的尺寸，一般来说是从左到右，对于vertical来说是从上到下。（相应于width）</li>
+            <li><code>block-size</code>:block的尺寸，对于一般的mode来说就是从上到下的尺寸。对于vertical来说则是从左到右</li>
+        </ul>
+    </p>
+        <h3>Logical margin, border and padding properties</h3>
+        <p>
+            之前讲过可以使用inline-size以及block-size来调整不同writing mode 的width和height。但是肯定还有其他的box内容相对应的，比如padding-left，margin-top等等。具体来说如下：
+            <ul>
+                <li><code>margin-block-start</code>:对应<code>margin-top</code>，即从block开始的方向的margin</li>
+                <li><code>padding-inline-start</code>:对应<code>padding-left</code>，即从文字的方向（inline的方向）开始的padding</li>
+                <li><code>border-block-end</code>：即对应<code>border-bottom</code>，指代border的结束位置，（因为border为block）</li>
+            </ul>
+        </p>
+        <p>
+            之前学的默认设定的内容被称为physical，而这里描述的新内容称为logical properties。记得logical为一个相对新的内容，有很多浏览器也许不支持，因此若不使用多种书写方式时，建议依然使用physical的。
+        </p>
+        <p>
+            之前看的都是logical properties，但是有一些properties也可以接受logical values。对应如下：
+            <ul>
+                <li><code>block-start</code>对应<code>top</code></li>
+                <li><code>block-end</code>对应<code>end</code></li>
+                <li><code>inline-start</code>对应<code>left</code></li>
+                <li><code>inline-end</code>对应<code>right</code></li>
+            </ul>
+        </p>
+</body>
+</html>
