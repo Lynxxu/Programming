@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+        .smallbox{
+            height: 100px;
+            width: 200px;
+            border: 2px solid black;
+            margin: 4px;
+            box-sizing: border-box;
+            padding: 1px;
+            display: inline-block;
+        }
+
+        .hidden{
+            overflow: hidden;
+        }
+
+        .scroll{
+            overflow: scroll;
+        }
+
+        .auto{
+            overflow: auto;
+        }
+    </style>
+    <title>Overflowing content</title>
+</head>
+<body>
+<h1>Overflowing content</h1>
+<p>
+    一切内容在css内都是由box组成的，我们可以自定义box的大小尺寸以及特性，但是假设文字所站的位置比box要大，则便有了<code>Overflow</code>
+</p>
+    <h2>CSS- Overflow原理</h2>
+    <p class="smallbox">
+        This is a paragraph with extra information that is not needed for understndinfg but just for showing how css would manage overlfow to a box like this. Note how the text in here is managed out of the  box but still showinsg content
+    </p>
+    <p>
+        看上面的box，有许多内容因为box太小而出现在了外面，但是由于css的特性， 这些在box外的内容会显示出来，而不是消失。 CSS会avoid data loss，因此当有内容超出了box时，css默认你知道你在干嘛。但话虽如此，还是有办法可以调整overflow的，即使用<code>overflow</code>
+    </p>
+    <h2>The <code>overflow</code> properties</h2>
+    <p>
+        <code>overflow</code>为CSS的特性，用于控制css的overflow，默认值为<code>visible</code>，即看得见overflow的内容。除了<code>visible</code>之外，还有其他的几个value可选：
+        <ul>
+            <li><code>hidden</code>：即将整个overflow的东西隐藏起来，注意隐藏起来后就看不见了。</li>
+            <li><code>scroll</code>：浏览器将会使用scroll bar来展示overflow的内容，可以使用x，y等来指代具体的scroll方向，比如<code>overflow-y:scroll</code></li>
+            <li><code>auto</code>:自动决定，如果内容太多需要overflow，则会选择overflow。</li>
+        </ul>
+    </p>
+    <div class="smallbox hidden">
+        <b>overflow: hidden</b><br>
+        This is a paragraph with extra information that is not needed for understndinfg but just for showing how css would manage overlfow to a box like this. Note how the text in here is managed out of the  box but still showinsg content
+    </div>
+    <div class="smallbox scroll">
+        <b>overflow: scroll</b><br>
+        This is a paragraph with extra information that is not needed for understndinfg but just for showing how css would manage overlfow to a box like this. Note how the text in here is managed out of the  box but still showinsg content
+    </div>
+    <div class="smallbox auto">
+        <b>overflow: auto</b><br>
+        This is a paragraph with extra information that is not needed for understndinfg but just for showing how css would manage overlfow to a box like this. Note how the text in here is managed out of the  box but still showinsg content
+    </div>
+    <h2>Block Formatting Context</h2>
+    <p>
+        当使用scroll或者auto时，box会被改成<code>Block Formatting Context</code>格式，此时box内的内容无法突出box外，而box外的内容也无法进入box，而一切内容均会由scroll的形式保持完整。
+    </p>
+</body>
+</html>

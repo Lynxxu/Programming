@@ -44,7 +44,8 @@
             之前讲过可以使用inline-size以及block-size来调整不同writing mode 的width和height。但是肯定还有其他的box内容相对应的，比如padding-left，margin-top等等。具体来说如下：
             <ul>
                 <li><code>margin-block-start</code>:对应<code>margin-top</code>，即从block开始的方向的margin</li>
-                <li><code>padding-inline-start</code>:对应<code>padding-left</code>，即从文字的方向（inline的方向）开始的padding</li>
+                <li><code>padding-inline-start</code>:对应<code>padding-left</code>
+                ，即从文字的方向（inline的方向）开始的padding</li>
                 <li><code>border-block-end</code>：即对应<code>border-bottom</code>，指代border的结束位置，（因为border为block）</li>
             </ul>
         </p>
@@ -58,6 +59,14 @@
                 <li><code>block-end</code>对应<code>end</code></li>
                 <li><code>inline-start</code>对应<code>left</code></li>
                 <li><code>inline-end</code>对应<code>right</code></li>
+            </ul>
+        </p>
+        <p>
+            例子：
+            <ul>
+                <li>border-top对应border-block-start</li>
+                <li>margin-left对应margin=inline-start</li>
+                <li>padding-bottom对于padding-block-end</li>
             </ul>
         </p>
 </body>

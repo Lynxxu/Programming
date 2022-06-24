@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSS values and units</title>
+    <style type="text/css">
+    table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200,200,200);
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+
+    td, th {
+      border: 1px solid rgb(190,190,190);
+      padding: 10px 20px;
+    }
+
+    th {
+      background-color: rgb(235,235,235);
+    }
+
+    td {
+      text-align: center;
+    }
+
+    caption {
+      padding: 10px;
+    }
+
+    .wrapper{
+        font-size: 15px;
+    }
+    .px {
+      width: 200px;
+    }
+
+    .vw {
+      width: 10vw;
+    }
+
+    .em {
+      width: 10em;
+    }
+
+    .box{
+        border: 1px solid black;
+        background-color: grey;
+        padding: 3px;
+        margin: 5px;
+        color: white;
+    }
+
+    .imgbox{
+        margin: 5px;
+        height: 500px;
+        width: 700px;
+        border: 1px solid black;
+        background-position: left center;
+    }
+
+    .em li{
+        font-size: 1.5em;
+    }
+
+    img{
+        display: block;
+    }
+
+    .image{
+        background-image: url(../Resources/97774287_p0.jpg);
+        background-size: contain;
+    }
+    .gra{
+        background-image: linear-gradient(90deg, rgba(119,0,255,1) 39%, rgba(0,212,255,1) 100%);
+    }
+
+    .colorwheel{
+        background-image:url("../Resources/wheel-5-ryb.png");
+        background-repeat: no-repeat;
+    }
+    </style>
+</head>
+<body>
+<h1>CSS values and units</h1>
+<p>
+    CSS内的每一个property均有一种value type（或data type），这种type定义了该property可选择的values，比如&ltcolor&gt便是代表了一切颜色，那么一个完整的定义颜色的property value pair便是<code>color: &ltcolor&gt</code>
+</p>
+
+    <h2>Numbers, lengths, and percentages</h2>
+    <p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>&ltinteger&gt</code></td>
+                    <td>任意whole number，比如1025，-12</td>
+                </tr>
+                <tr>
+                    <td><code>&ltnumber&gt</code></td>
+                    <td><code>&ltnumber&gt</code>代表了任意decimal number，可以是小数也可以不是，比如999，1.2，-1.1</td>
+                </tr>
+                <tr>
+                    <td><code>&ltdimension&gt</code></td>
+                    <td><code>&ltdimension&gt</code>是一个带单位&ltnumber&gt，比如45deg，5s，19em等等。&ltdimension&gt是一个大类，其下属的有&ltlength&gt, &ltangle&gt, 以及&ltresolution&gt</td>
+                </tr>
+                <tr>
+                    <td><code>&ltpercentage&gt</code></td>
+                    <td><code>&ltpercentage&gt</code>代表了某个value的比例，比如50%。Percentage永远是相对与某个值的，比如一个元素的长度是其母元素的90%</td>
+                </tr>
+            </tbody>
+        </table>
+    </p>
+
+        <h3>Lengths</h3>
+        <p>
+            css很常见的数字类型<i>numeric type</i>是<code>&ltlength&gt</code>，比如10px, 30em等等，但是除了这种以外，length还接受relative length
+        </p>
+            <h4>Absolute length units</h4>
+            <p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Unit</th>
+                            <th>Name</th>
+                            <th>Equivalent to</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>cm</code></td>
+                            <td>Centimeter</td>
+                            <td>1cm = 37.8px = 25.2/64 in</td>
+                        </tr>
+                        <tr>
+                            <td><code>mm</code></td>
+                            <td>Millimeters</td>
+                            <td>1mm = 1/10th of 1 cm</td>
+                        </tr>
+                        <tr>
+                            <td><code>Q</code></td>
+                            <td>Quarter-millimeters</td>
+                            <td>1Q =1/40th of 1cm</td>
+                        </tr>
+                        <tr>
+                            <td><code>in</code></td>
+                            <td>inches</td>
+                            <td>1in = 2.54cm = 96px</td>
+                        </tr>
+                        <tr>
+                            <td><code>pc</code></td>
+                            <td>Picas</td>
+                            <td>1pc = 1/6th of 1 in</td>
+                        </tr>
+                        <tr>
+                            <td><code>pt</code></td>
+                            <td>Points</td>
+                            <td>1pt = 1/72nd of 1 in</td>
+                        </tr>
+                        <tr>
+                            <td><code>px</code></td>
+                            <td>Pixels</td>
+                            <td>1px = 1/96th of 1 in</td>
+                        </tr>
+                    </tbody>
+                </table>
+                以上table总结了绝对长度单位，一般来说使用的是px最多
+            </p>
+
+            <h4>Relative length units</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Unit</th>
+                        <th>Relative to</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>&ltem&gt</code></td>
+                        <td>假设用于<code>typological properties</code>时，则em对应parent的font size。假设用于其他内容，比如width，则是对应该元素本身的font size</td>
+                    </tr>
+                    <tr>
+                        <td><code>&ltex&gt</code></td>
+                        <td><code>ex</code>代表了元素font的x高度</td>
+                    </tr>
+                    <tr>
+                        <td><code>&ltch&gt</code></td>
+                        <td><code>&ltch&gt</code>为该元素的字体的"0"的尺寸</td>
+                    </tr>
+                    <tr>
+                        <td><code>&ltrem&gt</code></td>
+                        <td><code>&ltrem&gt</code>root元素的字体尺寸</td>
+                    </tr>
+                    <tr>
+                        <td><code>&ltlh&gt</code></td>
+                        <td>代表了元素的line height</td>
+                    </tr>
+                    <tr>
+                        <td><code>&ltrlh&gt</code></td>
+                        <td>代表了root元素的line height。当使用在root元素的<code>font-size</code>以及<code>line-height</code>时，代表的是属性的初始值</td>
+                    </tr>
+                    <tr>
+                        <td><code>vw</code></td>
+                        <td>1% of viewport's width</td>
+                    </tr>
+                    <tr>
+                        <td><code>vh</code></td>
+                        <td>1% of viewport's height</td>
+                    </tr>
+                    <tr>
+                        <td><code>vmin</code></td>
+                        <td>1% of viewport's smaller dimension</td>
+                    </tr>
+                    <tr>
+                        <td><code>vmax</code></td>
+                        <td>1% of veiwport's larger dimension</td>
+                    </tr>
+                    <tr>
+                        <td><code>vb</code></td>
+                        <td>1% of size od inital containing block in the direction fo fthe root element's block axis,即在root元素的block方向的initial containing block的1%</td>
+                    </tr>
+                    <tr>
+                        <td><code>vi</code></td>
+                        <td>同上，只不过是root元素的inline方向的initialcontaining block的1%</td>
+                    </tr>
+                    <tr>
+                        <td><code>svw, svh</code></td>
+                        <td>1% of the small veiwport's width and height</td>
+                    </tr>
+                    <tr>
+                        <td><code>lvw,lvh</code></td>
+                        <td>1% of the larger view port's width and height</td>
+                    </tr>
+                    <tr>
+                        <td><code>dvw, dvh</code></td>
+                        <td>1% of the dynamic viewport'd width and height</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                例子如下:
+                <div class="wrapper">
+                    <div class="box px">固定200px宽度</div>
+                    <div class="box vw">10vw，即10% viewport</div>
+                    <div class="box em">10em, 即parent(此处为15px)的10倍font size，即150px</div>
+                </div>
+            </p>
+
+            <h4><code>em</code>与<code>rem</code></h4>
+            <p>
+                em与rem为两种相对长度，一般来说最常见的就是这两个unit了。首先记得em为parent element的font size，而rem为root element的font size（在html内，一般为<code>html</code>），因为这种特性，em与rem在nesting时会有不同的特征。
+            </p>
+            <p>
+                假设我想写一个nested list，如果我们使用的是rem，则nested list的全部内容均将由root元素，一般为html的font size 决定，于是字体便不会由特别大的变化。但是当我使用em时，由于nested list会使用母元素的font size来决定大小，则nested em会一直增长，类似这样：
+                <ul class="em">
+                    <li>Item1
+                        <ul>
+                            <li>Item1a
+                                <ul>
+                                    <li>Item1aa</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </p>
+
+            <h4>Percentages</h4>
+            <p>
+                在大多数情况下，percentage的使用方法和length一样，但是和em类似，<code>percentgae</code>永远是与某个元素相对的，比如我设置font-size为50%，则font size将会是该元素parent的50%
+            </p>
+            <p>
+                比较有意思的是，使用nesting元素时，假设使用的时percentage，那么结果其实会与使用<code>em</code>类似，因为都是根据parent element的某个特性来的。只不过em根据的是font size，而percentage会以对应的来调整。值得一提的是，并不是所有的属性都会支持percentage，有一些只会支持length属性。记得查一下allowed values是否含有percentge
+            </p>
+
+            <h4>Numbers</h4>
+            <p>
+                有部分属性只接受数字，即不带单位的数字， 一个例子为<code>opacity</code>，控制某个元素透明度的属性，该属性接受从0到1的数字，即从完全透明到完全不透明
+            </p>
+
+    <h2>Color</h2>
+    <p>
+        有很多办法可以定义某个想要的颜色，而这些办法有些是新的，有些是已经支持很久了的。但是一般来说，一种颜色是可以在css内广泛使用的。现代电脑支持256 x 256 x 256 = 16,777,216种颜色， 由rgb三种tunnel定义
+    </p>
+        <h3>Color keywords</h3>
+        <p>
+            &ltcolor&gt value type可以接受keywords，比如<span style="color: grey;">grey</span>，<span style="color: greenyellow;">greenyellow</span>，<span style="color: blueviolet;">blueviolet</span>等等。
+        </p>
+
+        <h3>Hexadecimal RGB values</h3>
+        <p>
+            另外一种经常遇得到的color value type为<code>hexadecimal codes</code>，每个hex value由hash#开头，接着6个16进制的值，即从0到f。每两个值代表了一种颜色，因为16x16=256。则总共对应依旧对应的是256 x 256 x 256种颜色。类似例子有<span style="color:#1d3fd5;">#1d3fd5</span>, <span style="color:#c55da1;">#c55da1</span>
+        </p>
+        <h3>RGB ans RGBA</h3>
+        <p>
+            第三个加入color的方式为rgb和rgba，为一种定义了rgb的function。而rgba则是附带了opacity的定义。比如<span style="color:rgb(2, 150, 200)">rgb(2, 150, 200)</span>以及<span style="color:rgba(199, 100, 15, 0.3);">rgba(99, 100, 5, 0.3)</span>以及没有设置透明度的<span style="color:rgb(199, 100, 15)">rgb(199, 100, 15)</span>
+        </p>
+
+        <h3>HSL and HSLA vlaues</h3>
+        <p>
+            除了前面几个方法之外，浏览器支持较少的便是HSL color model（比较老的IE一般不支持）。和rgb不同，hsl是使用色相，饱和度和明度来定义多种颜色的。具体来说为以下：
+            <ul>
+                <li><b>Hue</b>:定义色相环上的某个颜色，可选值为*从0到360如下：<img src="../Resources/wheel-5-ryb.png"></li>
+                <li><b>Saturation</b>，即饱和度，色彩的鲜艳程度，0为透明，而100为满色</li>
+                <li><b>Lightness</b>亮度，0为黑色而100为纯白</li>
+            </ul>
+            与rgba类似，HSLA也只是多了一个指定透明度的值。一般来说在一个project内使用哪个颜色选项都可以
+        </p>
+    <h2>Images</h2>
+    <p>
+        &ltimage&gt value type可以在任意接受image值的属性使用。可以是一个具体的图像，或者是gradient如下
+    </p>
+    <p>
+        <div class="imgbox image"></div>
+        <div class="imgbox gra"></div>
+    </p>
+
+    <h2>Position</h2>
+    <p>
+        &ltposition&gt value type代表了一系列2d坐标， 使用于放置item时的定位，比如<code>background-position</code>，可以接受keywords比如<code>top</code>, <code>left</code>, <code>bottom</code>,<code>right</code>, 以及<code>center</code>来对于box定位。
+    </p>
+    <p>
+        一般来说，一个position value是有两个值的，第一个代表horizontal坐标，另一个代表vertical坐标。若不填的话便默认center，比如以下的色相盘便是是d使用的position: left center来定义的位置，即水平方向是左边，vertical方向为中间
+    </p>
+    <div class="imgbox colorwheel"></div>
+
+    <h2>Strings and identifiers</h2>
+    <p>
+        以前学过了很多种关键词，比如<code>top</code>, <code>black</code>, <code>center</code>等等。这些关键词被称为identifiers而不是string。因为css认识这些词语，所以也不需要使用quotation将其框起来。
+    </p>
+    <p>
+        但是并不是所有时候都用的是identifiers。比如想要使用一段string来代表你的content时，可以使用quote来将其圈起来以代表string
+    </p>
+
+    <h2>Functions</h2>
+    <p>
+       最后一类value type为functions。function具体的定义就不在解释了，在css内也有functions，比如<code>rgb()</code> , <code>url()</code>等等。
+    </p>
+    <p>
+        类似传统编程语言的function有calc()，用来指定特殊的尺寸以及值，一般用于无法计算的情况。假设<code>calc(20%+ 20px)</code>便是parent element的20%的尺寸加上20px
+    </p>
+</body>
+</html>
