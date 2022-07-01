@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+        .bigbox{
+          width: 500px;
+          height: 400px;
+          border: 3px black solid;
+        }
+
+        .smallbox{
+          width: 50%;
+          height: 400px;
+          border: 3px solid black;
+        }
+        .pctmargin{
+          margin: 10%;
+          padding: 10%;
+          height: 100px;
+          width: 125px;
+          border: 3px black solid;
+        }   
+
+        section{
+            display: flex;
+            align-items: flex-start;
+            /*使用这个来使flex不是全部对齐*/
+        }
+        .maxbox{
+            width: 200px;
+            max-height: 100px;
+            border: 3px solid black;
+            display: block;
+            margin: 5px;
+        }
+
+        .minbox{
+            width: 200px;
+            min-height: 100px;
+            border: 3px solid black;
+            display: block;
+            margin: 5px;
+        }
+
+        .box{
+            width: 500px;
+            border: 3px solid black;
+            margin: 3px;
+        }
+
+        .max{
+            max-width: 100%;
+        }
+
+        .width{
+            width: 100%;
+        }
+
+        .vwwidth{
+            width: 10vw;
+        }
+    </style>
+    <title>Sizing items in CSS</title>
+</head>
+<body>
+<h1>Sizing items in CSS</h1>
+<p>
+    在之前讲过的很多东西内，已经提到过了使用css调整size的办法，这里做一个总结。
+</p>
+    <h2>Natural or intrinsic size</h2>
+    <p>
+        html元素均有自己的默认尺寸，称为natural size。类似的，image file也含有sizing info称为intrinsic size，而这个image的intrinsic size仅与image本身的size有关。也就是说，假设我放一个图片在html内，并且不以任何方式更改它的尺寸，则该图片的尺寸便是intrinsic size，即原本的尺寸。
+    </p>
+    <p>
+        对于类似div这样的元素来说，由于div本身是没有尺寸的，因此假设在html内加入一个没用css style 过的div元素，便会是类似下面的一条线。
+        <div style="border: 1px solid black; margin: 5px;"></div>
+        <div style="border: 1px solid black; margin: 5px">  但是假设我加入了一点content，则会有和content所对应的尺寸。
+        </div>
+    </p>
+
+    <h2>Setting up a specific size</h2>
+    <p>
+        当然，可以使用properties来指定尺寸，但是像是在<a href="Overflowing content.html">Overflow</a>内提到过的一样，设尺寸可能会带来overflow的问题。具体见超链接
+    </p>
+
+    <h2>Using percentage</h2>
+    <p>
+        在很多时候，比例也是一种尺寸，也像之前提到的一样，比例一般是在想要与母元素进行对比时使用的。比如以下便是一个box内含了另一个小box，小box的width为大box的50%。其实更准确来说，因为div为block元素，一般会占据全部的内容，因此当被包在母元素内时，母元素便是全部的内容，而percentage便是代表了它本因占据的位置百分比
+    </p>
+    <div class="bigbox">
+        <div class="smallbox"></div>
+    </div>
+        <h3>Percentage magin and padding</h3>
+        <p>
+            假设在padding以及margin处使用percentage，则percent依旧是相对于parent元素，但是注意仅是相对于inline direction，也就是width of parent element。也就是说，当使用percentage作为padding和margin长度时,只会与parent元素的width相关。打开inspection来看，便看得出来下面的小box的margin和padding均为10%
+        </p>
+        <div class="bigbox">
+          <div class="pctmargin"></div>
+        </div>
+    <h2>min and max size</h2>
+    <p>
+        除了基于某个数值/比例的固定尺寸，css还可以指定某元素max以及min size。当设置为max时，若元素所需要的值小于max，则将会由原本展示，但是假设大于max时，也只会显示到max的位置
+    </p>
+    <p>
+        相对的，使用min的时候，若元素需要的位置小于设置的min尺寸，则依旧会按着设置的min 尺寸来。但是当元素超过了指定的min size，便会自动伸缩。
+    </p>
+    <section>
+        <div class="maxbox">
+            This is a max box that is set at maximum height of 100px, which means the box will never exceed 50px, if the content exceed the intend size, overflow will occur just as shown in this box
+        </div>
+        <div class="maxbox">this is also a max box</div>
+    </section>
+    <p>
+        可以看到上面的max-height设置成了100px的两个box的区别，同理可见下面的min-height box:
+    </p>
+    <section>
+        <div class="minbox">
+            This is a min box with minimum height of 100px. when the content is smaller than the box, the box will remain the min size, but while the content is larger, the box grows automatically
+        </div>
+        <div class="minbox">This is also a min box</div>
+    </section>
+    <p>
+        这个方法在对应overflow时非常有用，尤其是不定量的content。一种比较常见的max-width用法是将其应用在图片尺寸小于container尺寸时的场景。
+    </p>
+    <p>
+        比如，当我对某个图片使用width: 100%时，假设其intrinsic size小于container，则该图片便会被强制拉伸。看起来pixelated。但是，使用max-width：100%却不一样，max-width的原理就是当内容小于container时，container便会自动缩小
+    </p>
+    <p>
+        例子如下:
+        <div class="box"><img src="../Resources/Polandballhutao2.png" class="width"></div>
+        <div class="box"><img src="../Resources/Polandballhutao2.png" class="max"></div>
+        <div class="minbox"><img src="../Resources/Polandballhutao2.png" class="max"></div>
+    </p>
+    <p>
+        看上面三个图片，分别是三个box，第一个是固定尺寸的box，并且使用了width:100%，所以图片被拉伸到了100%并且没有那么清晰。第二个是相同的box，但是使用了max-width:100%,那么container会自动缩小至图片的intrinsic size。第三个是一个小一点的box，并且也使用了max-width元素，因此图片便会自动缩小到box的尺寸（因为max-size：100%设定的便是box的width相等。
+    </p>
+
+    <h2>Viewport units</h2>
+    <p>
+        viewport, 也就是visible area of the page, 也包含尺寸。 而<code>vw</code>以及<code>vh</code>这两个单位分别对应了viewport的width以及height。 
+    </p>
+    <p>
+        <div class="box vwwidth">This box's width is 20% of the viewport, and will change when the viewport change</div>
+    </p>
+</body>
+</html> 
