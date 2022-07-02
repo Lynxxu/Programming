@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Images, media, and form elements</title>
+    <style type="text/css">
+        .bigbox{
+            height: 300px;
+            width: 500px;
+            border: 3px solid black;
+            margin: 5px;
+        }
+
+        .cover{
+            object-fit: cover;
+        }
+
+        .contain{
+            object-fit: contain;
+        }
+        img{
+            height: 100%;
+            width: 100%;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 200px 200px;
+            gap: 20px;
+        }
+        .wrapper > div {
+            background-color: rebeccapurple;
+            border-radius: .5em;
+        }
+        button,
+        input,
+        select,
+        textarea {
+            font-family : inherit;
+            font-size : 100%;
+        } 
+    </style>
+</head>
+<body>
+<h1>Images, media, and form elements</h1>
+<p>
+    之前讲过了基本的box结构以及styiling，但是并不是所有的内容都是严谨的box结构，因此有必要了解这些"irregular" box
+</p>
+    <h2>replaced element</h2>
+    <p>
+        图片以及视频被称为<code>replaced elements</code>，意思是css无法改变元素的internal layout，仅可改变其位置。
+    </p>
+    <p>
+        某些replaced elements，比如图片以及视频，含有<b>aspect ratio</b>，也就是其内置了x以及y的尺寸，并且默认将以intrinsic size展示出来。
+    </p>
+
+    <h2>Sizing images</h2>
+    <p>
+        之前已经提过了，css内的一切内容均含有box，当将一个intrinsic size与box不同的image放在box内，其将会overflow或者看起来比他更小。
+    </p>
+    <p>
+        而解决方式，前文已经讲过了，对<code>img</code>使用<code>max-width:100%</code>可以使得image永远不会大于box的width，这个办法同样可用于其他replaced elements如<code>video</code>，<code>iframe</code>等等.
+    </p>
+    <p>
+        当然，还有另外一个办法，类似在<a href="Background & border.html">background&borders</a>内提到过的，使用<code>contain</code>以及<code>cover</code> value，只不过此处不同的是使用object-fit property。
+    </p>
+    <p>
+        background-size与object-fit最大的不同就在于，background-size需要与<code>background-image</code>在css内的box class单独使用，所以一个图片需要单独的一个box写在css内。但是<code>object-fit</code>是属于<code>img</code> property内的，也就是说可以做一个大的box，而在内嵌入一个img，然后使用object来控制contain，cover或fill。并且注意，使用object-fit时，需要将<code>img</code>属性调整成height与width均为100%，不然图片会以intrinsic size展示。
+    </p>
+    <div class="bigbox"><img src="../Resources/97774287_p0.jpg" class="cover"></div>
+    <div class="bigbox"><img src="../Resources/97774287_p0.jpg" class="contain"></div>
+    <p>
+        以上便是两个使用了<code>img{object-fit: cover}</code>以及contain的图片，由一个300x500的box作为parent element
+    </p>
+
+    <h2>Replaced elements in layout</h2>
+    <p>
+        当使用css layout时，若使用了replaced elements，则他们可能会与其他元素略微不同。
+    </p>
+
+    <div class="wrapper">
+      <img src="../Resources/Polandballhutao2.png" alt="star" style="height: inherit; width: inherit;">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p>
+    看上面的layout，是一个grid，除了图片外，其他的grid均为stretcted full。虽然还没学layout，但是现在需要知道图片会在layout时与其他元素表现出不同的behavior.现在来说，若想使得图片stretch，可使用img元素的内置height 以及width调至100%
+    </p>
+    <h2>Form elements</h2>
+    <p>
+        进行styling时，font元素有时会变得很麻烦，具体来说后面会有一篇完全阐述web forms的文章。但是在此先提一下最主要的基本内容
+    </p>
+    <p>
+        许多form control均是由<code>&ltinput&gt</code>元素加入html文档的，他定义了最简单的文字输入，以及html5内新增的color 和date选择等等。当然还有其他的元素，比如<code>&lttextarea&gt</code>输入多行文字，以及标记form使用的<code>&ltfieldset&gt</code>, <code>&ltlegend&gt</code>
+    </p>
+        <h3>Styling text input elements</h3>
+        <p>
+            对于form元素，若支持input，比如<code>&ltinput type="text"&gt</code>, <code>&lttextarea&gt</code>等等，一般比较容易style，并且会和网页的其他元素行为类似，但是需要知道的是，这些元素的default style是于浏览器和操作系统相关的
+        </p>
+        <form>
+          <div><label for="name">Name</label>
+          <input type="text" id="name"></div>
+          <div><label for="email">Email</label>
+          <input type="email" id="email"></div>
+
+          <div class="buttons"><input type="submit" value="Submit"></div>
+        </form>
+
+        <h3>form elements and inheritance</h3>
+        <p>
+            在某些浏览器内，form的元素是不会自动inhert font style的，因此假设想要使form元素改成inherit可以使用css加入rules. 比如
+            <pre>
+                button, input, select{font-family:inherit; font-size: 100%}    
+            </pre>
+        </p>
+
+        <h3>Form elements and box sizing</h3>
+        <p>
+            在浏览器内，不同的form元素会根据widget类型使用不同的box sizing rules。具体可见<a href="box model.html">box model</a>来解释box-sizing。但是一般来说建议使用css rules使一切的form element设置padding以及margin为0以保证普遍性
+        </p>
+        
+        <h3>overflow</h3>
+        <p>
+            除了以上的所有rules，建议在<code>&lttextarea&gt</code>使用<code>overflow: auto</code>以停止IE产生不需要的scrollbar.
+        </p>
+
+        <h3>Normalization & "reset"</h3>
+        <p>
+            在上面提到的所有内容均可被加在一起，生成一套大的reset css rule。一般这个也被称为normalizing stylesheet，用于将所有浏览器的上style重置成一致的style。一个比较通用的normalization stylesheet<a href="https://necolas.github.io/normalize.css/">如下</a>而对于form element，就是如下：
+            <pre>
+            textarea {
+                font-family: inherit;
+                font-size: 100%;
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+
+            textarea {
+                overflow: auto;
+            }
+            </pre>
+        </p>
+</body>
+</html>
