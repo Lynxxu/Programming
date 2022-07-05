@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">        
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet" type="text/css">
+    
+    <title>Styling tables</title>
+    <style type="text/css">
+/*       
+        table {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+            border: 3px solid black;
+        }
+
+        thead th:nth-child(1) {
+            width: 30%;
+        }
+
+        thead th:nth-child(2) {
+            width: 20%;
+        }
+
+        thead th:nth-child(3) {
+            width: 15%;
+        }
+
+        thead th:nth-child(4) {
+            width: 35%;
+        }
+
+        th, td {
+            padding: 20px;
+        }
+
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            margin: 5px;
+        }
+
+        html {
+            font-family: 'Gentium Book Plus', serif;
+        }
+        thead th, tfoot th, caption{
+            font-family: 'Cookie', cursive;
+        }
+
+        th {
+          letter-spacing: 2px;
+        }
+
+        td {
+          letter-spacing: 1px;
+        }
+
+        tbody td {
+          text-align: center;
+        }
+
+        tfoot th {
+          text-align: right;
+        }
+
+        thead, tfoot{
+            background: url(../Resources/85543107_p0.jpg);
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-shadow: 1px 1px 1px black;
+        }
+
+        thead th, tfoot th, tfoot td {
+          background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
+          border: 1px solid white;
+        }
+
+
+        tbody tr:nth-child(odd) {
+          background-color: rgba(255, 255, 255, 1.0);
+        }
+
+        tbody tr:nth-child(even) {
+          background-color: rgba(220, 220, 220, 0.8);
+        }
+
+
+        caption{
+            font-family:'Cookie', cursive;
+            padding:20px;
+            font-weight: bold;
+            font-style: italic;
+            caption-side:bottom;
+            color: black;
+            text-align:right;
+            letter-spacing:1px;
+        }
+*/
+    </style>
+</head>
+<body>
+<h1>Styling tables</h1>
+<p>
+    之前在<a href="../../HTML5/basics/Semantics/HTML tables/Table basics.html">html tables</a>内提到过，html的table是骨架，而styling则需要css来完成。这里就介绍以下css的基本table styling
+</p>
+    <h2>A typical HTML table</h2>
+    <p>
+        下面是一个典型的html table，总结了原神开服以来的几个新增地区以及时间，国家/地区原型，注释等等。
+    </p>
+    <table>
+        <caption>Table of Genshin new areas released by Sept.2022</caption>
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Year released</th>
+                <th scope="col">prototype</th>
+                <th scope="col">Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Mondsdat</th>
+                <td>2020</td>
+                <td>Europe</td>
+                <td>Mostly Germany, Finland</td>
+            </tr>
+            <tr>
+                <th scope="row">Liyue</th>
+                <td>2021</td>
+                <td>China</td>
+                <td>Southern China, with some focus on Nothern cultures</td>
+            </tr>
+            <tr>
+                <th scope="row">Dragonspine</th>
+                <td>2021</td>
+                <td>Ice mountain</td>
+                <td>Not really based on any specific country, but is related to typical ice mountains</td>
+            </tr>
+            <tr>
+                <th scope="row">Inazuma</th>
+                <td>2021</td>
+                <td>Japan</td>
+                <td>Mostly based on Japanese cultures. Excluding Enkanomia, which is hypothetical</td>
+            </tr>
+            <tr>
+                <th scope="row">The Chasm</th>
+                <td>2022</td>
+                <td>The inner Mongolia of China</td>
+                <td>Based on the huge cola mining area of inner Mongolia</td>
+            </tr>
+            <tr>
+                <th scope="row">Sumeru</th>
+                <td>2022</td>
+                <td>Middle East</td>
+                <td>Saudi Arabia, India and Iran</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="row" colspan="2">Total areas</th>
+                <td colspan="2">6</td>
+            </tr>
+        </tfoot>
+    </table>
+    <p>
+        上面的table是一个结构完整的html表格，包含了<code>scope</code>, <code>caption</code>, <code>thead</code>, <code>tbody</code>等等tags，但是没有styling的话，这个表格看起来就比较messy。
+    </p>
+
+    <h2>Styling our table</h2>
+    <p>
+        根据<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Styling_tables#styling_our_table">mdn</a> 要求，应该创建一个外部的css file，但是在这里我就直接写内置的以排除后期影响。
+    </p>
+
+        <h3>Spacing and layout</h3>
+        <p>
+            table的styling的第一步是准备spacing以及layout，使用的code如下:
+        </p>
+        <pre>
+            table{
+                table-layout:fixed;
+                width:100%
+                border-collapse:collapse;
+                border: 3px solid purple;
+            }
+
+            thead th:nth-child(1){
+                width:30%;
+            }
+
+            thead th:nth-child(2){
+                width:20%;
+            }
+
+            thead th:nth-child(3){
+                width:15%
+            }
+
+            thead th:nth-child(4){
+                width:35%
+            }
+
+            th,td{
+                padding:20px;
+            }
+        </pre>
+        <p>
+            分析一下以上代码：
+            <ul>
+                <li><code>table-layout</code>以及其的值，<code>fixed</code>一般可以设置在table内。未被style过的table的coloumns会根据column内容的大小来决定size。但是使用<code>table-layout:fixed</code>时，column会以其heading的大小来决定size。而此处，我们有4个heading，因此我们可以使用<code>:nth-child</code> selector来选择第n个child，放在这个context内便是<code>thead th:nth-child(n)</code>，然后在每一个对应的child内设置出width，这个table便是四个heading分别对应30%, 20%, 15%, 35%。然后再将整个table的width设置成100%，这样便可以很完美的占满屏幕的空间并且不拥挤</li>
+                <li><code>border-collapse</code>以及其的值,<code>collapse</code>为标准的table styling。一般来说，对于一个table设置border时，相邻的格子依然会有spacing，类似<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Styling_tables#styling_our_table">mdn</a>的例子，但是使用<code>border-collapse: collapse</code>后，便可以使得香菱的格子没有重复的边界</li>
+                <li>在table的style内设置一个总的<code>border</code>来分清楚整个table的框架，并且可以用于footer和header的clarification</li>
+                <li>对于<code>th</code>和<code>td</code>，使用<code>padding</code>来生成一点间隙来使得table更legible</li>
+            </ul>
+        </p>
+        <div>
+            而获得的结果如下：
+            <img src="../Resources/Spacing layout.png">
+        </div>
+        <h3>Some Typography</h3>
+        <p>
+            现在可以在进一步自定义table，来改个字体吧：使用<a href="https://fonts.google.com/">google fonts</a> 来选择心仪的字体，然后使用<code>link</code>元素来调整。先使用<code>&ltlink href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet" type="text/css"&gt</code>
+            来引入字体，然后再用以下的代码来给header和footer单独assign一个字体，这里用的是google的cookie字体
+            <pre>
+                thead th, tfoot th {
+                  font-family: 'Rock Salt', cursive;
+                }
+
+                th {
+                  letter-spacing: 2px;
+                }
+
+                td {
+                  letter-spacing: 1px;
+                }
+
+                tbody td {
+                  text-align: center;
+                }
+
+                tfoot th {
+                  text-align: right;
+                }
+            </pre>
+        </p>
+        <p>
+            以上的代码并不难懂，但是有以下几个点需要注意:
+            <ul>
+                <li>可以对html进行全局字体的更改，然后对table的每个part进行单独的更改。此处更改了header以及footer内的th元素的字体</li>
+                <li>我对heading和cell的字母间距做了调整，也就是<code>letter-spacing</code>的调整，增加可读性</li>
+                <li>对table body内的cell，也就是内容，将其居中以对齐heading。值得一提的是，默认来说heading是黑体且剧中显示的，而内容是朝左对齐的。</li>
+                <li>让footer内的heading向右对齐，这样可以和他的相对应vale靠得更近，看得更清楚</li>
+            </ul>
+            而将其和前面的layout相结合，成果如下：
+            <img src="../Resources/fonts layout.png">
+        </p>
+
+        <h3>Graphics and colors</h3>
+        <p>
+            因为这个table是原神主题的，我们可以给他来一点原神的特色。比如给header以及footer加个Lumine的图片。
+            <pre>
+                thead, tfoot{
+                    background: url(luminepic.png);
+                    color:white;
+                    text-shadow:1px 1px 1px black;
+                }
+
+                thead th, tfoot th, tfoot td{
+                    background: linear-gradient(to bottom, rgba(0,0,0, 0.1), rgba(0,0,0,0.5));
+                    border: 1px solid white;
+                }
+            </pre>
+        </p>
+        <p>
+            以上的代码其实一看就明白了，对thead和tfoot的整个section添加背景，且使文字改成白色， 然后在给文字一点阴影。阴影详见<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow"><code>text-shadow</code></a>的用法，简单来说就是x，y和阴影的位置。然后再对整个footer和header搞一个linear gradient来添加一点厚度。此处用的是之前提到过的<code>linear-gradient(to bottom, rgba(0,0,0, 0.1), rgba(0,0,0,0.5));</code>。也就是从上面完全透明到下面50%的透明度，纯黑色的gradient，这步结算后是这样的:<img src="../Resources/gradient.png">
+        </p>
+        
+        <h3>Zebra striping</h3>
+        <p>
+            zebra striping，也就是斑马条纹，类似那种交替颜色的表格，比较好用。一个使用的代码如下:
+            <pre>       
+            tbody tr:nth-child(odd) {
+              background-color: rgba(255, 255, 255, 1.0);
+            }
+
+            tbody tr:nth-child(even) {
+              background-color: rgba(220, 220, 220, 0.8);
+            }
+
+            table {
+              background-color: grey;
+            }
+            </pre>
+        </p>
+
+        <p>
+            单独分析，其实并不难。第一个和第二个selector选择了tbody内的tr，然后使用了nth-child function来根据odd/even来选择对应的tr。然后给整个table row (tr)进行styling。如此便生成了zebra striping。值得一提的是，也可以对tbody设置背景，具体方式参照tfoot的styling。从此以后的效果图下:
+            <img src="../Resources/Zebra.png">
+        </p>
+
+        <h3>Styling caption</h3>
+        <p>
+            最后一步，给table的caption加上style, 使用以下的css代码：
+            <pre>
+                caption{
+                    font-family:'Cookie', cursive;
+                    padding:20px;
+                    font-style: italic;
+                    caption-side:bottom;
+                    color: black;
+                    text-align:right;
+                    letter-spacing:1px;
+                }
+            </pre>
+        </p>
+        <p>
+            以上的代码基本没有新东西，除了一个<code>caption-side</code>，代表的是caption的位置，并且接受了<code>bottom</code>的value。全部加起来的table如下:
+            <img src="../Resources/Fina.png">
+        </p>
+    <h2>Table styling tips</h2>
+    <p>
+        具体的css代码可以在本文档开头注释处查看。key takeaways：
+        <ul>
+            <li>table的markup尽量简单，最好使用percentage来保证flexibility以及responsiveness</li>
+            <li>使用<code>table-layout: fixed</code>来生成table，这样可以保证table的cell size仅和heading的width(也就是th)有关，也就不会造成崩坏的现象。</li>
+            <li>使用<code>border-collapse: collapse</code>以去除多余的table border</li>
+            <li>使用<code>thead, tbody, tfoot</code>将整个table的html框架分开，这样当style的时候便可以单独进行css styling，避免麻烦</li>
+            <li>用<code>text-align</code>来对齐cell的heading及其对应的数据</li>
+        </ul>
+    </p>
+</body>
+</html>
