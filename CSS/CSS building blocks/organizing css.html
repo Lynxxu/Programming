@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Organizing your css</title>
+</head>
+<body>
+<h1>Organizing your css</h2>
+<p>
+    当开始大型的css文件时，比如大型网站，那么需要部分css技术支持来更好的增加maintainability，来使得css更整洁
+</p>
+    <h2>Tips to keep css Tidy</h2>
+    <p>
+        以下是几种保持stylesheet整洁以及tidy的技术：
+    </p>
+        <h3>Coding style guide</h3>
+        <p>
+            假设使用existing project。那么首先该检查项目是否含有一个style guide。如果有的话使用style guide，因为需要规范且持续的代码格式
+        </p>
+
+        <h3>Keep it consistent</h3>
+        <p>
+            假设是我制定css的规定，或者单人时，那么最重要的事情便是保持consistency。比如保持相同的formatting，indentation等等。
+        </p>
+
+        <h3>Formatting readable CSS</h3>
+        <p>
+            css的格式有几种，有的开发者喜欢使用单行代表一个rule，类似
+            <br><code>.box{background-color: black}</code><br>
+            而别的开发者可能更喜欢将所有的property和rule分成单段
+            <pre>
+                .box{
+                    background-color: black
+                }
+            </pre>
+        </p>
+        <p>
+            虽然css两者都认得，但是一般来说第二种，也就是分段使用会更加清晰。
+        </p>
+
+        <h3>Comment your css</h3>
+        <p>
+            向css内添加注释可以帮助你的coworkers，也可也帮以后的自己理解css rule
+        </p>
+        <pre>
+        /* This is a CSS comment
+        It can be broken onto multiple lines. */
+        </pre>
+        <p>
+            一般来说，建议根据不同逻辑的section来添加注释。并且可以使用一些特殊字符加在每一个section前面以易于搜索。类似下面:
+            <pre>
+            /* || General styles */
+
+            ...
+
+            /* || Typography */
+
+            ...
+
+            /* || Header and Main Navigation */
+
+            ...
+            </pre>
+        </p>
+        <p>
+            另外，在使用某些特殊的css rules时，特别是无法单单从css看出用意的时候，可以使用注释来写明白用意。如下:
+            <pre>
+                .box {
+                    background-color: red; /* fallback for older  browsers that don't support gradients */
+                    background-image: linear-gradient(to right, #ff0000, #aa0000);
+                }
+            </pre>
+        </p>
+
+        <h3>Create logical sections for stylesheets</h3>
+        <p>
+            为了整洁以及可读性，一般来说会将css分成以逻辑为基准的大块。首先来说会先定义最基本的以及最主要的部分，也就是以下几个:
+            <ul>
+                <li><code>body</code></li>
+                <li><code>p</code></li>
+                <li><code>h1,h2,h3, etc</code></li>
+                <li><code>ul and ol</code></li>
+                <li><code>table</code></li>
+                <li>links</li>
+            </ul>
+        </p>
+        <p>
+            那么第一个section一般也是他们的集合，称为<b>general styles</b>类似如下:
+            <pre>
+                /* || GENERAL STYLES */
+
+                body { ... }
+
+                h1, h2, h3, h4 { ... }
+
+                ul { ... }
+
+                blockquote { ... }
+            </pre>
+        </p>
+        <p>
+            第二个section可以定义几个utility classes，这些css rules是会在html内多次用到的，比如定义一个.flex，.nobullet等等。一般来说这些class应该是self-explanatory的。类似如下：
+            <pre>
+               /* || UTILITIES */
+
+               .flex{
+                    display: flex;
+               }
+
+               .nobullet{
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+               }
+            </pre>
+        </p>
+        <p>
+            然后下一个section可以是用于全网站的，比如最基本的layout，header， navi bar等等。此section被称为<b>sitewide</b>
+            <pre>
+                /* || Sitewide */
+                .main-nav{...}
+
+                .logo{...}
+            </pre>
+        </p>
+
+        <p>
+            一般来说有以上几个section便可以几乎包含绝大多数需要多次重复使用的styling了。因此下面几个sections便可以以page，context甚至component来分类了。比如我的store page可以有单独的一个section 如下:
+            <pre>
+                /* || STORE PAGES */
+
+                .product-listing { ... }
+
+                .product-box { ... }
+            </pre>
+        </p>
+
+        <h3>Avoid over specific selectors</h3>
+        <p>
+            假设我创造了一个非常复杂且详细的selector如下:
+            <br><code>article.alter p.center{ border:1px solid black}</code><br>
+            也就是一个在属于alter class的article内的属于center class的p，那么这个selector会非常精准。那么就会使得这个selector在其他地方不起作用。虽然在很多时候使用specific selector有用，但是一般不建议这么做
+        </p>
+
+        <h3>Breal large stylesheets into smaller ones</h3>
+        <p>
+            如果在创造网页时，有几个部分需要非常不同风格的styling，那么一般来说可以创建一个大的，总的stylesheet包含general styling，然后多个单独的stylesheet对应不同风格的section。将其仅对相对应的网页链接
+        </p>
+        <p>
+            假设我想做一个online store为一个网页的部分，那么我可以写一个总的全网页通用的stylesheet，以及一个仅store处用得到的stylesheet，将这俩一起link到该store section的source code，如此便可保证css更加整洁，并且使得分工和后续的maintainece更加明确
+        </p>
+</body>
+</html>
