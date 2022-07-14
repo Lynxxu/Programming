@@ -1,0 +1,38 @@
+img{
+    height: 100%;
+    width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family : inherit;
+    font-size : 100%;
+} 
+
+.bigbox{
+    height: 300px;
+    width: 500px;
+    border: 3px solid black;
+    margin: 5px;
+}
+
+.cover{
+    object-fit: cover;
+}
+
+.contain{
+    object-fit: contain;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 200px 200px;
+    gap: 20px;
+}
+.wrapper > div {
+    background-color: rebeccapurple;
+    border-radius: .5em;
+}

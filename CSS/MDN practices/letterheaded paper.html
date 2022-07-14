@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Fancy letterheaded paper</title>
+    <link rel="stylesheet" type="text/css" href="letterhead.css">
+  </head>
+  <body>
+
+    <article>
+      <h1>Awesome<br>Company</h1>
+      <p>
+        <br><br><br>
+        这个assessment用了以下办法：将已有的article元素内添加<code>background</code>属性，来添加多个背景。首先使用单个background property以达到fallback显示的目的（因为css会以后面的为准）。然后在使用background内加入两个背景，使用<b>单个gradient</b>来盖住一整个article元素，使用<code>to bottom rgba(0,0,0,transparency)，百分比</code>来创造一个头尾颜色深的渐变
+      </p>
+      <p>至于h1以及logo,这里是使用了border-radius并且给了一个和图片相同尺寸的值，将box直接变成一个圆形，以此使用box-shadow来添加drop shadow。也可也使用filter: drop-shadow(3px 3px 3px black);</p>
+      <p>
+        值得一提的是，我这里使用的不是这个办法，我为俩top和bottom分别创建了不同的class，然后将其设定max sizes均为100%，以此限定了尺寸，然后单独对他们使用<code>position</code>来设定位置(top:0%以及bottom:0%)。最后对他们使用gradient。我这个办法的优点是gradient会严格的在图片的范围，而图片也只会占用其本该有的大小。但是会多写几段代码
+      </p>
+      <p>
+        此处也要注意，假设在article内使用一个<code>background</code>来加上全部的背景和渐变，那么记住要最后加入<code>background-color:white</code>来覆写整个背景的颜色（灰转白色），假设单独写在前面，会被后面的background给覆写掉（因为更specific）。
+      </p>
+      <address>
+        <p>The Awesome Company</p>
+        <p>102-112 Frail Bend Bridge<br>
+        The Dwindlings<br>
+        Little Hornet<br>
+        HX3 9ZQ<br>
+        UK</p>
+      </address>
+    </article>
+  </body>
+</html>

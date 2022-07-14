@@ -3,6 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+        img{
+            display: block;
+        }
+    </style>
     <title>Organizing your css</title>
 </head>
 <body>
@@ -150,5 +155,157 @@
         <p>
             假设我想做一个online store为一个网页的部分，那么我可以写一个总的全网页通用的stylesheet，以及一个仅store处用得到的stylesheet，将这俩一起link到该store section的source code，如此便可保证css更加整洁，并且使得分工和后续的maintainece更加明确
         </p>
+    <h2>Tools for organizing css</h2>
+    <p>
+        css本身斌没有太多自带的organization，所以说css的一致性和可读性取决于作者。也是因为这些原因，开发者们发明了很多条例，工具等等来管理大css项目。
+    </p>
+        <h3>CSS methodologies</h3>
+        <p>
+            目前css社区已经有了许多优秀的css coding guides，我们可以直接使用这些已有的structure，但是一般来说这些guides会比我写的更冗长，但是更容易理解。所以使用一个已被广泛使用的method对于团队合作以及后续维护非常有用
+        </p>
+            <h4>OOCSS</h4>
+            <p>
+                绝大多数的approaches都和<b>Object Oriented CSS</b>有关，这个approach由<a href="https://github.com/stubbornella/oocss/wiki">Nicole Suilivan</a>开发。基本来说就是将css分开成可重复使用的objects，然后便可以在网站中据需求使用。
+            </p>
+            <p>
+                一个很常见的OOCSS的例子就是<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Layout_cookbook/Media_objects">Media object</a>，一个两列的box，其中一个是图片而另一个是文字，类似facebook tweet之类的，如下：
+                <img src="../Resources/MediaObject.png">
+            </p>
+
+            <p>
+                再举一个例子，假设我没使用OOCSS，并且如果我想实现两个class，一个作为评论，一个作为list，而且这俩class没有特别大的区别。那么我可能会写出俩class如下:
+                <pre>
+                    .comments{
+                        display: grid;
+                        grid-template-column: 1fr 3fr;
+                    }
+                    .comment img {
+                      border: 1px solid grey;
+                    }
+
+                    .comment .content {
+                      font-size: .8rem;
+                    }
+
+                    .list-item {
+                      display: grid;
+                      grid-template-columns: 1fr 3fr;
+                      border-bottom: 1px solid grey;
+                    }
+
+                    .list-item .content {
+                      font-size: .8rem;
+                    }
+                </pre>
+            </p>
+            <p>
+                但是假设我使用了OOCSS，则我先会创建一个叫做meida的pattern作为基本class，然后可以在该class的基础上添加其他class以达到实现不同的目的。类似如下:
+                <pre>
+                    .media{
+                        display: grid;
+                        grid-template-column: 1fr 3fr;
+                    }
+
+                    .media .content{
+                        font-size: 0.8rem;
+                    }
+
+                    .comments img{
+                        border: 1px solid grey;
+                    }
+
+                    list-item {
+                        border-bottom: 1px solid grey;
+                    }
+                </pre>
+            </p>
+            <p>
+                可想而知，使用时只需要先加上media，然后加上相对应的class，比如comments便是<code>&ltdiv class="media comments"</code>。这样子便可以去掉重复的css代码，达到简洁的目的。
+            </p>
+
+            <h4>BEM</h4>
+            <p>
+                BEM, 全称Block Element Modifier,在BEM内， block是一个单独的实体，比如一个按钮，菜单和logo等等。元素则是类似list item， title等等和block相连的。modifier则是改变block或者element的styling或者behavior。BEM的特征很明显，一般来说一眼就认得出来：他的命名用了很多的dash和underscore。一些例子类似:
+                <pre>         
+                &ltform class="form form--theme-xmas form--simple"&gt
+                  &ltinput class="form__input" type="text" /&gt
+                  &ltinput
+                    class="form__submit form__submit--disabled"
+                    type="submit" /&gt
+                &lt/form&gt
+                </pre>
+            </p>
+            <p>
+                虽然这种使用class来添加特性的办法和OOCSS很类似，但是BEM是拥有严格的naming rules的，也是这种原因使得BEM在大型网页项目内广泛使用。命名规则详见<a href="http://getbem.com/naming/">GETBEM</a>
+            </p>
+            <h4>Other common systems</h4>
+            <p>
+                除了BEM以及OOCSS以外，还有许多系统，比如<a href="http://smacss.com/">SMACSS</a>，<a href="https://itcss.io/">ITCSS</a>，<a href="https://acss.io/">ACSS</a>等等。如果在开发期间遇见了这些，或者其他system，那么在网上搜索这些guides便可以很简单的理解上一个作者的用意。但是使用这些guides的弊端便是比较麻烦，尤其是对于小项目单人项目来说
+            </p>
+        <h3>Build systems for CSS</h3>
+        <p>
+            另一个组织css的办法是使用一些前端工程师使用的工具，他们被称为<b>pre-processor</b>以及<b>post-processor</b>. 前者将会运行raw files并且将其转化成一个stylesheet，而后者会对finished stylesheet进行处理，比如optimization等等
+        </p>
+        <p>
+            目前最受欢迎的preprocessor是<a href="https://sass-lang.com/">SASS</a>，他对organizing css有着很大的用处，比如以下几点：
+        </p>
+            <h4>Defining variables</h4>
+            <p class="border-test">
+                虽然CSS有自带的<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">custom properties</a>，但是他并没有那么好用，有很多的variables是无法定义的。使用variable的好处是便于更改，假设我写完了一个stylesheet后发现我的color：black全部需要改成blue，那我可能需要从每一个black开始搜索然后逐个改正，但是使用了variable后却只需要更改一个。
+            </p>
+            <p>
+                使用SASS定义变量时，使用$来定义变量，如下：
+                <pre>
+                $base-color: black;
+                $base-size: 50%;
+
+                .border{
+                border: 1px solid $base-color;
+                width: $base-size;
+                }
+
+                .box{
+                color: $base-color;
+                width: $base-size;
+                }
+                </pre>
+            </p>
+            <p>
+                其对应的css如下:
+                <pre>
+                .border {
+                  border: 1px solid black;
+                  width: 50%;
+                }
+
+                .box {
+                  color: black;
+                  width: 50%;
+                }
+                </pre>
+            </p>
+
+            <h4>Compling component stylesheets</h4>
+            <p>
+                之前提到过，将css分成不同大小的模组会使得css更加简洁，而使用sass时，会变得更容易。
+            </p>
+            <p>
+                具体来说，使用sass时，可以创建许多的partial文件，由underscore开头，此时sass会认出来这个文件不是该编译成css的。然后可以使用@use来将partial链接起来.
+            </p>
+            <p>
+                假设我有_partial1.scss和_partial2.scss,将这俩放到同一个文件夹，然后需要引用时，可以直接使用如下：
+            </p>
+            <pre>
+                @use 'partial1';
+                @use 'partial2';
+            </pre>
+            <p>
+                如果我在该文件夹创建一个叫做_index.scss的文件，然后将该文件夹内的所有partial，也就是上面俩，加入进该文件，则该文件夹的母文件夹处可以直接使用其名称来一次性加入全部的partials。类似@use 'foldername'
+            </p>
+
+            <h4>post-processing for optimization</h4>
+            <p>
+                如果对stylesheet的尺寸太大担心，比如太多空格，注释等等，可以使用post-processing tools来去除这些因素，将整个css变成最小的可能。一个例子为<a href="https://cssnano.co/">cssnano</a>
+            </p>
 </body>
 </html>
