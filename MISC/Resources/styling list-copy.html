@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Styling lists</title>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<h1>Styling lists</h1>
+<p>
+    虽然list和其他的text总体来说是类似的，但是有一些css属性可以专门用于lists的，并且也被广泛认为是最佳的选择
+</p>
+    <h2>List behavior</h2>
+    <p>
+        首先来看一个比较简单的list例子，如下：
+        <p>list1: unordered</p>
+        <ul>
+            <li>Venti</li>
+            <li>kazuha</li>
+            <li>xiao</li>
+        </ul>
+
+        <p>list2: ordered</p>
+        <ol>
+            <li>Mondsdat</li>
+            <li>Liyue</li>
+            <li>Dragonspine</li>
+            <li>Inazuma</li>
+        </ol>
+
+        <p>list3: description list</p>
+        <dl>
+            <dt>Mistspiltter</dt>
+            <dd>78% CD, 689 DMG</dd>
+            <dt>Thundering pulse</dt>
+            <dd>68% CD, 689 DMG</dd>
+            <dt>Redhorn</dt>
+            <dd>89% DEF, 589 DMG</dd>
+        </dl>
+    </p>
+    <p>
+        假设使用devtools来看一下上面的元素，可以看到以下特征：
+        <ul>
+            <li><code>ul</code>, <code>ol</code>均有上下margin 16px(1em)以及padding-left: 40px（2.5em）</li>
+            <li><code>li</code>没有设置spacing</li>
+            <li><code>dl</code>含有上下margin 1px(1em)，但没有padding</li>
+            <li><code>dd</code>含有自带的margin-left: 40px（2.5em）</li>
+            <li><code>p</code>含有上下margin：16px(1em)</li>
+        </ul>
+    </p>
+
+    <h2>Handing list spacing</h2>
+    <p>
+        当style list时，有时需要手动调整他们的style来保证他们与其他元素是对齐的。
+        <pre>
+            /* General styles */
+
+            html {
+              font-family: Helvetica, Arial, sans-serif;
+              font-size: 10px;
+            }   
+
+            h2 {
+              font-size: 2rem;
+            }
+
+            ul,ol,dl,p {
+              font-size: 1.5rem;
+            }
+
+            li, p {
+              line-height: 1.5;
+            }
+            
+            /* Description list styles */
+            
+            dd, dt {
+              line-height: 1.5;
+            }
+
+            dt {
+              font-weight: bold;
+            }
+        </pre>
+    </p>
+    <p>
+    上面的一系列css可以将list spacing的问题解决掉, 逐个分析，第一个rule限定了font stack以及size，这些属性将会在整个html内继承。第二，三个rule则是使用em设置了标题和list type的尺寸，这样子便可使其保持一致。第四条设置了行高，以保持垂直方向的一致性。然后最后两条则是针对description list使用的，设置了行高和标题的黑体。
+    </p>
+
+    <h2>List-specific styles</h2>
+    <p>
+        之前看过了基础的list styling，现在可以来看一下更加详细的，仅限于list的属性。首先以一些比较简单的开始：
+        <ul>
+            <li><code><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type">list-style-type</a></code>: 设置点(bullet)的类型，比如是圆形，方形还是什么形状。对于ol来说，可以调整使用什么数字类型来计数，比如拉丁数字，abcd等等。详见超链接</li>
+            <li><code><a href="https://developer.mozilla.org/en-US1/docs/Web/CSS/list-style-position">list-style-position</a></code>: 设置子弹头的位置，可以接受outside以及inside，分别对应将子弹头放在外面和放在list item的content内。</li>
+            <li><code><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-image">list-style-image</a></code>：添加自定义子弹头，但是需要知道的是，这个方法不太容易更改位置，尺寸等等，所以可以使用<code>background</code>属性来添加</li>
+        </ul>
+    </p>
+
+    <p>
+        在上面提了一下三个属性的用法，一个比较ok的style 如下：
+        <pre>
+            ul{
+                padding-left: 2rem;
+                list-style-type:none;
+            }
+
+            ul li{
+                padding-left: 2rem;
+                background-image: url(image);
+                background-position: 0,0;
+                background-size: 1.6rem 1.6rem;
+                background-repeat: no-repeat;
+            }
+        </pre>
+    </p>
+    <p>
+        分析一下，首先使用了<code>padding-left</code>以把原本的40px的左内衬改小到了2rem，也就是32px, 然后将li也改成相同的尺寸来保证consistency。
+    </p>
+    <p>
+        然后，将<code>list-style-type</code>调整至none，这样就没有了子弹头（直接取消，然后使用background来代替）
+    </p>
+    <p>
+        对于每一个list item，添加一个子弹头，具体如下:
+        <ul>
+            <li><code>background-image</code>：指定路径</li>
+            <li><code>background-position</code>：定义背景图的位置，这里我们设置成了0，0，也就是左上角。</li>
+            <li><code>background-size</code>:设置背景图的尺寸，理想化的尺寸是和list item的尺寸差不多，因为前面设置了2rem的padding尺寸以包含bullet，只要尺寸比这个小一点就很好（因为还需要预留空间），此处选择了1.6rem</li>
+            <li><code>background-repeat</code>: 默认来说，背景图会占据整个页面，如果不够就重复，我们不需要这样所以设置为<code>no-repeat</code></li>
+        </ul>
+    </p>
+
+        <h3>List-style shorthand</h3>
+        <p>
+            上面的三个特性都可以使用一个简化的shorthand，也就是<code>list-style</code>来设置，比方说
+            <pre>
+                ul{
+                    list-style-type:square;
+                    list-style-image: url(image.png);
+                    list-style-position: outside;
+                }
+            </pre>
+            是可以使用以下来代替的:
+            <pre>
+                ul{
+                    list-style: square url(image.png) outside;
+                }
+            </pre>
+        </p>
+        <p>
+            具体来说，这种shorthand可以接受任意顺序和任意数量的以上三个属性，若没有出现的话便使用默认属性（disc，none，outside），并且若type和image同时出现，type会被用于fallback属性。
+        </p>
+
+    <h2>Controlling list counting</h2>
+    <p>
+        一般来说ordered list从1开始增加点数，但是如果需要其他方式的话（比如从任意数字开始，倒着数等等）则可以使用css/html来更改
+    </p>
+        <h3>start</h3>
+        <p>
+            <code>start</code> attribute可以调整list开始的值，注意这个是attribute,也就是直接使用在元素上的，不需要在css处使用。
+            <ol start="-1">
+                <li>这个点从-1开始</li>
+                <li>因为我使用了 <code>&lt;ol start="-1"&gt;</code></li>
+            </ol>
+        </p>
+        <h3>reversed</h3>
+        <p>
+            <code>reversed</code> attribute, 如字面意义，让list反过来数，配合<code>start</code>可以调整为从某个值开始倒计数。
+            <ol start="2" reversed>
+                <li>这里我设置了<code>&lt; ol start="2" reversed&gt;</code></li>
+                <li>因此这个list会从2开始</li>
+                <li>并且一直倒数下去</li>
+            </ol>
+        </p>
+        <h3>value</h3>
+        <p>
+            <code>value</code> attrtibute可以允许我们自定义某个点的值，只需要在对应的点使用即可
+            <ol>
+                <li value="-999">这个点是-999</li>
+                <li value="648">这个点是648</li>
+                <li value="3.14">但是不能是小数(我这里是3.14）</li>
+            </ol>
+        </p>
+</body>
+</html>

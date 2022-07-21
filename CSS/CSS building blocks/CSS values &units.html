@@ -85,7 +85,7 @@
 <body>
 <h1>CSS values and units</h1>
 <p>
-    CSS内的每一个property均有一种value type（或data type），这种type定义了该property可选择的values，比如&ltcolor&gt便是代表了一切颜色，那么一个完整的定义颜色的property value pair便是<code>color: &ltcolor&gt</code>
+    CSS内的每一个property均有一种value type（或data type），这种type定义了该property可选择的values，比如&lt;color&gt;便是代表了一切颜色，那么一个完整的定义颜色的property value pair便是<code>color: &lt;color&gt;</code>
 </p>
 
     <h2>Numbers, lengths, and percentages</h2>
@@ -99,20 +99,20 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><code>&ltinteger&gt</code></td>
+                    <td><code>&lt;integer&gt;</code></td>
                     <td>任意whole number，比如1025，-12</td>
                 </tr>
                 <tr>
-                    <td><code>&ltnumber&gt</code></td>
-                    <td><code>&ltnumber&gt</code>代表了任意decimal number，可以是小数也可以不是，比如999，1.2，-1.1</td>
+                    <td><code>&lt;number&gt;</code></td>
+                    <td><code>&lt;number&gt;</code>代表了任意decimal number，可以是小数也可以不是，比如999，1.2，-1.1</td>
                 </tr>
                 <tr>
-                    <td><code>&ltdimension&gt</code></td>
-                    <td><code>&ltdimension&gt</code>是一个带单位&ltnumber&gt，比如45deg，5s，19em等等。&ltdimension&gt是一个大类，其下属的有&ltlength&gt, &ltangle&gt, 以及&ltresolution&gt</td>
+                    <td><code>&lt;dimension&gt;</code></td>
+                    <td><code>&lt;dimension&gt;</code>是一个带单位&lt;number&gt;，比如45deg，5s，19em等等。&lt;dimension&gt;是一个大类，其下属的有&lt;length&gt;, &lt;angle&gt;, 以及&lt;resolution&gt;</td>
                 </tr>
                 <tr>
-                    <td><code>&ltpercentage&gt</code></td>
-                    <td><code>&ltpercentage&gt</code>代表了某个value的比例，比如50%。Percentage永远是相对与某个值的，比如一个元素的长度是其母元素的90%</td>
+                    <td><code>&lt;percentage&gt;</code></td>
+                    <td><code>&lt;percentage&gt;</code>代表了某个value的比例，比如50%。Percentage永远是相对与某个值的，比如一个元素的长度是其母元素的90%</td>
                 </tr>
             </tbody>
         </table>
@@ -120,7 +120,7 @@
 
         <h3>Lengths</h3>
         <p>
-            css很常见的数字类型<i>numeric type</i>是<code>&ltlength&gt</code>，比如10px, 30em等等，但是除了这种以外，length还接受relative length
+            css很常见的数字类型<i>numeric type</i>是<code>&lt;length&gt;</code>，比如10px, 30em等等，但是除了这种以外，length还接受relative length
         </p>
             <h4>Absolute length units</h4>
             <p>
@@ -183,27 +183,27 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>&ltem&gt</code></td>
+                        <td><code>&lt;em&gt;</code></td>
                         <td>假设用于<code>typological properties</code>时，则em对应parent的font size。假设用于其他内容，比如width，则是对应该元素本身的font size</td>
                     </tr>
                     <tr>
-                        <td><code>&ltex&gt</code></td>
+                        <td><code>&lt;ex&gt;</code></td>
                         <td><code>ex</code>代表了元素font的x高度</td>
                     </tr>
                     <tr>
-                        <td><code>&ltch&gt</code></td>
-                        <td><code>&ltch&gt</code>为该元素的字体的"0"的尺寸</td>
+                        <td><code>&lt;ch&gt;</code></td>
+                        <td><code>&lt;ch&gt;</code>为该元素的字体的"0"的尺寸</td>
                     </tr>
                     <tr>
-                        <td><code>&ltrem&gt</code></td>
-                        <td><code>&ltrem&gt</code>root元素的字体尺寸</td>
+                        <td><code>&lt;rem&gt;</code></td>
+                        <td><code>&lt;rem&gt;</code>root元素的字体尺寸</td>
                     </tr>
                     <tr>
-                        <td><code>&ltlh&gt</code></td>
+                        <td><code>&lt;lh&gt;</code></td>
                         <td>代表了元素的line height</td>
                     </tr>
                     <tr>
-                        <td><code>&ltrlh&gt</code></td>
+                        <td><code>&lt;rlh&gt;</code></td>
                         <td>代表了root元素的line height。当使用在root元素的<code>font-size</code>以及<code>line-height</code>时，代表的是属性的初始值</td>
                     </tr>
                     <tr>
@@ -291,7 +291,7 @@
     </p>
         <h3>Color keywords</h3>
         <p>
-            &ltcolor&gt value type可以接受keywords，比如<span style="color: grey;">grey</span>，<span style="color: greenyellow;">greenyellow</span>，<span style="color: blueviolet;">blueviolet</span>等等。
+            &lt;color&gt; value type可以接受keywords，比如<span style="color: grey;">grey</span>，<span style="color: greenyellow;">greenyellow</span>，<span style="color: blueviolet;">blueviolet</span>等等。
         </p>
 
         <h3>Hexadecimal RGB values</h3>
@@ -315,7 +315,7 @@
         </p>
     <h2>Images</h2>
     <p>
-        &ltimage&gt value type可以在任意接受image值的属性使用。可以是一个具体的图像，或者是gradient如下
+        &lt;image&gt; value type可以在任意接受image值的属性使用。可以是一个具体的图像，或者是gradient如下
     </p>
     <p>
         <div class="imgbox image"></div>
@@ -324,7 +324,7 @@
 
     <h2>Position</h2>
     <p>
-        &ltposition&gt value type代表了一系列2d坐标， 使用于放置item时的定位，比如<code>background-position</code>，可以接受keywords比如<code>top</code>, <code>left</code>, <code>bottom</code>,<code>right</code>, 以及<code>center</code>来对于box定位。
+        &lt;position&gt; value type代表了一系列2d坐标， 使用于放置item时的定位，比如<code>background-position</code>，可以接受keywords比如<code>top</code>, <code>left</code>, <code>bottom</code>,<code>right</code>, 以及<code>center</code>来对于box定位。
     </p>
     <p>
         一般来说，一个position value是有两个值的，第一个代表horizontal坐标，另一个代表vertical坐标。若不填的话便默认center，比如以下的色相盘便是是d使用的position: left center来定义的位置，即水平方向是左边，vertical方向为中间

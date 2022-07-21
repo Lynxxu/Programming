@@ -10,11 +10,11 @@
     Adding Images on a webpage
 </h1>
 <p>
-    加入图片时，我们使用<code>&ltimg&gt</code>来添加图片，使用<code>width</code>，<code>height</code>,以及<code>figure</code>等attribute来改变/添加属性。
+    加入图片时，我们使用<code>&lt;img&gt;</code>来添加图片，使用<code>width</code>，<code>height</code>,以及<code>figure</code>等attribute来改变/添加属性。
 </p>
 <h2>The <code>img</code> tag</h2>
 <p>
-    <code>&ltimg&gt</code>类似<code>a</code>(超链接)，里面也有<code>src</code> attribute代表图片的路径。类似之前提到的，路径可以为网上的absolute URL(不建议，因为会使浏览器做无用功），也可以是电脑内图片路径, 比如我引用"D:\Programming\Imgs\2021121623318.png"会有以下结果：
+    <code>&lt;img&gt;</code>类似<code>a</code>(超链接)，里面也有<code>src</code> attribute代表图片的路径。类似之前提到的，路径可以为网上的absolute URL(不建议，因为会使浏览器做无用功），也可以是电脑内图片路径, 比如我引用"D:\Programming\Imgs\2021121623318.png"会有以下结果：
     <img src=D:\Programming\Imgs\2021121623318.png>
 </p>
 <h3>Alternative text <code>alt</code></h3>
@@ -48,20 +48,20 @@
 <p>
     若想给图片加上解释<i>caption</i>，可以使用最原始的办法，也就是在图片下面带上一段话，如<br>
     <code>
-        &ltdiv class = "figure"&gt<br>
-        &ltimg src = "source.jpg"&gt<br>
-        &ltp&gtcaption&ltp&gt<br>
-        &lt/div&gt<br>
+        &lt;div class = "figure"&gt;<br>
+        &lt;img src = "source.jpg"&gt;<br>
+        &lt;p&gt;caption&lt;p&gt;<br>
+        &lt;/div&gt;<br>
     </code>
     但是很明显，这并不会给caption带来semantics，也就是说accessibility有可能无法解读字幕和图片的关系。
 </p>
 <p>
-    为了解决这个问题，我们有<code>&ltfigute&gt</code>和&lt<strong>figcaption</strong>&gt。将以上的代码以figure代替，我们有：<br>
+    为了解决这个问题，我们有<code>&lt;figute&gt;</code>和&lt;<strong>figcaption</strong>&gt;。将以上的代码以figure代替，我们有：<br>
     <code>
-        &ltfigure&gt<br>
-        &ltimg src = "source.jpg"&gt<br>
-        &ltfigaption&gtcaption&ltfigcaption&gt<br>
-        &lt/figure&gt
+        &lt;figure&gt;<br>
+        &lt;img src = "source.jpg"&gt;<br>
+        &lt;figaption&gt;caption&lt;figcaption&gt;<br>
+        &lt;/figure&gt;
     </code>
 </p>
 <p>

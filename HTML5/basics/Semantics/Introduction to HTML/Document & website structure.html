@@ -27,30 +27,30 @@
         <p>
             如上说的，我们需要使用正确的semantics，每一个大的section都有相对应的几个tags如下：
             <ul>
-                <li><strong>header:</strong>&ltheader&gt</li>    
-                <li><strong>navigation bar:</strong>&ltnav&gt</li>
-                <li><strong>main content:</strong>&ltmain&gt, 以及content的subsection如&ltarticle&gt, &ltsection&gt, &ltdiv&gt</li>
-                <li><strong>sidebar:</strong>&ltaside&gt, 一般在&ltmain&gt内</li>
-                <li><strong>footer:</strong>&ltfooter&gt</li>
+                <li><strong>header:</strong>&lt;header&gt;</li>    
+                <li><strong>navigation bar:</strong>&lt;nav&gt;</li>
+                <li><strong>main content:</strong>&lt;main&gt;, 以及content的subsection如&lt;article&gt;, &lt;section&gt;, &lt;div&gt;</li>
+                <li><strong>sidebar:</strong>&lt;aside&gt;, 一般在&lt;main&gt;内</li>
+                <li><strong>footer:</strong>&lt;footer&gt;</li>
             </ul>
         </p>
 
     <h2>HTML layout specific details</h2>
         <p>
             <ul>
-                <li>&ltmain&gt每个web仅有一个，可以有很多subsection，此main应在body内</li>
-                <li>&ltarticle&gt为related content，这一整个content应独立也可以看得懂，比如一个blog post</li>
-                <li>&ltsection&gt与article类似，但是section更类似小标题，将许多parts集合在一起。sections与articles可以被nested。</li>
-                <li>&ltaside&gt为相关联内容，但是并不是直接与内容有关。一般来说类似glossory，authory，related links等等</li>
-                <li>&ltheader&gt代表了开头内容，如果在body内，则是global header，若是在article或section内，则是该section的指定header。</li>
-                <li>&ltnav&gt则是main navigation。Secondary links不会在此内</li>
-                <li>&ltfooter&gt代表了尾部内容</li>
+                <li>&lt;main&gt;每个web仅有一个，可以有很多subsection，此main应在body内</li>
+                <li>&lt;article&gt;为related content，这一整个content应独立也可以看得懂，比如一个blog post</li>
+                <li>&lt;section&gt;与article类似，但是section更类似小标题，将许多parts集合在一起。sections与articles可以被nested。</li>
+                <li>&lt;aside&gt;为相关联内容，但是并不是直接与内容有关。一般来说类似glossory，authory，related links等等</li>
+                <li>&lt;header&gt;代表了开头内容，如果在body内，则是global header，若是在article或section内，则是该section的指定header。</li>
+                <li>&lt;nav&gt;则是main navigation。Secondary links不会在此内</li>
+                <li>&lt;footer&gt;代表了尾部内容</li>
             </ul>
         </p>
 
     <h2>Non semantic wrappers</h2>
         <p>
-            有的时候我们不需要一个含有semantic意义的tag。比如我想给某个词带<span class="float" title="float definition">float definition</span>或者css以及js赋值。在应对这两种情况时，我们有&ltdiv&gt和&ltspan&gt，分别代表了block和inline level的non-seamantic wrapper。 
+            有的时候我们不需要一个含有semantic意义的tag。比如我想给某个词带<span class="float" title="float definition">float definition</span>或者css以及js赋值。在应对这两种情况时，我们有&lt;div&gt;和&lt;span&gt;，分别代表了block和inline level的non-seamantic wrapper。 
             <div class="example class">而div是一个block level的non-semantic element。 当我们无法想到含有semantic意义的element时再使用。比如一个浮空的购物车，他不是页面的一部分，也不完全和页面有关系，所以<code>aside</code>和<code>section</code>都不能使用</div>
         </p>
 

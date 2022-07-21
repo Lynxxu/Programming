@@ -39,33 +39,33 @@
                 </table> 
             </p>
             <p>
-                html最基本的table如上，使用&lttable&gt wrapper和&lttd&gt elements <i>table data</i>, 然后td再由tr tag包起来，便是一个row。以上的table是这样写的：
+                html最基本的table如上，使用&lt;table&gt; wrapper和&lt;td&gt; elements <i>table data</i>, 然后td再由tr tag包起来，便是一个row。以上的table是这样写的：
                 <code>
                     <pre>
-                        &lttable&gt
-                        &lttr&gt
-                            &lttd&gt1st cell&lt/td&gt
-                            &lttd&gt2nd cell&lt/td&gt
-                            &lttd&gt3rd cell&lt/td&gt
-                        &lt/tr&gt
-                        &lttr&gt
-                            &lttd&gt2nd row 1st cell&lt/td&gt
-                            &lttd&gt2nd row 2nd cell&lt/td&gt
-                            &lttd&gt2nd row 3rd cell&lt/td&gt
-                        &lt/tr&gt
+                        &lt;table&gt;
+                        &lt;tr&gt;
+                            &lt;td&gt;1st cell&lt;/td&gt;
+                            &lt;td&gt;2nd cell&lt;/td&gt;
+                            &lt;td&gt;3rd cell&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                            &lt;td&gt;2nd row 1st cell&lt;/td&gt;
+                            &lt;td&gt;2nd row 2nd cell&lt;/td&gt;
+                            &lt;td&gt;2nd row 3rd cell&lt;/td&gt;
+                        &lt;/tr&gt;
                     </pre>
                 </code>
             </p>
             <h3>Add headers</h3>
             <p>
-                想在table上加header，只需要使用&ltth&gt替换掉td tag即可。并且可以对th tag加上<code>scope</code> attribute,具体来说，一个完整的th tag如下：
+                想在table上加header，只需要使用&lt;th&gt;替换掉td tag即可。并且可以对th tag加上<code>scope</code> attribute,具体来说，一个完整的th tag如下：
                 <code>
                     <pre>
-                        &ltth scope = "col"&gt cell content &lt/th&gt
-                        &ltth scope = "row"&gt cell content &lt/th&gt
+                        &lt;th scope = "col"&gt; cell content &lt;/th&gt;
+                        &lt;th scope = "row"&gt; cell content &lt;/th&gt;
                     </pre>
                 </code>
-                很明显看得出来，scope attribute指代的是header具体是列还是排，使用&ltth&gt会带来含有semantic意义的header
+                很明显看得出来，scope attribute指代的是header具体是列还是排，使用&lt;th&gt;会带来含有semantic意义的header
             </p>
             <h3>Span cells</h3>
             <p>
@@ -119,7 +119,7 @@
             <p>
                 以上表格内，最上面的heading和须弥，枫丹以及纳塔均为rowspan="3"，因为他们都跨过了3个column。而璃月，蒙德和稻妻则是rowspan="2"，因为他们跨了两个row。具体来说，依然是使用tr tag代表每一个row，但是使用span后可以使cell跨格子，具体写法看源码
             </p>
-        <h2>Styling: with and without &ltcol&gt</h2>
+        <h2>Styling: with and without &lt;col&gt;</h2>
         <p>
             给表格上色时，html自带的方法有:
             <ol>
@@ -127,7 +127,7 @@
                     在需要上色的格子内写上style="background-color:yellow"，当然可以换成别的属性，比如border，width和visibility。这个方法比较麻烦，需要在每一个要上色的格子内填上。
                 </li>
                 <li>
-                    使用 &ltcol&gt以及&ltcolgroup&gt进行styling：使用&ltcolgroup&gt define有几个column，再用&ltcol&gt代表某个column的style
+                    使用 &lt;col&gt;以及&lt;colgroup&gt;进行styling：使用&lt;colgroup&gt; define有几个column，再用&lt;col&gt;代表某个column的style
                 </li>
             </ol>
             Table 1: without col

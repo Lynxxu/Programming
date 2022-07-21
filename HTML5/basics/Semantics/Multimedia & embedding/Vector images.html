@@ -25,15 +25,15 @@
     <br>
     具体语法与插入普通图片类似，为:<br>
         <code>
-        &ltimg src="D:/Programming/Imgs/Starsvg.svg" 
+        &lt;img src="D:/Programming/Imgs/Starsvg.svg" 
         alt="A hexagonal star with bold blue boundary and green fill"
-        height="87"&gt
+        height="87"&gt;
         </code>
     <p>
         <b>Pros</b>
         <ul>
             <li>快，简单</li>
-            <li>可以将svg当做hyperlink使用，用<code>&lta&gt</code>来生成超链接</li>
+            <li>可以将svg当做hyperlink使用，用<code>&lt;a&gt;</code>来生成超链接</li>
             <li>svg可在浏览器内缓存<i>Cache</i>住，以后再次打开便快速加载</li>
         </ul>
         <b>Cons</b>
@@ -43,7 +43,7 @@
 <h3>Troubleshooting, Cross-browser support</h3>
 <p>对于不支持SVG图片的浏览器，可以使用<code>srcset</code> attribute来reference svg图片，支持svg的浏览器将会从srcset来提取，而不支持的可以使用原本的png格式。具体操作详见<a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Adding_vector_graphics_to_the_Web#troubleshooting_and_cross-browser_support">MDN</a></p>
 <h2>Inline SVG</h2>
-<p>因为svg类似markup langague，不一定非要external ref，可以在html文件内inline defined。确保svg图片由&ltsvg&gt和&lt/svg&gt tag开头/结尾。<br>
+<p>因为svg类似markup langague，不一定非要external ref，可以在html文件内inline defined。确保svg图片由&lt;svg&gt;和&lt;/svg&gt; tag开头/结尾。<br>
 <svg version="1.1"
      baseProfile="full"
      width="300" height="200"
@@ -65,7 +65,7 @@
         <li>若在多出使用了同一个svg，浏览器会加载多次，比较浪费资源</li>
         <li>Inline svg会增加html文件的大小</li>
         <li>不像普通图片，inline svg在每次html加载都会重复一次，因此并不会缓存下来，以后也不会快多少</li>
-        <li>若遇到不支持的浏览器，的确可以使用<code>&ltforeignObject&gt</code>来生成fallback image，但是即使是支持svg的浏览器仍会下载fallback image，产生资源浪费</li>
+        <li>若遇到不支持的浏览器，的确可以使用<code>&lt;foreignObject&gt;</code>来生成fallback image，但是即使是支持svg的浏览器仍会下载fallback image，产生资源浪费</li>
     </ul>
 <p>另外，还有使用<code>Iframe</code>嵌入svg的方法，但是不推荐使用因为<br>1.iframe的fallback mechanism不完整，不能针对svg的fallback生成image。<br>2. 除非svg及网页拥有相同的来源，不然也不能使用JS操作svg</p>
 </p>

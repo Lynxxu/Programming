@@ -37,10 +37,10 @@
 <p>
     以上诺艾尔与爷的图片，在view port为1024px时会自动改变像素，具体语法如下：
     <pre>
-    &ltimg srcset="../file/2021121623254.png 2048w,
+    &lt;img srcset="../file/2021121623254.png 2048w,
                    ../file/2021121623254-reduced.png 724w"
            sizes="(max-width:1024px) 724px, 2048px" 
-           src="../file/2021121623254.png"&gt
+           src="../file/2021121623254.png"&gt;
     </pre>
     其中，srcset是两个不同size的图片，第一个是2048像素，第二个是724w。而sizes内的<code>(max-width:1024px)</code>便是探测viewport的尺寸，当尺寸大于1024时，自动放出2048px的图片，小于1024时放出724px的图片，由此解决resolution switching problem。<i>改变图片大小</i>
 </p>
@@ -55,16 +55,16 @@
     <p>
         以上的语法为
     <pre>
-    &ltimg srcset="../file/2021121623254-reduced.png,
+    &lt;img srcset="../file/2021121623254-reduced.png,
                    ../file/2021121623254.png 2x"
            src="../file/2021121623254.png"
-           alt="万能maid"&gt
+           alt="万能maid"&gt;
     </pre>
         其中，<code>srcset</code>一样提供的是不同文件的路径，而第二个文件后面的<code>2x</code>告诉浏览器，当resolution是原图的两倍时，选择第二个文件。当浏览器不支持srcset时，将直接显示src原图
     </p>
 <h3>Art Direction Problem</h3>
     <p>
-        使用<code>&ltpicture&gt</code> wrapper来解决<i>art direction problem</i>
+        使用<code>&lt;picture&gt;</code> wrapper来解决<i>art direction problem</i>
         <picture>
             <source media="(max-width: 1024px)"
             srcset="../file/83622913-cropped.jpg">
@@ -76,13 +76,13 @@
     <p>
         上面的图片在1024和1025px时会自动切换到剪切过的图片。语法如下：
         <pre>
-        &ltpicture&gt
-            &ltsource media="(max-width: 1024px)"
-            srcset="../file/83622913-cropped.jpg"&gt
-            &ltsource media="(min-width:1025px)"
-            srcset="../file/83622913.jpg"&gt
-            &ltimg src="../file/83622913.jpg" alt="Fuhua"&gt
-        &lt/picture&gt
+        &lt;picture&gt;
+            &lt;source media="(max-width: 1024px)"
+            srcset="../file/83622913-cropped.jpg"&gt;
+            &lt;source media="(min-width:1025px)"
+            srcset="../file/83622913.jpg"&gt;
+            &lt;img src="../file/83622913.jpg" alt="Fuhua"&gt;
+        &lt;/picture&gt;
         </pre>
         此处使用的source element有自带的<code>media</code> attribute，而当media括号内的判断为真，则将会自动切换至该source内的图片展示。第一个media="(max-width: 1024px) 便是判断是不是超过了1024px，若没超过，则展示cropped image。 相反，超过了，则是第二个source为真，展示原图。 注意必须要加<code>img</code> element，不然无法正常显示图片
     </p>

@@ -34,12 +34,12 @@
             <p>
                 首先看以下html代码：
                 <pre>
-                    &ltp&gt
+                    &lt;p&gt;
                         Lets use:
-                        &ltspan&gtHonkai&ltspan&gt
-                        &ltspan&gtImpact&ltspan&gt
-                        &ltspan&gtIII&ltspan&gt
-                    &lt/p&gt
+                        &lt;span&gt;Honkai&lt;span&gt;
+                        &lt;span&gt;Impact&lt;span&gt;
+                        &lt;span&gt;III&lt;span&gt;
+                    &lt;/p&gt;
                 </pre>
                     则，DOM树会有parent node- p元素以及三个child nodes，均为span element。 而这些span元素也是parent element，而文本便是child node。 浏览器会将这一段html转化成以上的DOM  tree并且渲染出以下的文字：
                 <p>

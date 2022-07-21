@@ -56,7 +56,7 @@
             </p>
         <h2>Structural Definition with tables</h2>
         <p>
-            使用<code>&ltthead&gt</code> <code>&lttfoot&gt</code> and <code>&lttbody&gt</code>来markup header，footer以及body section，这些elements并没有semantics意义，也没有accessiblility的意义，但是可以在css styling的时候很有用（act as hook when using as long tables that requires heading fixed at top)
+            使用<code>&lt;thead&gt;</code> <code>&lt;tfoot&gt;</code> and <code>&lt;tbody&gt;</code>来markup header，footer以及body section，这些elements并没有semantics意义，也没有accessiblility的意义，但是可以在css styling的时候很有用（act as hook when using as long tables that requires heading fixed at top)
         </p>
         <p>
             使用方法：将thead设为第一个wrapper，放在col/colgroup（如果有)内。然后使用tfood当作第二个wrapper，包含footer的info。最后使用tbody element，包含其他parts。 注意<i>tbody</i>会implicitly defined如果code内没有使用，
@@ -188,7 +188,7 @@
         </p>
             <h3>使用Column/row headers</h3>
             <p>
-                使用row/column header之后，screenreader用户可以看得出来每个cell和header之间的联系，前提是headers是使用&ltth&gt写出来的，具有semantics意义的header
+                使用row/column header之后，screenreader用户可以看得出来每个cell和header之间的联系，前提是headers是使用&lt;th&gt;写出来的，具有semantics意义的header
             </p>
             <h3>使用Scope attribute</h3>
             <p>
@@ -197,7 +197,7 @@
             </p>
             <h3>使用id， header attribute</h3>
             <p>
-                类似scope，可以给每一个header指定一个id，每个cell指定一个header。类似<code> &lttd headers="cost primogen"&gt160&lt/td&gt</code> 以及<code>&ltth id="game"&gtPurchase&lt/th&gt</code>。这种方法非常精确，但是很耗时间写，并且写完后不易更改。建议使用scope
+                类似scope，可以给每一个header指定一个id，每个cell指定一个header。类似<code> &lt;td headers="cost primogen"&gt;160&lt;/td&gt;</code> 以及<code>&lt;th id="game"&gt;Purchase&lt;/th&gt;</code>。这种方法非常精确，但是很耗时间写，并且写完后不易更改。建议使用scope
             </p>
     </body>
     </html>

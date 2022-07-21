@@ -10,14 +10,14 @@
 
     <h2>Description lists</h2>
         <p>
-            之前看到过由&ltul&gt或者&ltol&gt代表的有序，无序列表。 对于一个word对照一个description来说，我们有<strong>description list</strong>类似：
+            之前看到过由&lt;ul&gt;或者&lt;ol&gt;代表的有序，无序列表。 对于一个word对照一个description来说，我们有<strong>description list</strong>类似：
             <dl>
                 <dt>Ramen</dt>
                 <dd>A type of noodles originally created by Chinese in thousands of years ago but spread and renovated by japanses</dd>
                 <dt>Tea</dt>
                 <dd>A type of drink with multiple benefits including lowering cardiovascular disease, reduce liver fat, etc. Most popular in China and UK</dd>
             </dl>
-            这种list使用&ltdl&gt与&ltdt&gt和&ltdd&gt分别对应description list, description term和description definition。分别是开始list，list的term和term对应的definition，使用方法基本上和ul，ol一样<br>
+            这种list使用&lt;dl&gt;与&lt;dt&gt;和&lt;dd&gt;分别对应description list, description term和description definition。分别是开始list，list的term和term对应的definition，使用方法基本上和ul，ol一样<br>
             也可以一个term对应多个definition，如下:
             <dl>
                 <dt>睡觉</dt>
@@ -30,18 +30,18 @@
         HTML有许多种quote的方法，比如blockquote，inline quote以及内置attribute的citation
         <h3>Blockquote</h3>
             <p>
-                Blockquote为<b>block element</b>。当我们引用一整个段落时，我们需要将其单独设为一段的quote来代表其为引用。可以使用cite attribute内置cite的来源。将quote内容放在&ltblockquote&gt和&lt/blockquote&gt内。比如:
+                Blockquote为<b>block element</b>。当我们引用一整个段落时，我们需要将其单独设为一段的quote来代表其为引用。可以使用cite attribute内置cite的来源。将quote内容放在&lt;blockquote&gt;和&lt;/blockquote&gt;内。比如:
                 <blockquote cite="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5326624/">
                     rabbit TRPV1 exhibits much reduced capsaicin sensitivity (Gavva et al., 2004). A study published in 2004 showed that, when the S3 to S4 segments of rat TRPV1 were transferred to rabbit TRPV1, high capsaicin sensitivity can be transferred as well.
                 </blockquote>
             </p>
         <h3>Inline quotation</h3>
             <p>
-                Inline quotation为引用一句话，用法和&ltblockquote&gt一样，使用的是&ltq&gt以及可选的cite element。比如符华： <q cite="https://zh.moegirl.org.cn/%E7%AC%A6%E5%8D%8E(%E5%B4%A9%E5%9D%8F3)#" title="这里就是inline quotation，由引用号看出来">Hua，性别女，17岁，编号MSA-209，普通士兵，前逐火之蛾第五小队成员</q>
+                Inline quotation为引用一句话，用法和&lt;blockquote&gt;一样，使用的是&lt;q&gt;以及可选的cite element。比如符华： <q cite="https://zh.moegirl.org.cn/%E7%AC%A6%E5%8D%8E(%E5%B4%A9%E5%9D%8F3)#" title="这里就是inline quotation，由引用号看出来">Hua，性别女，17岁，编号MSA-209，普通士兵，前逐火之蛾第五小队成员</q>
             </p>
         <h3>Citations (element)</h3>
             <p>
-                上提到过cite attribute，此为attribute，但是并不会被浏览器给展示出来，所以我们一般使用另一个： &ltcite&gt element。 一般搭配超链接使用，默认cite element为italic font。
+                上提到过cite attribute，此为attribute，但是并不会被浏览器给展示出来，所以我们一般使用另一个： &lt;cite&gt; element。 一般搭配超链接使用，默认cite element为italic font。
                 <p>
                     阿華的几个弟子，来源：<a href="https://zh.moegirl.org.cn/%E7%AC%A6%E5%8D%8E(%E5%B4%A9%E5%9D%8F3)#"><cite>萌娘百科</cite></a>
                         <blockquote cite="https://zh.moegirl.org.cn/%E7%AC%A6%E5%8D%8E(%E5%B4%A9%E5%9D%8F3)#">
@@ -53,12 +53,12 @@
                 </p>
             </p>
     <h2>Abbreviation缩写</h2>
-        缩写html内为&ltabbr&gt代表，显示效果是虚下划线。使用title attribute来显示全程
+        缩写html内为&lt;abbr&gt;代表，显示效果是虚下划线。使用title attribute来显示全程
         <p>
-            例子：<abbr title="abbravation">abbr</abbr>代表缩写。<abbr title="Hyper Text Markup Language">HTML</abbr> 是一个浏览器网页语言。注意HTML也有&ltacronym&gt，但不建议使用因为spec里面不建议
+            例子：<abbr title="abbravation">abbr</abbr>代表缩写。<abbr title="Hyper Text Markup Language">HTML</abbr> 是一个浏览器网页语言。注意HTML也有&lt;acronym&gt;，但不建议使用因为spec里面不建议
         </p>
     <h2>Address</h2>
-        HTML内自带&ltaddress&gt tag，可以帮助写出地址。一般建议放在<strong>footer</strong>或者<strong>Author  info</strong>而不是正文内
+        HTML内自带&lt;address&gt; tag，可以帮助写出地址。一般建议放在<strong>footer</strong>或者<strong>Author  info</strong>而不是正文内
         <p>
             <address>
                 273 Limridge Street, Hamilton, ON
@@ -78,7 +78,7 @@
             </address>
         </p>    
     <h2>Superscript & subscript</h2>
-        上标下标在html内为首字母缩写&ltsup&gt和&ltsub&gt，可以适用于日期，公式等等。
+        上标下标在html内为首字母缩写&lt;sup&gt;和&lt;sub&gt;，可以适用于日期，公式等等。
         <p>
             The chemical formula for vinegar is C<sub>2</sub>H<sub>5</sub>OH<br>
             Christmas is at 25<sup>th</sup> December
@@ -86,23 +86,23 @@
     <h2>Computer code</h2>
         HTML有以下代表code的tags:
         <ul>
-            <li>&ltcode&gt: 标准计算机code</li>
-            <li>&ltpre&gt: 此tag将会把editor内的整个在tag内的code原封不动的表示在html内。包括whitespace（因为浏览器会自动忽略html内的空格等。</li>
-            <li>&ltvar&gt: 变量名</li>
-            <li>&ltkbd&gt: keyboard command，即输入电脑内的指令等</li>
-            <li>&ltsamp&gt: 代表电脑program的输出code</li>
+            <li>&lt;code&gt;: 标准计算机code</li>
+            <li>&lt;pre&gt;: 此tag将会把editor内的整个在tag内的code原封不动的表示在html内。包括whitespace（因为浏览器会自动忽略html内的空格等。</li>
+            <li>&lt;var&gt;: 变量名</li>
+            <li>&lt;kbd&gt;: keyboard command，即输入电脑内的指令等</li>
+            <li>&lt;samp&gt;: 代表电脑program的输出code</li>
         </ul>
         <p>
             例：<br>
             以上list的code为：
             <pre>
-            &ltul&gt
-                &ltli&gt&ltcode&gt: 标准计算机code&lt/li&gt
-                &ltli&gt&ltpre&gt: 此tag将会把editor内的整个在tag内的code原封不动的表示在html内。包括whitespace（因为浏览器会自动忽略html内的空格等。&lt/li&gt
-                &ltli&gt&ltvar&gt: 变量名&lt/li&gt
-                &ltli&gt&ltkbd&gt: keyboard command，即输入电脑内的指令等&lt/li&gt
-                &ltli&gt&ltsamp&gt: 代表电脑program的输出code&lt/li&gt
-            &lt/ul&gt
+            &lt;ul&gt;
+                &lt;li&gt;&lt;code&gt;: 标准计算机code&lt;/li&gt;
+                &lt;li&gt;&lt;pre&gt;: 此tag将会把editor内的整个在tag内的code原封不动的表示在html内。包括whitespace（因为浏览器会自动忽略html内的空格等。&lt;/li&gt;
+                &lt;li&gt;&lt;var&gt;: 变量名&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;: keyboard command，即输入电脑内的指令等&lt;/li&gt;
+                &lt;li&gt;&lt;samp&gt;: 代表电脑program的输出code&lt;/li&gt;
+            &lt;/ul&gt;
             </pre>
         </p>
     <h2>Time & Date</h2>
@@ -113,9 +113,9 @@
             <li>Next Wednesday</li>
         </ul>
         <p>
-            而HTML自带的<code>&lttime&gt</code>以及其<code>datetime</code> 的attribute，可以以年-月-日以及其他方式输入computer readable的日期以便日历使用等。比如<time datetime="2021-10-27">27 Oct. 2021</time><br>
+            而HTML自带的<code>&lt;time&gt;</code>以及其<code>datetime</code> 的attribute，可以以年-月-日以及其他方式输入computer readable的日期以便日历使用等。比如<time datetime="2021-10-27">27 Oct. 2021</time><br>
             <pre>
-                &lttime datetime="2021-10-27"&gt27 Oct, 2021&lt/time&gt
+                &lt;time datetime="2021-10-27"&gt;27 Oct, 2021&lt;/time&gt;
             </pre>
         </p>
 </body>

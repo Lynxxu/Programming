@@ -28,16 +28,16 @@
 <!--油管share
     <iframe width="560" height="315" src="https://www.youtube.com/embed/UPICfwDirEY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
 -->
-<p>而iframe，由于可以任意嵌入其他网页的document，十分方便。但是其有安全问题,在此暂且不提。<code>&ltifrmes&gt</code>的example code如下：</p>
+<p>而iframe，由于可以任意嵌入其他网页的document，十分方便。但是其有安全问题,在此暂且不提。<code>&lt;ifrmes&gt;</code>的example code如下：</p>
 <pre>
-&ltiframe src="https://developer.mozilla.org/en-US/docs/Glossary"
-        width="100%" height="500" allowfullscreen sandbox&gt
-    &ltp&gt
-      &lta href="/en-US/docs/Glossary"&gt
+&lt;iframe src="https://developer.mozilla.org/en-US/docs/Glossary"
+        width="100%" height="500" allowfullscreen sandbox&gt;
+    &lt;p&gt;
+      &lt;a href="/en-US/docs/Glossary"&gt;
          Fallback link for browsers that don't support iframes
-    &lt/a&gt
-    &lt/p&gt
-&lt/iframe&gt
+    &lt;/a&gt;
+    &lt;/p&gt;
+&lt;/iframe&gt;
 </pre>
 <ul>
     <li><code>border: none</code>：不设置任何边界(最好不要边界)</li>

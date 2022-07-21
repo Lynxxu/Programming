@@ -202,16 +202,16 @@
             <ul>
                 <li><code>px</code>:像素，为绝对单位，不论在什么情况和什么设备，基本上都是相同的尺寸</li>
                 <li><code>em</code>: 1 em就是母元素的font size，更详细一点来说就是parent element内的M字母的宽度。使用em在nested elements内会变得比较tricky，但是为什么不呢，基本上所有东西都可以使用em来指定尺寸，甚至可以将整个网页都使用em来决定尺寸以此保证maintainability</li>
-                <li><code>rem</code>: 大体来说和em的逻辑相同，但是1rem是与root element的font size有关，也就是&lthtml&gt，而不是母元素。这样就变得更简单了，因为不需要在nested元素内一直算来算去的。但是需要注意的是很多老浏览器是不支持rem的，比如IE8和以下</li>
+                <li><code>rem</code>: 大体来说和em的逻辑相同，但是1rem是与root element的font size有关，也就是&lt;html&gt;，而不是母元素。这样就变得更简单了，因为不需要在nested元素内一直算来算去的。但是需要注意的是很多老浏览器是不支持rem的，比如IE8和以下</li>
             </ul>
         </p>
         <p>
-            一个元素的<code>font-size</code>是自然继承母元素的，但是整个文档的一切均始于&lthtml&gt，也就是默认的16px尺寸。绝大多数未被指定尺寸的元素均为16px，部分比如&lth1&gt之类的，会以几em来作为默认尺寸
+            一个元素的<code>font-size</code>是自然继承母元素的，但是整个文档的一切均始于&lt;html&gt;，也就是默认的16px尺寸。绝大多数未被指定尺寸的元素均为16px，部分比如&lt;h1&gt;之类的，会以几em来作为默认尺寸
         </p>
         <pre>
-            &ltarticle&gt
-                &ltp&gr Nested elements&lt/p&gt
-            &lt/article&gt
+            &lt;article&gt;
+                &lt;p&gr Nested elements&lt;/p&gt;
+            &lt;/article&gt;
         </pre>
         <p>
             以上便是一个简单的nested paragraph，当<code>article</code>和<code>p</code>均使用em来设置尺寸时，<code>p</code>会受html以及article的影响，而这种影响在更深的嵌套元素内会变得错综复杂，所以尽可能的避免设置font-size，而在必须使用的时候可以用rem来保持简洁

@@ -4,11 +4,172 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Styling links</title>
+    <style type="text/css">
+        a[href*="lynx1027"]{
+            background: url("../Resources/icons8-external-link-26.png") no-repeat 100% 0;
+            background-size: 16px 16px;
+            padding-right: 20px;
+        }
+
+        p div{
+            border: 1px solid darkblue;
+        }
+    </style>
 </head>
 <body>
 <h1>Styling links</h1>
 <p>
-    在<a href="../../HTML5/basics/Semantics/Introduction to HTML/Hyperlinks.html">html hyperlinks</a>
+    在<a href="../../HTML5/basics/Semantics/Introduction to HTML/Hyperlinks.html">html hyperlinks</a>内讲过了基本的html的超链接实现方法和扩展，现在将会基于以上内容来进行styling。
 </p>
+    <h2>Link states</h2>
+    <p>
+        首先我们需要了解一个概念，也就是<b>link state</b>，不同状态下的超链接，他们可以使用各种pseudo-class来进行styling。
+    </p>
+        <ul>
+            <li><b>link</b>: 链接，也就是一个含有终点的链接，使用<code>:link</code>伪类来style</li>
+            <li><b>Visited</b>: 已经被访问过一次的链接（记录将会在浏览器内），使用<code>:visited</code>进行style</li>
+            <li><b>Hover</b>: 被鼠标悬浮上空的链接，使用<code>:hover</code>来style</li>
+            <li><b>Focus</b>: 一个被focus了的链接（类似使用键盘tab选中，或者编程实现的focus。使用<code>:focus</code>来style</li>
+            <li><b>Active</b>:一个被开启了的链接（被点了的），使用<code>:active</code>来style</li>
+        </ul>
+
+        <h3>Default Style</h3>
+        <p>
+            以下是随便写的一个未被style过的链接，用于展示以下default style:
+            <br><a href=https://developer.mozilla.org/en-US/>MDN homepage</a>
+        </p>
+        <p>
+            可以看出以下默认style：
+        </p>
+            <ul>
+                <li>links有下划线</li>
+                <li>未被访问过的链接为蓝色</li>
+                <li>访问过的链接为紫色</li>
+                <li>在链接上悬浮会将鼠标图标变成一只手</li>
+                <li>使用tab聚焦链接时，会有一圈边界围绕着他</li>
+                <li>激活的链接是红色的（试着对链接按住鼠标)</li>
+            </ul>
+
+        <p>
+            值得一提的是，这种默认的链接style从很早的时候就是这样了，直到现在都没变化过。因此最好不要对链接装饰的太超出预期，不然用户会比较困惑，一般来说至少建议使用:
+        </p>
+            <ol>
+                <li>下划线，且仅用于链接，若不使用下划线则至少使用什么办法将其高光一下</li>
+                <li>让他们在被鼠标悬浮（或聚焦）时产生反应，并且在激活时产生稍微不同的反应</li>
+            </ol>
+
+        <p>
+            以下默认的超链接style可以被css关闭：
+        </p>
+            <ul>
+                <li><code>color</code>, 也就是字体颜色</li>
+                <li><code>cursor</code>，也就是鼠标悬浮时自动切换的那只手（建议不关）</li>
+                <li><code>outline</code>，这个东西和border很类似，但是需要区分的是，border会占据box内的空间而outline仅会悬浮在背景上方。outline是一个非常有用的accessibility aid，建议仅在添加了其他提醒方式时移除</li>
+            </ul>
+
+            <h3>Styling links - example</h3>
+            <p>
+                在开始style link之前，需要知道style链接最好是按照特定的顺序来，如下：
+            </p>
+                <pre>
+                    a {
+
+                    }
+
+                    a:link {
+
+                    }
+
+                    a:visited {
+
+                    }
+
+                    a:focus {
+
+                    }
+
+                    a:hover {
+
+                    }
+
+                    a:active {
+
+                    }
+                </pre>
+            <p>
+                这样做的目的是保证rules不会造成不需要的覆写。以上的顺序便是从大到小，因为一个链接，如果被激活了，那么大概率是被hover的，若是被hover了，则很有可能是被visited。使用这个逻辑可以保证最重要的（或者说覆盖率最高的内容）在上。可以使用LoVe Fears HAte来帮忙记忆
+            </p>
+
+            <p>现在来在上面空的选择器内加一点内容吧</p>
+                <pre>
+                a {
+                    outline:none;
+                    padding:2px 1px 0;
+                    text-decoration: none;
+                }
+
+                a:link {
+                    color: gold;
+                }
+
+                a:visited {
+                    color: purple;
+                }
+
+                a:focus {
+                    border-bottom: 1px solid;
+                    background: yellow;
+                }
+
+                a:hover {
+                    border-bottom: 1px solid;
+                    background: yellow;
+                }
+
+                a:active {
+                    background: grey;
+                    color: white;
+                }
+                </pre>
+
+            <p>
+                以上代码的结果可以在<a href="link example page.html">example page</a>内看见，虽然和默认的超链接不一样，但是应该说是大体上能够让用户看得出来这个是超链接的，以下几点是比较重要的
+            </p>
+            <ul>
+                <li>使用<code>a</code>选择器来去掉默认的下划线和focus的outline（这其实和浏览器也有关系）然后加上一点的的padding</li>
+                <li>使用<code>a:link</code>以及<code>a:visited</code>这俩伪类来加上访问过和默认的链接颜色</li>
+                <li>下两条伪类, <code>a:focus</code>和<code>a:hover</code>将focus和hover的链接添上颜色并且加上下划线来增加区分度。需要注意的是此处使用了<code>border-bottom:1px solid</code>而不是<code>text-decoration</code>。这俩的区别是前者更加自由，并且线会更低一点以避免有些字母被下划线挡住。另外注意这里并没有指定颜色，则会自动选择当前元素的font color。在类似这种根据不同情况选择颜色的时候很好用</li>
+                <li>最后，使用<code>a:active</code>来创造一个inverted color scheme给正在被激活的链接，来提醒一下用户他们正在激活什么东西</li>
+            </ul>
+        <h2>Adding icons to links</h2>
+        <p>
+            一个比较常见的办法来表示超链接是添加某种图标，比如比较常见的是小箭头，此处将会使用<a href="https://icons8.com/icon/741/external-link">icons8.com</a>提供的图标以达到类似这个<a href="https://www.lynx1027.com">link</a>的目的
+        </p>
+        <pre>
+        a[href*="lynx1027"]{
+            background: url("../Resources/icons8-external-link-26.png") no-repeat 100% 0;
+            background-size: 16px 16px;
+            padding-right: 20px;
+        }
+        </pre>
+        <p>
+            以上的代码可以实现一个图标，逐个分析：
+        </p>
+            <ul>
+                <li>首先使用了attribute selector来选择任何包含了lynx1027的链接（当然可以是任意需要的内容，自己定义）</li>
+                <li>使用<code>background</code>属性来创造icon，类似在<a href="styling list.html">styling list</a>内讲过的，只不过这次用的是shorthand形式</li>
+                <li>使用了no-repeat，并且将icon的位置定在了100%，0，也就是horizontal方向100%，最右边，top方向0，所以图标将会显示在最右边</li>
+                <li>设置图标尺寸为16x16px,也就是默认的text尺寸以保持一致性</li>
+                <li>在右边设置内衬20px来给icon空间，这样就不会被文字挡住</li>
+            </ul>
+
+        <p>
+            一些sidenote：如何仅对外部链接添加icon？一般来说，在自己的网页内都是使用relative url的，而外部网页则会由https开头，因此可以使用attribute selector <code>a[href ^="http"]</code>来一次性选择全部的外部链接
+        </p>
+
+        <h2>Styling links as buttons</h2>
+        <p>
+            以上学的所有内容也可也在其它地方使用，比如hover可以在许多元素上使用，比如<div>这个词</div>
+        </p>
 </body>
 </html>
