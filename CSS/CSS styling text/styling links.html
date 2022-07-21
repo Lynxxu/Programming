@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Styling links</title>
+    <!--     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap" rel="stylesheet"> -->
     <style type="text/css">
         a[href*="lynx1027"]{
             background: url("../Resources/icons8-external-link-26.png") no-repeat 100% 0;
@@ -11,9 +14,13 @@
             padding-right: 20px;
         }
 
-        p div{
+        p span:hover{
             border: 1px solid darkblue;
         }
+
+       /* body{
+            font-family: 'Oswald', sans-serif;
+        }*/
     </style>
 </head>
 <body>
@@ -169,7 +176,138 @@
 
         <h2>Styling links as buttons</h2>
         <p>
-            以上学的所有内容也可也在其它地方使用，比如hover可以在许多元素上使用，比如<div>这个词</div>
+            以上学的所有内容也可也在其它地方使用，比如hover可以在许多元素上使用，比如<span>这个词</span>就是使用了<code>p span:hover(</code>选择器并赋予了border。
+        </p>
+        <p>
+            在某些时候，这个技巧会很有用，比如说在导航栏处使用图标代替超链接是一个非常常见的办法。
+        </p>
+        <p>
+            打开<a href="button link.html">example page</a>，可以看到类似的效果，实现的css代码如下：
+        </p>
+        <pre>
+        .container{
+            display: flex;
+            gap: 0.625%;
+        }
+
+        a{
+            flex: 1;
+            text-decoration: none;
+            outline: none;
+            text-align: center;
+            line-height: 3;
+            color: black;
+        }
+
+        a:link, a:visited, a:focus{
+            background: linear-gradient(to bottom, blue skyblue);
+        }
+
+        a:hover{
+            background: blue;
+        }
+
+        a:active{
+            background: red;
+            color: white;
+        }
+        </pre>
+        <p>
+            在对应的html框架内，使用&lt;nav&gt;，将其赋予<code>container</code>类。
+        </p>
+        <ul>
+            <li><code>container</code>类是flexbox，也就是说里面的内容会是flex item，而items之间的gap则会是0.625%的container总宽度。</li>
+            <li><code>flex:1</code>意思是所有的items的宽度将会自动调整至占据container所有的位置</li>
+            <li>将<code>text-decoration</code>以及<code>outline</code>关闭来避免不想要的效果</li>
+            <li>最后三个decoration将text居中，并且使用<code>line-height</code>来给button一点高度（并且这样可以使得text自动vertically centered）。然后设置color</li>
+        </ul>
+
+            <h3>Example</h3>
+            <p>
+                因为完整创建一个web font的流程比较繁杂，这里一步一步来学如何创造一个basic web font example
+            </p>
+            <p>
+                在这个例子内，我将使用两个不同的font，一个给标题，另一个给body text，首先第一步是寻找字体文件。字体是由font foundries创建的，并且可以由不同类型存在。一般来说有三种网站可以找到字体
+            </p>
+            <ul>
+                <li>free font distributor: 这种网站会创建并发放免费字体用于下载（有的可能会需要credit原作者或者其他license需求），此类网站有<a href="https://www.fontsquirrel.com/">Font squirrel</a>, <a href="https://www.dafont.com/">dafont</a>以及<a href="https://everythingfonts.com/">Everything fonts</a></li>
+                <li>paid font distributor: 这种网站创建字体并收费，比如<a href="https://www.fonts.com/">fonts.com</a>, <a href="https://www.myfonts.com/">myfonts</a>。当然，也可也直接从fonts foundries内购买（也就是创造者）比如<a href="https://www.linotype.com/">linotype</a>和<a href="https://www.monotype.com/">Monotype</a></li>
+                <li>online font service: 这种网站储存字体，并且直接把需要的代码给你准备好（就是不用写什么@font-face了），具体看<a href="#online font">下文</a></li>
+            </ul>
+            <p>
+                首先来找几个字体吧，这里使用<a href="https://www.fontsquirrel.com/">Font squirrel</a>来寻找。根据这里的需求，只需要两个字体，用于heading和body。找到后下载并存在相同directory下。
+            </p>
+            <p>
+                下载后得到的应该是俩压缩文件，将其解压会得到多个字体文件，一般来说这些都属于变体，比如斜体，粗体等等。在这里就先随便选一个字体继续吧。
+            </p>
+
+            <h3>生成需要的代码</h3>
+            <p>
+                选择好了需要的字体文件后，需要生成代码以及字体类型，对于每一个需要的字体:
+            </p>
+            <ol>
+                <li>若需要在商业或project上使用是，看清楚是否满足licensing requirement</li>
+                <li>前往<a href="https://www.fontsquirrel.com/tools/webfont-generator">webfont generator</a></li>
+                <li>上传对应的字体文件，并且下载生成的kit</li>
+            </ol>
+            <p>
+                如果需要支持过时的浏览器，使用Expert mode，选择svg，eot，ttf等格式一起下载。需要注意的是，类似的web services有时候会限制文件大小，此时可以选择使用其他的conversion tools。具体详见<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_text/Web_fonts#active_learning_a_web_font_example">MDN</a>
+            </p>
+            <h3>Implement the code to demo</h3>
+            <p>
+                这个时候，将下载好了的kit解压，在其中可以看见几个熟悉且有用的东西：
+            </p>
+            <ul>
+                <li>每个字体对应的两种不同格式:<code>.woff</code>以及<code>.woff2</code></li>
+                <li>一个demo html文件，可以打开这个文件来看一下预期效果</li>
+                <li>stylesheet.css，里面是自动生成的@font-face</li>
+            </ul>
+            <p>
+                下一步便是将这些文件implement至我的demo内，过程如下：
+            </p>
+            <ol>
+                <li>重命名解压后的路径，原本的很长</li>
+                <li>打开<code>stylesheet.css</code>并且复制两个<code>@font-face</code>到需要的css文件内，记得将其放在css的一切rules之前，因为它需要最开始被载入。</li>
+                <li>检查一下刚刚复制的<code>@font-face</code>有没有问题，记得重点检查路径是否正确</li>
+                <li>然后就是以前学过的了，直接使用<code>font-family</code>来加入html</li>
+            </ol>
+            <p>
+                到这里就结束了，可以看一下结束的例子<a href="Example web font page/web-font-start.html">网页</a>，使用的是caviar_dreamsregular和titilliumregular，均跟随以上流程 
+            </p>
+
+        <h2 id="online font">Using online font services</h2>
+        <p>
+            在线字体服务一般会直接帮我们写好css code（不一定是font-face），我们需要的仅仅是将其复制粘贴到源码里，然后就可以使用了。比较好用的有<a href="https://fonts.adobe.com/">Adobe Fonts</a>，<a href="https://www.typography.com/webfonts">Cloud.typography</a>。大多数都是订阅制的，除了<a href="https://fonts.google.com/">goole fonts</a>，非常好用且免费
+        </p>
+        <p>
+            需要注意的是，这个办法和之前上面使用的FontSquirrel不同，因为前者是distributor，仅仅提供下载，我们得手动生成文件和css。而online font services类似google fonts甚至不需要下载什么东西。
+        </p>
+        <p>
+            具体来说，使用google fonts时，找到需要的字体文件，选中想要的style，并且加入selected family。在找到一切所需内容后，里面会生成一段html代码，用于导入字体，和一段css代码用于载入。
+        </p>
+
+        <h2>@font-face in more details</h2>
+        <p>
+            来分析一下之前使用fontsquirrel自动生成的font-face代码
+        </p>
+        <pre>
+            @font-face {
+                font-family: 'caviar_dreamsregular';
+                src: url('font kit/caviardreams-webfont.woff2') format('woff2'),
+                     url('font kit/caviardreams-webfont.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+        </pre>
+        <p>
+            逐个分析:
+        </p>
+        <ul>
+            <li><code>font-family</code>: 这行代码将会定义这个font在css内使用的名字</li>
+            <li><code>src</code>:这行代码定义了字体文件的路径（url()部分）以及字体文件对应的类型（format部分）。虽然后面的格式部分是可选的，但是一般建议加上去，因为浏览器可以更快的决定使用哪个格式的字体。使用逗号来隔开不同字体文件，记住将想要的字体放在首位</li>
+            <li><code>font-weight</code>, <code>font-style</code>：这俩行代码定义了斜体和黑体的属性。假设需要使用单个字体的不同weight 和style时，不用单独每一个变体都换一个名字。因为一个可行的办法，由Roger Johansson带来的<a href="https://www.456bereastreet.com/archive/201012/font-face_tip_define_font-weight_and_font-style_to_keep_your_css_simple/">@font-face tip: define font-weight and font-style to keep your CSS simple</a>内详细描写了。说简单点就是将每个变体由相同名称加载一次，然后在需要改变的时候使用<code>font-style</code>和<code>font-weight</code></li>
+        </ul>
+        <p>
+            关于上面提到的technique，我觉得需要更深的解释。首先当我们在font-face内使用<code>font-weight</code>以及<code>font-style</code>时，是给该字体指定了
         </p>
 </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Button link</title>
+    <style type="text/css">
+        .container{
+            display: flex;
+            gap: 0.625%;
+        }
+
+        a{
+            flex: 1;
+            text-decoration: none;
+            outline: none;
+            text-align: center;
+            line-height: 3;
+            color: black;
+        }
+
+        a:link, a:visited, a:focus{
+            background: linear-gradient(to bottom, blue skyblue);
+        }
+
+        a:hover{
+            background: blue;
+        }
+
+        a:active{
+            background: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<nav class="container">
+  <a href="#">Home</a>
+  <a href="#">Pizza</a>
+  <a href="#">Music</a>
+  <a href="#">Wombats</a>
+  <a href="#">Finland</a>
+</nav>
+</body>
+</html>
