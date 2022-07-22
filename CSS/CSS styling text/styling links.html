@@ -306,8 +306,22 @@
             <li><code>src</code>:这行代码定义了字体文件的路径（url()部分）以及字体文件对应的类型（format部分）。虽然后面的格式部分是可选的，但是一般建议加上去，因为浏览器可以更快的决定使用哪个格式的字体。使用逗号来隔开不同字体文件，记住将想要的字体放在首位</li>
             <li><code>font-weight</code>, <code>font-style</code>：这俩行代码定义了斜体和黑体的属性。假设需要使用单个字体的不同weight 和style时，不用单独每一个变体都换一个名字。因为一个可行的办法，由Roger Johansson带来的<a href="https://www.456bereastreet.com/archive/201012/font-face_tip_define_font-weight_and_font-style_to_keep_your_css_simple/">@font-face tip: define font-weight and font-style to keep your CSS simple</a>内详细描写了。说简单点就是将每个变体由相同名称加载一次，然后在需要改变的时候使用<code>font-style</code>和<code>font-weight</code></li>
         </ul>
+            <h3>font face technique</h3>
+            <p>
+                关于上面提到的technique，我觉得需要更深的解释。首先当我们在font-face内使用<code>font-weight</code>以及<code>font-style</code>时，我们是给该下载好的字体指定了他们的类型。一个regular字体应该是font-weight和style均为normal.但是我可以给他指定任意属性。
+            </p>
+            <p>
+                使用Font Squirrel等软件生成的font face默认会使用不同名字，但是font-weight以及style均设置为normal，可以参考这个<a href="Example web font page/Default font face.html">网页</a>的css源码来看看。
+            </p>
+            <p>
+                这种默认的办法并不是不行，但是会比较麻烦，因为每一次使用时，都需要单独指定所需的字体，并且强制浏览器覆写掉默认的font-weight和style以避免fake styling。这些操作不仅麻烦，浪费资源，还会在无法使用@font-face时去除本应该有的style
+            </p>
+            <p>
+                那么根据Roger Johansson得出的方法，可以让每一个font变体都变成一样的font-family，也就是相同的名字。注意，即使他们的名字相同，只要url指向正确，这些变体就都是不一样的。此时使用<code>font-weight</code>和<code>font-style</code>来区分每一个字体的区别。然后在需要使用对应变体的时候，只需要输入一个名字（甚至可以不用名字，从母元素继承即可）以及两个property便可以自动对应字体。比如h1就可以继续使用<code>font-weight: bold;</code>即使在出错的环境下，浏览器也可也fake出来应有的效果。
+            </p>
+        <h2>Variable fonts</h2>
         <p>
-            关于上面提到的technique，我觉得需要更深的解释。首先当我们在font-face内使用<code>font-weight</code>以及<code>font-style</code>时，是给该字体指定了
+            除了上面提过的技术以外，最近有一种新技术称为variable fonts,这种字体可以允许单个字体的多种变体被放在一个file内，而不是给每一个不同的变体单独一份文件。我看了一下不是很懂，等以后更深入了再说，
         </p>
 </body>
 </html>

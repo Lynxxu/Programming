@@ -67,3 +67,20 @@ span{
 article{
     font-family: walleyebold_italic;
 }
+
+#fakeitalic{
+    font-family: walleyeregular;
+    font-style: italic;
+}
+
+#fakebold{
+    font-family: walleyeregular;
+    font-weight: bold;
+}
+
+h1{
+    font-family: walleyebold;
+    font-size: 1em;
+    font-style: normal;
+    font-weight: normal;
+}
