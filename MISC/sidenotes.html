@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
+        div{
+            display: flex;
+            justify-content: center;
+        }
+
         img{
             max-width: 100%;
             max-height: 100%;
@@ -18,11 +23,15 @@
 </p>
     <h2>Wildcards</h2>
     <p>
-        2020-07-20，我发现我打错了基本上所有的named character，因此我开始使用sublime的内置Find All功能，里面的filter是wildcard属性。
+        2022-07-20，我发现我打错了基本上所有的named character，因此我开始使用sublime的内置Find All功能，里面的filter是wildcard属性。
     </p>
     <p>
         wildcard说简单点就是一种搜索机制，我参考的是<a href="https://support.microsoft.com/en-us/office/using-wildcard-characters-in-searches-ef94362e-9999-4350-ad74-4d2371110adb">微软</a>的搜索教程，也就是说星号代表任何匹配的东西，而我这里使用的便是在programming文件夹内搜索<code>*.html</code>以及<code>*.css</code>，以一次性选择所有的html和css文档，这样便可不影响到其他文件。类似如下:
-        <img src="Resources/wildcard.png">
+        <div>
+            <img src="Resources/wildcard.png">
+        </div>
     </p>
-</body>
+
+
+</body> 
 </html>

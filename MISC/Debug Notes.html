@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style type="text/css">
-        img{
-            max-height: 100%;
-            max-width: 100%;
-            display: block;
-            margin: 1em 0 1em 0.5em;
-            border: 1px solid black;
-        }
-    </style>
-    <title>Debugging Journal</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">
+
+    div{
+        display: flex;
+        justify-content: center;
+    }
+
+    img{
+        max-width: 100%;
+        max-height: 100%;
+        display: flex;
+        margin: 1em 0 1em 0.5em;
+        border: 1px solid black;
+    }
+</style>
+<title>Debugging Journal</title>
 </head>
 <body>
 <h1>Clarification</h1>
 <p>
-    This webpage is used to note down problems, facts and techniques used with bugs I encountered during my study
+This webpage is used to note down problems, facts and techniques used with bugs I encountered during my study
 </p>
 
-    <h2 id="1">关于p内嵌套其他元素的限制</h2>
+<h2 id="1">关于p内嵌套其他元素的限制</h2>
+  <h3>问题详情:</h3>
     <p>
         2022-07-20，当我试图使用<code>p div</code>选择器来选中p内的div元素时，发现没有用，而p + div才有用，因此我将其文档 <a href="Resources/styling list-copy.html">styling list</a>放入了validator查错。发现了如下的问题：
-        <img src="Resources/p and list error.png">
-        经过了检查，我发现我每一个p都有对应的end tag，这个问题应该不存在才对。经过了一段时间的搜索，答案如下：
+        <div>
+            <img src="Resources/p and list error.png">
+        </div>
+        经过了检查，我发现我每一个p都有对应的end tag，这个问题应该不存在才对。：
     </p>
+  <h3>解析</h3>
     <p>
         在<a href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-p-element">官方文档p的定义</a>内，可以看见以下关于tag omission的解释
     </p>
@@ -41,22 +51,49 @@
     </p>
     <p>
         类似的，可以在DevTools内看见DOM tree处，list结束的下方多出了一对p tag，而没有文字。这也是显示出了问题所在的。
-        <img src="Resources/DT p and ol.png">
+        <div>
+            <img src="Resources/DT p and ol.png">
+        </div>
     </p>
     <p>
         下次若遇到相似的问题，首先可以查询官方文档来确定问题所在的tag，查询他们的content model与category。
     </p>
 
-    <h2>Named character需由分号结尾</h2>
-    <p>
-        2020-07-20, 解决<a href="#1">上一个问题</a>时顺带发现的。具体如下：
+<h2>Named character需由分号结尾</h2>
+<p>
+    2020-07-20, 解决<a href="#1">上一个问题</a>时顺带发现的。具体如下：
+    <div>
         <img src="Resources/named character end.png">
-    </p>
-    <p>
-        在html内，有些符号是reserve给html用的，因此直接输入不会有效果（或者bug），则需要使用named character(entity)来代替该字符。使用大于等于号，也就是<code>&gt;</code>是由&amp;gt;来生成的（此处的&amp;则是由&amp;amp;创建的)
-    </p>
-    <p>
-        根据<a href="https://html.spec.whatwg.org/multipage/syntax.html#character-references">官方文档</a>，一切named character均需要由分号来结尾以保证正确的编译。否则将会导致报错，如上图。
-    </p>
+    </div>
+</p>
+<p>
+    在html内，有些符号是reserve给html用的，因此直接输入不会有效果（或者bug），则需要使用named character(entity)来代替该字符。使用大于等于号，也就是<code>&gt;</code>是由&amp;gt;来生成的（此处的&amp;则是由&amp;amp;创建的)
+</p>
+<p>
+    根据<a href="https://html.spec.whatwg.org/multipage/syntax.html#character-references">官方文档</a>，一切named character均需要由分号来结尾以保证正确的编译。否则将会导致报错，如上图。
+</p>
+
+<h2>Flex-grow与flex元素的最小宽度</h2>
+    <h3>问题详情：</h3>
+        <p>
+            2022-07-25,在完成MDN的<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox_skills">task4</a>时，我发现我达不到要求的效果，因为使用了flex：row wrap后，下面的button总会有空闲的空间未被占用。此时我试着使用flex:1,得到的结果也不同。按照我在mdn学习时，<code>flex</code>接受的三个值分别时对应flex-grow，flex-shrink以及flex-basis。所以我以为使用flex-grow：1和flex：1应该是一个效果。答案很明显不是。
+        </p>
+    <h3>解析</h3>
+    <p>这个时候就稍微涉及到深一点的东西了，首先根据<a href="https://drafts.csswg.org/css-flexbox-1/#flex-property">CSS specification</a> on "flex" shorthand可以看出来，与flex:1对应的是flex-grow:1, flex-shrink:1, flex-basis:0。</p>
+    <p><code>flex-grow:1</code>在此处意义不大，就是平均分配空间，但是分出区别的就是flex-basis了。这里需要了解一下，flex-basis:0代表的到底是什么.</p>
+    <p>当flex-basis:0时，所有的flex items的最小空间为0，也就是说可分配的空间等于对应axis拥有的全部空间。此时使用flex-grow:1会将所有的items均匀分配空间，并且不由内容大小决定，这个时候就可能导致有的items内的内容看起来很挤，有的看起来很宽，但是长度都是相等的。</p>
+    <p>不过，当<code>flex-basis:auto</code>，也就是默认值的时候，container内的空间会先优先分配给每一个flex item直到能够完全展示文字。分配剩下的空间再由<code>flex-grow</code>指定的比例来均匀分配给每一个item。具体效果如下：</p>
+    <div>
+        <img src="Resources/rel-vs-abs-flex.svg">
+    </div>
+    <p>所以说，当我使用了<code>flex:1</code>的时候，我自动设置了<code>flex-basis:0</code>，因此按道理来说所有的flex items应该会按照全部空间平均分配，但是他并没有，这里先按下不提。真正的答案便是仅加上flex-grow:1，这样子就仅仅覆写它一个，默认的<code>flex-basis:auto</code>保持不变，所有的元素得到应有的空间后在对剩余空间进行分配。这便是mdn task的标答</p>
+    <h3>深入</h3>
+    <p>回到上面的问题，为什么我在mdn网页使用<code>flex:1</code>时得到的不是全部都相同大小的button呢。按照道理说，flex:1会设置flex-basis:0,因此将所有空间均匀分配。</p>
+    <p>这里就要扯到css的特性了，需要知道的是，css会以不漏掉任何信息为前提给你进行styling。具体详见css specification内的<a href="https://www.w3.org/TR/css-flexbox-1/#min-size-auto">flex-min-size</a>.说简单点便是flex items自带有<code>min-width:auto</code>,且优先级高于<code>flex</code>所指定的值.因此当使用了<code>flex:1</code>的时候, flex item自带的min-width使得所有元素先占据足够的位置,而不是听flex-basis的话</p>
+    <div>
+        <img src="Resources/min-width of flex.png">
+    </div>
+    <p>那么想解决这个问题, 最简单的办法就是直接给每一个flex items覆写掉<code>min-width</code>, 然后便可以解决掉这个问题. 另外一个解决方法是检查一下flex container是否指定了width, 如果是的话可以取消掉指定的width, 然后下属的flex items便可以确保空间足够后进行flex-basis:0的操作.</p>
+    <p>思路来源于<a href="https://stackoverflow.com/questions/36247140/why-dont-flex-items-shrink-past-content-size">Michael Benjamin</a></p>
 </body>
 </html>

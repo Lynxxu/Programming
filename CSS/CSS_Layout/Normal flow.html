@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Normal flow</title>
+</head>
+<body>
+<h1>Normal flow</h1>
+<p>
+    在上个<a href="Introduction.html">overview</a>里面讲过了所有的layout办法，在此处来深入讲一下normal flow
+</p>
+<p>
+    首先，normal flow就是html文档的默认layout。但是可以手动更改其中的元素，来让其融入/脱出normal flow。一个结构完好，能完美适应normal flow的文档是一个网页完美的开始。normal flow可以保证内容可以完美的展示出来，即使浏览器很老，或者用户使用的是scrren reader。且最主要的是，因为normal flow是为了创造readable content而生的，从normal flow开始更改文档会比和normal flow作对.
+</p>
+    <h2>How are elements laid out by default</h2>
+    <p>
+        normal flow从将boxes由其指定的padding，margin和border等等style加入conent开始，也就是<code>box model</code>
+    </p>
+    <p>
+        默认来说，block元素的content将会填满母元素的inline space，并且向block方向扩展。Inline元素的尺寸是无法更改的，因为它其实就是content的尺寸。若想要改变inline元素的尺寸，首先得将他改成<code>display: block</code>或者<code>inline-block</code>
+    </p>
+    <p>
+        虽然以上解释了normal flow是怎么排列单个元素的。当文档内容开始多起来，block元素会默认向block flow direction排列，而这个方向基于母元素的<code>writing mode</code>。 每一个新元素将会在之前的元素之下出现，由定义的margin分开。默认来说是horizontal，top to bottom writing mode
+    </p>
+    <p>
+        inline元素不同，他们不会单独占据新的一行，他们会以其他inline元素同一条线延展，直到达到了母元素的block width，若位置不够，则会向下overflow
+    </p>
+    <p>
+        若两个上下相邻的block元素，都有着指定的margin，且他们的margin碰到了一起，那么<a href="../CSS builidng blocks/Box model.html">margin collapse</a>便会发生. normal flow的例子可以看这个<a href="Examples/Sample normal flow.html">网页</a>
+    </p>
+</body>
+</html>

@@ -67,3 +67,5 @@ for i in range(1, 10001):
 for numbers in temp:
     if numbers == "7":
         iterator += 1
+
+

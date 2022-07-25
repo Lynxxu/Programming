@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+      article{
+        margin: 10px;
+        padding-left: 5px;
+        background-color: grey;
+        color: white;
+        border: 1px solid black;
+        border-radius:5px;
+        flex: 1;
+      }
+
+      img{
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      div{
+        display: flex;
+        border: 1px solid black;
+        height: 3rem;
+      }
+
+      button{
+        line-height: 1.5;
+      }
+
+
+    </style>
+    <title>Flexbox</title>
+  </head>
+  <body>
+  <h1>Flexbox</h1>
+  <p>Felxbox是一种1d的layout手段, 使用rows/columns来组织元素. 元素会<i>flex</i>, 也就是expand到占据更大空间, 或者当空间不足时缩小.</p>
+    <h2>Why flexbox</h2>
+    <p>很长一段时间, 跨浏览器支持的css layout手段只有<code>floats</code>以及<code>positioning</code>, 但是仅仅使用他们会有很多功能无法轻易达成</p>
+    <ul>
+      <li>将一个元素垂直剧中</li>
+      <li>使某个container的所有子元素占据相同的空间,不论有多少空间可供使用</li>
+      <li>让mult-column下的多个column全部使用相同的height,即使他们的content不一样</li>
+    </ul>
+    <p>而上面提到的这些,使用flexbox均可以解决</p>
+
+    <h2>Introducing simple example</h2>
+    <p>下面有三个段落,每一个段落均被包在了article元素内, 而article元素则在section内.此时我只加上了一点外观css,未改动display属性,如下:</p>
+
+    <section>
+      <article>
+        <p>Article1: I love Noelle she is the best and I hope she will be a Favonis knight</p>
+      </article>
+
+      <article>
+        <p>Article2: Yoimiya is the best girl in Inazuma but she shall be known to the world</p>
+      </article>
+
+      <article>
+        <p>Article3: Enkanomiya is by far the best region of genshin impact</p>
+      </article>
+    </section>
+
+    <p>此时,若我将<code>section</code>内的<code>display</code>设置成<code>display: flex</code>,其余不变,则效果如下:</p>
+
+    <section style="display:flex;">
+      <article>
+        <p>Article1: I love Noelle she is the best and I hope she will be a Favonis knight</p>
+      </article>
+
+      <article>
+        <p>Article2: Yoimiya is the best girl in Inazuma but she shall be known to the world</p>
+      </article>
+
+      <article>
+        <p>Article3: Enkanomiya is by far the best region of genshin impact</p>
+      </article>
+    </section>
+
+    <p>当改变成功时, 对于整个html文档来说,section就像是一个block元素一样互动,但是此时它其实已经变成了flex container, 而里面的所有子元素都被称为flex items,具体见下文</p>
+
+    <h2>The flex model</h2>
+    <p>当元素被设置成flex items时, 他们将由两个aixs排列开来:</p>
+    <img src="../Resources/flex_terms.png">
+    <ul>
+      <li><b>main axis</b>为flex item排列的方向,上面的例子是horizontal,开始和结束分别被称为main start, main end</li>
+      <li><b>cross axis</b>就是flex元素排列方向的垂直位置,或者说是整个flex container的block方向.开始和结束分别被称为cross start/end</li>
+      <li>设置为了<code>display: flex</code>的母元素为flex container,其下面的子元素均被称为flex items</li>
+    </ul>
+
+    <h2>Columns & rows</h2>
+    <p>Flexbox提供了一个叫做<code>flex-direction</code>的属性,用于调整main axis的位置, 也就是flex item放置的位置. 默认来说这个属性是<code>row</code>, 也就是根据浏览器设置的语言(比如英语的row就是从左到右)来以行排列</p>
+    <p>除了接受<code>row</code>和<code>column</code>以外, 还可以接受<code>row-reverse</code>以及<code>column-reverse</code></p>,分别对应颠倒方向的行/列
+
+    <h2>Wrapping</h2>
+    <p>
+      对于flexbox, 若一个flex container含有了太多的flex items, 或者这些flex items的尺寸过大, 那么在viewport尺寸不足时, itens会溢出. 类似这个MDN的<a href="https://mdn.github.io/learning-area/css/css-layout/flexbox/flexbox-wrap0.html">例子</a>
+    </p>
+    <p>
+      但是没关系, css有着解决办法,也就是<code>flex-wrap:wrap;</code>属性. 将其加在flex container上方, 并且给flex items使用<code>flex:200px;</code>设置一个指定的宽度. 得到的结果便是overflow的内容将会移动到下一行，具体<a href="Examples/wrap example.html">见此</a>。需要注意的是此时调整成<code>reverse</code>也会自适应，从右到左/下到上
+    </p>
+
+    <h2>Flex-flow</h2>
+    <p>在上面提过<code>flex-direction</code>和<code>flex-wrap</code>后，可以使用<code>flex-flow</code>来作为shorthand</p>。比如<code>flex-flow: row wrap;</code>便是分别对应了direction与wrap的值的。
+
+    <h2>Flexible sizing of flex items</h2>
+    <p>回到第一个例子，假设我给每一个<code>article</code>元素加上<code>flex:1;</code>的参数，此时结果如下：</p>
+    <section style="display:flex;">
+      <article>
+        <p>Article1: I love Noelle she is the best and I hope she will be a Favonis knight</p>
+      </article>
+
+      <article>
+        <p>Article2: Yoimiya is the best girl in Inazuma but she shall be known to the world</p>
+      </article>
+
+      <article>
+        <p>Article3: Enkanomiya is by far the best region of genshin impact</p>
+      </article>
+    </section>
+    <p>
+      可以看得出来是没有变化的，这是因为三个article元素的值都是1，而flex空间的机制是由比例来的，也就是说只要这三个值都相等，他们就会占据相同比例的空间。就是我给个flex:100，那也和<code>flex:1;</code>的效果相当
+    </p>
+    <p>此时我给第三个article指定flex:2;而其他两个元素不变，结果如下：</p>
+
+    <section style="display:flex;">
+      <article>
+        <p>Article1: I love Noelle she is the best and I hope she will be a Favonis knight</p>
+      </article>
+
+      <article>
+        <p>Article2: Yoimiya is the best girl in Inazuma but she shall be known to the world</p>
+      </article>
+
+      <article style="flex:2;">
+        <p>Article3: Enkanomiya is by far the best region of genshin impact</p>
+      </article>
+    </section>
+    <p>这个时候就看出区别了，前两个article元素为flex：1，第三个为2，所以总共有4份，其中前两个元素占据1/4，而第三个元素则占据了2/4</p>
+
+    <p>值得一提的是，不仅仅可以直接按比例设置，还可以设置每个元素最少占据的空间，依然是<code>flex</code>属性，只不过此次在后面加上一个指定的值，比如<code>flex:2 200px;</code>就代表的是最少有200px空间后，多余位置按照比例（总份数的的2份）分配。</p>
+
+    <p>比如依旧是上面的例子，但是此时我给他们都在后面加上了200px，那么在三个flex item都占满200px之前，他们会1：1增加，但是占满200px后按照1：1：2增加。结果如下：</p>
+    <section style="display:flex;">
+      <article style="flex:200px;">
+        <p>Article1: I love Noelle she is the best and I hope she will be a Favonis knight</p>
+      </article>
+
+      <article style="flex:200px";>
+        <p>Article2: Yoimiya is the best girl in Inazuma but she shall be known to the world</p>
+      </article>
+
+      <article style="flex:2 200px;">
+        <p>Article3: Enkanomiya is by far the best region of genshin impact</p>
+      </article>
+    </section>
+
+      <h2>Flex: shorthand or not</h2>
+      <p>在上面讲解过了flex的两个属性以后，值得提一下flex其实是shorthand，可以接受三个值：</p>
+      <ul>
+        <li>第一个无单位的数字，用于直接按比例分配空间，该全称为<code>flex-grow</code></li>
+        <li>第二个无单位的数字，对应<code>flex-shrink</code>，用于调整flex item面对overflow时缩小程度的调整。这个比较高级，先不讲。</li>
+        <li>上面提过的最小值，全称为<code>flex-basis</code></li>
+      </ul>
+      <p>在一般情况下，建议不使用longhand，除非用于覆写等场景。</p>
+
+      <h2>Horizontal & vertical alignment</h2>
+      <p>可以使用flexbox来朝着main或cross axis来对齐flex items。首先看一下下面一系列由div包起来的button没有进行调整的flexbox。</p>
+      <div>
+        <button>Noelle</button>
+        <button>Keqing</button>
+        <button>Kiana</button>
+        <button>REM</button>
+        <button>Kamisato</button>
+      </div>
+      <p>此时，假设我给这个div container，也就是flex container，加上个<code>align-items: center;</code>和<code>jusitfy-content: space-around;</code>，那么结果如下：</p>
+      <div style="align-items:center; justify-content: space-around;">
+        <button>Noelle</button>
+        <button>Keqing</button>
+        <button>Kiana</button>
+        <button>REM</button>
+        <button>Kamisato</button>
+      </div>
+      <p>分析一下，首先来看看<code>align-items</code>的作用以及接受的值：</p>
+      <ul>
+        <li>默认来说，align-items的值是<code>stretch</code>，也就是将所有的flex item从cross axis(block 方向)拉伸至填满parent设置的height（也就是第一个例子的原因）。若parent没有设置cross axis方向的height，则flex items和最高的flex items对齐高度</li>
+        <li>上面用的<code>center</code> value使得flex items保持intrinsic size的前提下在cross axis居中，也就是为什么第二个例子是垂直方向居中的了。</li>
+        <li>也可也使用<code>flex-start</code>以及<code>flex-end</code>来分别让items对齐cross axis的开头和结尾。</li>
+      </ul>
+      <p>同时也可以对单独某个item进行配置，使用的property为<code>align-self</code>，比如我给第二个元素使用align-self: flex-end;而其他元素均为<code>align-items:center</code>，则结果如下：</p>
+      <div style="align-items:center; justify-content: space-around;">
+        <button>Noelle</button>
+        <button style="align-self: flex-end;">Keqing</button>
+        <button>Kiana</button>
+        <button>REM</button>
+        <button>Kamisato</button>
+      </div>
+      <p>下一个需要讨论的是<code>justify-content</code>属性，用于控制flex axis在main axis的位置。</p>
+      <ul>
+        <li>默认值是<code>flex-start</code>，使得所有的items均以main axis的开头为开始</li>
+        <li><code>flex-end</code>类似上面一样，只不过是从main axis的结尾开始</li>
+        <li><code>center</code>也是一个<code>justify-content</code>的值，同理是将items放在main-axis居中的位置 </li>
+        <li><code>space-around</code>，也就是上面例子使用的值，将所有元素沿main aixs居中平均分布，元素中间以及axis的开头结尾留下间隙。与center不同的便是会留下间隙</li>
+        <li><code>space-betweem</code>，和space-around非常类似，但是轴的开头结尾不留空间</li>
+      </ul>
+
+      <h2>Ordering flex items</h2>
+      <p>flexbox也有着可以改变flex items的排序手段的（即使不改变源码），即使用<code>order</code>属性，比如我给第一个button加上<code>order:1</code></p>
+      <div style="align-items:center; justify-content: space-around;">
+        <button style="order: 1;">Noelle</button>
+        <button>Keqing</button>
+        <button>Kiana</button>
+        <button>REM</button>
+        <button>Kamisato</button>
+      </div>
+      <p>此时可以看到"Noelle"按钮已经被移动到了main aixs的最后位置了。具体来说，order有以下的特性：</p>
+      <ul>
+        <li>所有的flex items的默认值都为0</li>
+        <li>有着更高order值的flex items会显示在更后面</li>
+        <li>拥有相同order值的flex items会以源码的顺序出现，比如四个items分别有着2,1,1,0的order值，那么这四个值会对应第4位，第2位，第3位和第1位。</li>
+      </ul>
+      <p>需要注意的是，order的值可以接受负值，比如使用button:last-child{order:-1;}来使得最后一个button永远出现在第一位</p>
+
+      <h2>Nested flexbox</h2>
+      <p>可以使用</p>
+      <section style="display:flex;">
+        <article style="flex:200px;">
+          <p>Article1: I love Noelle she is the best and I hope she will be a Favonis knight</p>
+        </article>
+
+        <article style="flex:200px";>
+          <p>Article2: Yoimiya is the best girl in Inazuma but she shall be known to the world</p>
+        </article>
+
+        <article style="flex:2 200px;">
+          <p>Article3: Enkanomiya is by far the best region of genshin impact. And these are the best characters in genshin</p>
+          <div style="align-items:center; justify-content: space-around;">
+            <button>Noelle</button>
+            <button>Keqing</button>
+            <button>Kiana</button>
+            <button>Kazuha</button>
+            <button>Kamisato</button>
+          </div>
+        </article>
+      </section>
+      <p>一个更有趣的例子可以看<a href="https://mdn.github.io/learning-area/css/css-layout/flexbox/complex-flexbox.html">MDN</a>的嵌套flexboxes。</p>
+      <h2>Cross-browser compatibility</h2>
+      <p>flexbox在绝大多数新浏览器上都是被完美支持的，但是需要知道的是依然有很多老旧的浏览器不支持，或仅仅支持很老版本的flexbox</p>
+
+      <p>虽然我现在还是在学习阶段，但是到了正式project的时候需要多次测试，以确保跨浏览器支持无问题</p>
+  </body>
+</html>
