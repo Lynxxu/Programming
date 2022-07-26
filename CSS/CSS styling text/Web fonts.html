@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Web fonts</title>
-</head>
-<body>
-<h1>Web fonts</h1>
-<p>
-    在第一篇<a href="Fundamental text and font styling">文章</a>内，我学过了基本的css文字装饰。现在来学的更细节一点。
-</p>
-    <h2>Font families recap</h2>
+  </head>
+  <body>
+    <h1>Web fonts</h1>
     <p>
-        往html内加上字体的办法是使用<code>font-family</code>属性如下：
+      在第一篇<a href="Fundamental text and font styling">文章</a
+      >内，我学过了基本的css文字装饰。现在来学的更细节一点。
     </p>
+    <h2>Font families recap</h2>
+    <p>往html内加上字体的办法是使用<code>font-family</code>属性如下：</p>
     <pre>
         html{
             font-family: Impact, Helvetica, "Times New Roman", sans-serif;
         }
     </pre>
     <p>
-        上面的办法非常有用，但是类似之前提到的，开发者并不能随便找个字体都可以跨平台无障碍的使用。一般来说，在一个font stack内，你想要的字体优先级最高，但是建议加上一款web safe alterntive，在加上默认的浏览器字体。虽然这种办法很保险，但是会增加工作量，因为你需要测试每一个字体和网页的适配性 
+      上面的办法非常有用，但是类似之前提到的，开发者并不能随便找个字体都可以跨平台无障碍的使用。一般来说，在一个font
+      stack内，你想要的字体优先级最高，但是建议加上一款web safe
+      alterntive，在加上默认的浏览器字体。虽然这种办法很保险，但是会增加工作量，因为你需要测试每一个字体和网页的适配性
+    </p>
+
     <h2>Web fonts</h2>
     <p>
-        除了使用font-family以外，还有一个非常好用的办法，他甚至支持IE6这种老浏览器。具体来说，他可以让用户打开网页时下载你指定的字体文件（如果可以的话），意思就是只要支持该功能的浏览器都可以显示你指定的字体。
+      除了使用font-family以外，还有一个非常好用的办法，他甚至支持IE6这种老浏览器。具体来说，他可以让用户打开网页时下载你指定的字体文件（如果可以的话），意思就是只要支持该功能的浏览器都可以显示你指定的字体。
     </p>
 
     <p>
-        具体来说，它由<code>@font-face</code>开头，写在css的开头处，类似一个这样的语句：
+      具体来说，它由<code>@font-face</code>开头，写在css的开头处，类似一个这样的语句：
     </p>
     <pre>
         @font-face{
@@ -36,23 +39,30 @@
 
         }
     </pre>
-    <p>
-        然后，就像平常一样，使用font stack来指定刚刚@rules内的字体
-    </p>
+    <p>然后，就像平常一样，使用font stack来指定刚刚@rules内的字体</p>
     <pre>
         html{
             font-family: "someFonts", "Bitstream Vera Serif", serif;
         }
     </pre>
-    <p>
-        虽然语法看起来很简单，但是有很多东西需要注意的：
-    </p>
+    <p>虽然语法看起来很简单，但是有很多东西需要注意的：</p>
     <ul>
-        <li>字体不总是免费的，有的时候需要付钱或者credit原作者</li>
-        <li>绝大多数浏览器都支持WOFF/WOFF2 (Web Open Font Format version 1 & 2)，即使是比较老的浏览器也能支持WOFF</li>
-        <li>WOFF2 支持全部的TrueType和OpenType specification。包括variable font， chromatic font和font collection</li>
-        <li>列举字体文件的顺序很重要，如果给浏览器提供了多个字体文件，它会选择第一个能用的字体，所以建议将最想要的字体列在第一位（WOFF2），然后老浏览器便可以支持后面的老字体</li>
-        <li>若希望支持已过时的浏览器，应该提供EOT(Embedded Open type), TTF(TrueType Font)以及svg格式的字体以供下载。下面会讲一下如何使用工具来生成这些文件</li>
+      <li>字体不总是免费的，有的时候需要付钱或者credit原作者</li>
+      <li>
+        绝大多数浏览器都支持WOFF/WOFF2 (Web Open Font Format version 1 &
+        2)，即使是比较老的浏览器也能支持WOFF
+      </li>
+      <li>
+        WOFF2 支持全部的TrueType和OpenType specification。包括variable font，
+        chromatic font和font collection
+      </li>
+      <li>
+        列举字体文件的顺序很重要，如果给浏览器提供了多个字体文件，它会选择第一个能用的字体，所以建议将最想要的字体列在第一位（WOFF2），然后老浏览器便可以支持后面的老字体
+      </li>
+      <li>
+        若希望支持已过时的浏览器，应该提供EOT(Embedded Open type), TTF(TrueType
+        Font)以及svg格式的字体以供下载。下面会讲一下如何使用工具来生成这些文件
+      </li>
     </ul>
-</body>
+  </body>
 </html>
