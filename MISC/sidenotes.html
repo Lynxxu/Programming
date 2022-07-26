@@ -32,6 +32,19 @@
         </div>
     </p>
 
-
+    <h2>将body居中且自动收缩的办法</h2>
+    <p>
+        2022-07-25，学习grid时的example发现的，想要居中一整个网页的body可以使用一下代码：
+    </p>
+    <pre>
+    body{
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+    }
+    </pre>
+    <p>
+        具体来说，第一个width设定了body的width永远不会和page的viewport相等，所以即使是在页面缩小的情况下，因为百分比的原因，body依旧会与浏览器有边界。而第二个max-width则是设置了最高的width，以保证当浏览器全屏时依旧可以有margin。最后的margin auto则是将整个body视为html内的一个元素，对他进行了自动间距，使得整个body一直会在屏幕中央
+    </p>
 </body> 
 </html>

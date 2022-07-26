@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grids</title>
+  <style type="text/css">
+    img{
+      max-width: 100%;
+      max-height: 100%;
+
+
+    }
+  </style>
+</head>
+<body>
+<h1>Grids</h1>
+<p>CSS grid是一个2d的layout system。也就是允许你使用rows and columns来排列内容。</p>
+  <h2>What's grid layout</h2>
+  <p>一个grid是由一堆垂直以及竖直的线组成的，就类似一个表格一样给每一个contnet指定的位置和空间。使得整个layout看起来更整洁</p>
+  <p>grid一般会由<b>column</b>，<b>rows</b>以及分割他们的gaps，被称为<b>gutters</b>组成</p>
+
+  <h2>Creating a grid in css</h2>
+  <p>基本概念已经讲完了，直接实操创建一个grid来看看流程吧：</p>
+    <h3>定义grid</h3>
+    <p>首先，和其他所有layout一样，创建一个大的parent container, 设定<code>display:grid</code>以指定类型，此时全部的子元素都会变成grid items</p>
+    <p>但是和flexbox不一样的是，将contianer改成gird并不会有什么立竿见影的变化。 因为使用<code>display:grid</code>默认只会给你一个column，所以和normal flow区别并不大。如下：</p>
+    <img src="../Resources/basic grid.png">
+  <p>想要让它变得更像grid，首先可多加几个column。使用<code>grid-template-column</code>属性来做到。这里的例子将会加入<code>grid-template-columns: 200px 200px 200px</code>, 也就是多加入三个200px的column，效果如下：</p>
+  <img src="../Resources/3 column grid.png">
+    
+    <h3>Flexible grids with <code>fr</code></h3>
+    <p>除了使用比例和固定尺寸，我们还可以使用<code>fr</code>来达成flexible grid的目的。这个单位代表的是grid container内可使用空间的几分之一。</p>
+    <p>一个例子是<code>grid-template-columns:1fr 1fr 1fr</code>，将该代码输入在grid container内会使得三个column平均分配所有空间，因为这个空间总3个fr，每个column各一个fr。</p>
+    <p>同理，<code>grid-template-columns:2fr 1fr 1fr</code>便会是2：1：1的分配，总共4fr，2fr在第一个column，剩下俩均分。得到的结果如下：</p>
+    <img src="../Resources/fr grid units.png">
+    <p>需要注意的是，这个分配的机制和之前提过的flex-grow很类似，是根据能够使用的空间来分配的。假设某个column内的内容过长，则会优先显示所有内容，然后再分配剩下的空间。</p>
+
+    <h3>Gaps between tracks</h3>
+    <p>想要改变表格之间的gaps，也就是gutters，使用<code>column-gap</code>，<code>row-gap</code>来改变对应的gap，或者使用<code>gap</code>来直接改变全部的gap。以下便是使用了<code>gap:20px</code>的表格</p>
+    <p>需要注意的是，<code>gap</code>以前被称为<code>grid-gap</code>，所以当使用gap的时候，可以加上<code>grid-gap</code>一起保险（这俩会被认为是同名，不会生效两次）</p>
+    <img src="../Resources/grid with gap.png">
+    <h3>Repaet track listing</h3>
+    <p>当创建大型grid时，可能会需要多次创建一个相同的track，那么可以使用<code>repeat()</code>来完成，<code>grid-template-columns:1fr 1fr 1fr</code>与<code>grid-template-columns:repeat(3, 1fr)</code>的效果是相同的。后者是创建三个1fr的column。需要知道的是这几个东西可以混在一起用，所以很方便，比如<code>grid-template-columns:repeat(2, 1fr) 1fr</code>和前面也是一个效果。</p>
+
+    <h3>Implicit grid</h3>
+    <p>在以上例子，我们仅定义了column tracks的数量，但是row tracks被自动造出来，这就是<b>explicit</b>与<b>explicit</b>的例子，我手动定义的便是explicit，而implicit则是自动创建用于放置内容的</p>
+    <p>默认来说，在implicit grid内的track的尺寸是<code>auto</code>，也就是说会刚刚好盖住content所需要的空间，若想要手动给implicit grid的尺寸赋值，可以使用<code>grid-auto-rows</code>或者<code>grid-auto-columns</code>，哪个是implicit用哪个。在我们的例子上，<code>grid-auto-rows:40px</code>可以得到以下结果</p><img src="../Resources/grid auto rows.png">
+
+    <h3><code>minmax()</code> function</h3>
+    <p>上面手动设置的40px不一定会很有用，因为若某个格子超过了100px，则直接overflow。所以一个解决方案是使用minmax()函数，其实很好理解，把他当成layout内的min-height和maxheight的集合即可。因为它可以接受两个值，第一个是最低的值，第二个则是最高值。比如上面的40px就可以改成<code>minmax(40px auto)</code>，意思就是最少40px，但是最高是auto，也就是自动延展到所需的空间。比如下面就是一个高于40px的例子</p><img src="../Resources/minmax size.png">
+
+    <h3>responsive grid</h3>
+    <p>将上面已经学过的内容结合在一起，便可以得到很好用的自动回应网页收缩的grid了。比如我可以根据viewport尺寸增加或减少的column数量。使用以下代码：</p>
+    <pre>
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-auto-rows: minmax(40px, auto);
+      gap: 20px;
+    }
+    </pre>
+    <p>很简单的就看的出来上面的嵌套是如何做到responsive的。首先repeat接受两个值，第一个<code>auto-fill</code>是代表能够塞入的最小值的column数。比如设置最小200px的值，那么小于400px的时候这个值就是1，大于400小于600的时候就是2，以此类推，注意这里未算gap的值。后面的<code>minmax(200px, 1fr)</code>则是定义了column的宽度最小为200，多余的按照1：1分配。因此得到的结果便是一个自适应的grid，当viewport变成200px的倍数时自动伸缩，类似<a href="Examples/css grid.html">这样</a></p>
+
+  <h2>Line based placement</h2>
+  <p>现在创建grid已经差不多结束了，剩下的就是往grid里面放东西了。grid是由lines组成的，这些lines从1开始，并且由writing mode定义，比如英语的line 1就是屏幕最左边开始，若是阿拉伯文（从右往左写的），line 1则是右手边开始</p>
+  <p>我们可以使用以下的属性来使用lines定义grid内容的位置</p>
+  <ul>
+    <li>grid-column-start</li>
+    <li>grid-column-end</li>
+    <li>grid-row-start</li>
+    <li>grid-row-end</li>
+  </ul>
+  <p>当然，和他们对应的shorthand properties</p>
+  <ul>
+    <li>grid-column</li>
+    <li>grid-row</li>
+  </ul>
+  <p>这俩shorthand可以让你一次定义开头和结束，使用<code>/</code>来分开他们。</p>
+  <p>说具体一点，line有两条，从书写方向的边界由1开头，分割出不同grids的便是line，如果把gap打开，那么每一个gap便是一条line。比如以下代码：</p>
+  <pre>
+    header {
+      grid-column: 1 / 3;
+      grid-row: 1;
+    }
+
+    article {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    aside {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    footer {
+      grid-column: 1 / 3;
+      grid-row: 3;
+    }
+  </pre>
+  <p>定义了header从第一条线横到第三条线，占据一行两列，article占据第二条线到第三条线，也就是一行一列。aside同理，只不过占据的是左边的一行一列。footer则是最下方的一行两列。看下图具体的分析：</p><img src="../Resources/devtool lines.png">
+  <p>使用了以上代码后，得到的结果如下：</p><img src="../Resources/grid lines completed.png">  
+
+  <h2>Position with grid-template-area</h2>
+  <p>除了line以外还有一种排列方式，即给每一个区块命名，使用名字来指定位置。</p>
+  <pre>
+  .container {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "sidebar content"
+        "footer footer";
+    grid-template-columns: 1fr 3fr;
+    gap: 20px;
+    }
+
+  header {
+    grid-area: header;
+  }
+
+  article {
+    grid-area: content;
+  }
+
+  aside {
+    grid-area: sidebar;
+  }
+
+  footer {
+    grid-area: footer;
+  }
+
+  </pre>
+  <p>重点看<code>grid-template-areas</code>内的内容，其实就是一个2x3的grid，每一个区域都用名字来代替了。跨越了多行/列的区域只需要将其命名相同即可。</p>
+  <p>当区域分配完成，只需要将每一个grid内的content向区域指定名字即可。具体可见<a href="../Examples/area placement.html">该文档</a>，使用devtools来分析即可。</p>
+  <p><code>grid-template-area</code>有着以下的几点特征：</p>
+  <ul>
+    <li>grid内的每一个cell都必须被填充</li>
+    <li>重复相同的名字以跨行/列</li>
+    <li>使用句号<code>.</code>以留空</li>
+    <li>area必须是矩形的，不能有类似L形T形之类的</li>
+    <li>除非跨行，不然area不能重名</li>
+  </ul>
+  <h2>Grid frameworks in CSS grid</h2>
+  <p>css有自带的一个"framework"来作为开始的设计。一般是基于12或16column grid的，一个例子<a href="Examples/grid frameworks.html">如此</a>，可打开devtools便看得出来总共有16个columns</p>
+</body>
+</html>
