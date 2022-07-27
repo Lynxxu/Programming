@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      ol ol {
+        list-style-type: lower-roman;
+      }
+      /* enable below to get a fixed heading */
+      /* h1 {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        margin-top: 0;
+        background: white;
+        padding: 10px 10px 10px 0px;
+      }
+      
+      p:nth-of-type(1) {
+        margin-top: 60px;
+      } */
+
+      .sticky {
+        position: sticky;
+        top: 30px;
+        left: 30px;
+        border: 1px solid grey;
+        padding: 10px;
+        background-color: antiquewhite;
+        border-radius: 10px;
+      }
+
+      dt {
+        background-color: black;
+        color: whitesmoke;
+        padding: 10px;
+        margin: 1em;
+        position: sticky;
+        top: 0;
+        left: 0;
+      }
+
+      dd {
+        text-transform: capitalize;
+        line-height: 1.5;
+      }
+
+      body {
+        width: 85%;
+        max-width: 900px;
+        margin: 0 auto 800px auto;
+      }
+
+      .relative {
+        position: relative;
+        border: 2px solid blue;
+        border-radius: 5px;
+        padding: 5px;
+      }
+
+      .absolute {
+        position: absolute;
+        top: 30px;
+        left: 40px;
+        border: 1px solid black;
+        padding: 10px;
+        background-color: white;
+      }
+
+      .change-position {
+        top: 55px;
+        left: 65px;
+      }
+
+      .top {
+        z-index: 1;
+        color: black;
+        background-color: antiquewhite;
+      }
+    </style>
+    <title>Positioning</title>
+  </head>
+  <body>
+    <h1>Positioning</h1>
+    <p>Positioning 允许我们将元素移除normal flow，并精细的调整元素的位置</p>
+
+    <h2>Introduction</h2>
+    <p>
+      <code>positioning</code>大概能做的事情已经在<a href="Introduction.html"
+        >Overview</a
+      >内介绍过了，这里就简单的提一下。假设想要根据某个位置来精细的调整元素的位置，或者说想要元素固定在某个位置不动，那么<code>position</code>就是最好的办法之一。
+    </p>
+
+    <h2>Static positioning</h2>
+    <p>
+      首先，最简单的，也是默认的<code>position</code>的值，static
+      positioning基本上就是将元素放在normal flow内，也就是原本的正常位置
+    </p>
+    <pre>
+      .wrapper{
+        position: static;
+      }
+    </pre>
+
+    <h2>Relative positioning</h2>
+    <p>
+      和static不同, relative postiioning将把元素从normal
+      flow中提出来，然后我们便可以更改其位置，调整overlap等特性了。
+    </p>
+    <pre>
+      position:relative;
+    </pre>
+    <p>
+      但是注意，这里需要的不仅仅是这一行代码，还需要使用<code>top</code>,
+      <code>bottom</code>, <code>left</code>,
+      <code>right</code>这四个属性和其一起来指定位置。具体详见<a
+        href="Introduction.html#relative"
+        >Overview</a
+      >
+    </p>
+    <p>
+      另外需要注意的是，例子里面我使用的是<code>top:30px, left:30px</code
+      >，但是为什么是往下，右移动了30px呢。打开devtools看computed就可以发现，这里的top，left指定的值实际上是用于margin了，所以可以理解为加了margin-top和margin-left，那不自然就是反的吗
+    </p>
+
+    <h2>Absolute positioning</h2>
+    <p>
+      absolute
+      positioning是比较不同的一个办法，将元素设置成<code>position:absolute</code>将会将其直接移除normal
+      flow。例子见<a href="Introduction.html#absolute">Overview</a>
+    </p>
+    <p>
+      可以看到，被设定了absolute的box直接就被完完全全的移除normal
+      flow了，之前的relative至少还会留下原本的margin等等一个小空间。但是absolute
+      positioning则是直接将他自己分到了另一个layer。这种特性非常好用，因为我们可以将UI的某些部位给单独分出来而不影响其他内容，类似popup，
+      control menu等等
+    </p>
+    <p>
+      第二需要注意的是，即使参数相同，但absolute
+      position带来的位置是完全不同于relative的。这是因为relative
+      positioning是基于normal flow，但是absolute positioning是基于containing
+      element的。详见下文
+    </p>
+    <h3>Positioning contexts</h3>
+    <p>
+      当使用fixed， absolute
+      positioning时，他们调整box位置的方式是基于"containing
+      element"的，这个概念可以详见<a
+        href="https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block"
+        >mdn</a
+      >
+    </p>
+    <p>
+      在这里简单概括一下，首先containing
+      block的概念是仅基于<code>position</code>属性的值的。具体如下：
+    </p>
+    <ol>
+      <li>
+        若position的值为<code>static</code>，<code>relative</code>,
+        <code>sticky</code>，那么最近的ancestor element，如果是<b
+          >block contianer</b
+        >，或可生成<b>formatting context</b>（比如table，flex container， grid
+        container或者block container本身），那containing block则是其的content
+        box（也就是padding内）
+      </li>
+      <li>
+        若position的值为<code>absolute</code>，则containing
+        block是便是最近的，<code>position</code>值为非<code>static</code>的ancestor
+        element的padding box
+      </li>
+      <li>
+        若<code>position</code>的值是<code>fixed</code>，则containing
+        block就是viewport
+      </li>
+      <li>
+        若position的值为<code>absolute</code>或者<code>fixed</code>，那么除了原本的定义，若ancestor
+        element满足以下条件，也可也是其的padding box:
+        <ol>
+          <li>
+            <code>transform</code>或<code>perspective</code>的值不是<code
+              >none</code
+            >
+          </li>
+          <li>
+            <code>will-change</code>的值是<code>transform</code>或<code
+              >perspective</code
+            >
+          </li>
+          <li><code>filter</code>的值不是<code>none</code></li>
+          <li><code>contain</code>的值是<code>paint</code></li>
+          <li><code>backdrop-filter</code>的值不是<code>none</code></li>
+        </ol>
+      </li>
+    </ol>
+    <p>
+      那么在overview里面的例子内，由于absolute
+      positioning的元素未被任何其他的wrapper包围，且它的ancestor
+      elements均未设置<code>display</code>属性。那么这个absolute positioned
+      element便会使在initial containing block内，在这个情况，就是html元素
+    </p>
+    <p>
+      需要注意的是，可以手动调整positioning
+      context。只需要使用一个设置了<code>position:relative</code>block
+      wrapper包住该absolute positioned element即可
+    </p>
+
+    <h3>Z-index</h3>
+    <p>
+      虽然上面介绍的差不多了，但是absolute
+      positioning还需要考虑overlap时的问题，比如哪个element会优先于其他元素。这里就需要了解z-index的概念了
+    </p>
+    <div class="relative">
+      This is the div box which is set as relative, so containing the abs
+      container
+      <p class="absolute">1. This is an exmample</p>
+      <p class="absolute change-position">2. This is an exmample</p>
+    </div>
+    <br /><br />
+    <br /><br />
+    <p>
+      看以上的两个abs
+      box，我未设置任何z-index，因此他们按照源码顺序，后面的，也就是第二个box优先展示。而此时若我给第一个box加上以下代码：
+    </p>
+    <pre>
+      .top {
+        z-index: 1;
+        color: rebeccapurple;
+        background-color: antiquewhite;
+      }
+    </pre>
+    <p>那么结果会变成这样：</p>
+    <div class="relative">
+      This is the div box which is set as relative, so containing the abs
+      container
+      <p class="absolute top">1. This is an exmample</p>
+      <p class="absolute change-position">2. This is an exmample</p>
+    </div>
+    <br /><br />
+    <br /><br />
+    <p>
+      z-index仅接受unitless值，机制类似移动图层。其仅会判断大小，越大的数值将会overlap较低的数字，使用2和3的效果和200和300的效果是完全一样的
+    </p>
+
+    <h2>Fixed positioning</h2>
+    <p>
+      fixed positioning的使用方法和absolute大差不差，但是最不同的一点就是fixed
+      positioning是基于visible part of
+      viewport的（除非其ancestor设置了<code>transform</code>的值）
+    </p>
+    <p>
+      使用fixed
+      positioning的一个非常有用的情景就是设置一个屏幕上固定的东西。比如一个sidebar，又或者是固定的大标题。
+    </p>
+    <p>
+      假设我给h1加上以下css，那么这个h1大标题将会一直保持在屏幕的最上方，随着屏幕移动
+    </p>
+    <pre>
+      h1 {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        margin-top: 0;
+        background: white;
+        padding: 10px 10px 10px 0px;
+      }
+    </pre>
+    <p>
+      具体来说，<code>top:0;</code>以及<code>margin-top:0</code>使得h1大标题与viewport上方无缝衔接，然后将width调整到最大以保证不会有东西露出来(也可也调整成与body
+      with相同的大小)
+    </p>
+    <p>
+      但是这里注意一下，仅仅使用以上代码是有问题的。可能这里看不出来，但是若将以上代码开启后查看源码。可以看出h1下面的一个段落被clip掉了。很明显这是因为fixed
+      positioned element被移除了normal
+      flow，由于自身体积大小，覆盖住了其他元素。此时可以手动添加margin-top给第一段解决问题，如下：
+    </p>
+    <pre>
+      p:nth-of-type(1){
+        margin-top:60px;
+      }
+    </pre>
+
+    <h2>sticky positioning</h2>
+    <p>
+      sticky positioning其实就是relative与fixed
+      positioning的合体。当超过了某个threshold便会和fixed
+      position一样运转。同样接受top, right, left,
+      bottom四个值。但是这里代表的是offset，也就是移动的threshold值。而它本身的位置取决于normal
+      flow所在的基本位置。
+    </p>
+    <p>
+      假设我设置以下参数给一个div，当viewport划过了这个设定的值，div就会便会变成fixed
+    </p>
+    <pre>
+    .sticky {
+      position: sticky;
+      top: 30px;4
+      left: 30px;
+    }
+    </pre>
+    <!-- enable this to see simple stick example -->
+    <!-- <div class="sticky">
+      This is a example paragraph which is set to be sticky
+    </div> -->
+
+    <h3>Scrolling index</h3>
+    <p>
+      一个非常常见的sticky的用法便是scrolling
+      index，多说无妨，直接看下面的例子就懂了。
+    </p>
+    <h3>Genshin area index</h3>
+    <dl>
+      <dt>Mondsdat</dt>
+      <dd>brightcrown mountains</dd>
+      <dd>dragonspine</dd>
+      <dd>galesong hill</dd>
+      <dd>starfell valley</dd>
+      <dd>windwall highland</dd>
+      <dt>Liyue</dt>
+      <dd>Bishui plain</dd>
+      <dd>Lisha</dd>
+      <dd>Minlin</dd>
+      <dd>Qiongli estuary</dd>
+      <dd>sea of clouds</dd>
+      <dd>The Chasm</dd>
+      <dt>Inazuma</dt>
+      <dd>Enakanomiya</dd>
+      <dd>Kannazuka</dd>
+      <dd>Narukami Island</dd>
+      <dd>Seirai Island</dd>
+      <dd>Tsurumi Island</dd>
+      <dd>watatsumi island</dd>
+      <dd>Yashiori island</dd>
+    </dl>
+    <p>
+      这种sticky index本质上就是一个dl, 将dt设置为index的样式且设为sticky,
+      因此当它被划到下面时
+    </p>
+  </body>
+</html>

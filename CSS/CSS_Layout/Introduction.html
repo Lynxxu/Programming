@@ -297,7 +297,7 @@
     <p class="normal-box">Box 2</p>
     <p class="normal-box">Box 3</p>
 
-    <h3>Relative positioning</h3>
+    <h3 id="relative">Relative positioning</h3>
     <p>
       根据normal
       flow的位置调整位置，可以用于微调，这里的例子是接受了以下代码的。单独来说，position:
@@ -313,14 +313,18 @@
     <p class="normal-box relative-positioned">Positioned box</p>
     <p class="normal-box">Box 3</p>
 
-    <h3>Absolute positioning</h3>
+    <h3 id="absolute">Absolute positioning</h3>
     <p>
       还是以上的代码，但是此次调整到了position: absolute;
       此时会将元素完全移除normal
       flow，并根据其母元素的位置来调整位置（这里就是<code>body</code>，来滑到页面最上面就看到了哈哈哈哈)
     </p>
     <p class="normal-box">Box 1</p>
+    <!-- <div style="position: relative; border: 1px solid black">
+      this is a div, which the absolute position element could be based on if
+      this is position:relative -->
     <p class="normal-box absolute-positioned">abs. box</p>
+    <!-- </div> -->
     <p class="normal-box">Box 3</p>
 
     <h3>Fixed positioning</h3>
