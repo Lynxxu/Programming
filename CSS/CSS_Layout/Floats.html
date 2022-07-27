@@ -1,15 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>  
-    <ul>
-        <li></li>
-    </ul>
-    <div></div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .box {
+        width: 150px;
+        height: 100px;
+        border-radius: 15px;
+        background-color: #4c7eb8;
+        padding: 1em;
+        margin: 1rem;
+      }
+
+      body {
+        width: 90%;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .float {
+        float: left;
+        margin-right: 15px;
+      }
+
+      .render-background {
+        background-color: salmon;
+        padding: 10px;
+        color: #fff;
+      }
+
+      .cleared {
+        clear: left;
+      }
+
+      /* enable this for the clearfix */
+      /* .render-background:after {
+        content: "";
+        clear: both;
+        display: block;
+      } */
+
+      /* .render-background {
+        background-color: salmon;
+        padding: 10px;
+        color: #fff;
+        overflow: auto;
+      } */
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Floats</title>
+  </head>
+  <body>
+    <h1>Floats</h1>
+    <p>
+      最初用于将图片在blocks of text内浮空,
+      <code>float</code
+      >属性曾经是生成多列layout的最佳手段，但是到了现在，因为flexbox以及grid的出现，它又重回了原本应有的位置
+    </p>
+    <h2>The background of floats</h2>
+    <p>
+      <code>float</code
+      >被发明出来的主要目的是在一堆文字之间插入图片，而让图片浮空，文字环绕其中，很类似报纸的那种格式
+    </p>
+    <p>
+      但是没过多久，就有web
+      developers发现这个属性基本上可以浮空任何东西，不仅仅是图片。比较常见的例子是<a
+        href="https://thegymnasium.com/courses/take5/creating-beautiful-and-accessible-drop-caps"
+        >drop caps</a
+      >，就是那种开头一个超大的花体字母
+    </p>
+    <p>
+      也就是因为这种特性，float曾经直接被用于column
+      layout，因为在其边上的内容会围绕着它。不过到了现在，这种办法已经被认为过时了。在这次学习里，仅会提到正统的用法
+    </p>
+
+    <h2>A simple float example</h2>
+    <p>和前两次一样，直接开始一个例子来作为学习的路径吧:</p>
+    <pre>
+      body {
+        width: 90%;
+        max-width: 900px;
+        margin: 0 auto;
+        font: .9em/1.2 Arial, Helvetica, sans-serif;
+      }
+      
+      .box {
+        width: 150px;
+        height: 100px;
+        border-radius: 5px;
+        background-color: rgb(207,232,220);
+        padding: 1em;
+      }
+    </pre>
+    <div class="box">box</div>
+    <p>
+      上面是一个普普通通的box，没有使用<code>float</code>，所以展现的只不过是一个在normal
+      flow内的平平常常的box，此时我往这个box内加上以下代码：
+    </p>
+    <pre>
+      float: left;
+      margin-right: 15px;
+    </pre>
+    <div class="float box">Float</div>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+      aliquam dolor, eu lacinia lorem placerat vulputate. Duis felis orci,
+      pulvinar id metus ut, rutrum luctus orci. Cras porttitor imperdiet nunc,
+      at ultricies tellus laoreet sit amet.Sed auctor cursus massa at porta.
+      Integer ligula ipsum, tristique sit amet orci vel, viverra egestas ligula.
+      Curabitur vehicula tellus neque, ac ornare ex malesuada et. In vitae
+      convallis lacus. Aliquam erat volutpat. Suspendisse ac imperdiet turpis.
+      Aenean finibus sollicitudin eros pharetra congue. Duis ornare egestas
+      augue ut luctus. Proin blandit quam nec lacus varius commodo et a urna. Ut
+      id ornare felis, eget fermentum sapien.
+    </p>
+    <p class="cleared">
+      这个时候就看得出来了，使用了float以后，文字直接就附在了这个box的周围，就像是新闻报纸一样
+    </p>
+    <p>
+      那么分析一下，被设置了<code>float</code>的元素（这里的div），将会被撤出normal
+      flow，然后因为设定了<code>float:left;</code>，所以会被移动到parent元素（此处是body）的最左边处。
+      然后任意在该floated元素下方的内容就会缠绕在该元素周围。而使用<code>float:right;</code>得到的效果是相同的，只不过是元素被移动到右边。
+    </p>
+
+    <h2>Visualizing the float</h2>
+    <p>
+      虽然我们可以给被floated的元素加上margin来将附近的元素推远，但是若我们给附近的元素加上margin，却不会有相同的效果。原因很简单，就像之前说的，floated
+      element已经不属于normal flow内了，那么旁边还在normal
+      flow内的元素其实是在这个float元素后方运行的。
+    </p>
+    <p>
+      一个很简单的例子就可以检查我上面所述的，假设我给在float元素附近的段落加上一个背景颜色，那么如果整个段落，包括floated
+      element后面的位置都被上色了，那么就肯定是在背后渲染的背景。效果如下：
+    </p>
+    <div class="float box">Float</div>
+    <p class="render-background">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+      aliquam dolor, eu lacinia lorem placerat vulputate. Duis felis orci,
+      pulvinar id metus ut, rutrum luctus orci. Cras porttitor imperdiet nunc,
+      at ultricies tellus laoreet sit amet.Sed auctor cursus massa at porta.
+    </p>
+    <p>
+      打开devtools就看得出来，其实这整个段落依旧是full-width的，但是由于floated
+      element的因素，该p变成了inline boxes，并且在float后方渲染
+    </p>
+
+    <h2 class="cleared">Clear floats</h2>
+    <p>
+      上面已经讲过了，floated element会被移除normal
+      flow且其他元素将会在其边上展示。假设我不想让指定的元素继续围在floated
+      element周围，可以使用<code>clear</code>属性。
+    </p>
+    <p>
+      clear可以接受三个值，分别是<code>left</code>, <code>right</code>和
+      <code>both</code>，分别对应着指定元素的左/右/全部 不能含有floated element
+    </p>
+    <div class="float box">Float</div>
+    <p class="render-background">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+      aliquam dolor, eu lacinia lorem placerat vulputate. Duis felis orci,
+      pulvinar id metus ut, rutrum luctus orci. Cras porttitor imperdiet nunc,
+      at ultricies tellus laoreet sit amet.Sed auctor cursus massa at porta.
+    </p>
+    <p class="cleared">
+      这个段落就是设定了<code>clear:left</code>的，因此这段话并没有留在floated
+      box的右边，而是直接下来了
+    </p>
+
+    <h2>清除float处的boxes</h2>
+    <p>
+      上面讲的是手动定义某个元素排除到float内。但是当下面这个情况，也就是很大的floated
+      element和很短的段落的集合，且他们都在同一个wrapper内（这里是div）。若我想要使得floated
+      element的box整个将它和段落包起来，那么光对下面的段落使用<code>clear</code>是不够的，因为包围着floated
+      element的box依旧只有那么一些空间，可以从背景颜色看得出来
+    </p>
+    <div class="render-background">
+      <div class="float box">Float</div>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+        aliquam dolor, eu lacinia lorem placerat vulputate.
+      </p>
+    </div>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+      aliquam dolor, eu lacinia lorem placerat vulputate. Duis felis orci,
+      pulvinar id metus ut, rutrum luctus orci. Cras porttitor imperdiet nunc,
+      at ultricies tellus laoreet sit amet.Sed auctor cursus massa at porta.
+    </p>
+    <p>
+      解决方案有三个，其中两个可以在全浏览器支持，但是稍微有点hacky。第三个则是比较新的implementation，专门用于解决这种问题
+    </p>
+
+    <h3>Clearfix hack</h3>
+    <p>
+      最一开始的，也是最传统的用于解决这个问题的办法被称为clearfix
+      hack。这种办法其实很简单：将包含着floated
+      element和段落的wrapper添加一个<code>::after</code>
+      pseudo-element，然后让这个element给每一个wrapper后面加上一个占位符，不显示任何东西但是也不会跑到floated
+      element的附近。具体代码如下：
+    </p>
+    <pre>
+      .wrapper::after {
+        content: "";
+        clear: both;
+        display: block;
+      }
+    </pre>
+    <h3>Use overflow</h3>
+    <p>
+      另一个办法是使用<code>overflow</code>属性且将其设为<code>visible</code>，只需要在对应的wrapper内加入即可。原理是利用了Block
+      formatting context
+      BFC.此时，整个wrapper（也就是例子里面的div内）就变成了div内的一个mini
+      layout，所以floated
+      element也会在其中，则背景也会在后方渲染。一般来说这个没问题，但是有时可能会发现奇奇怪怪的bug，比如scrollbar，缺少内容等等，毕竟overflow并不是为了这目的实现的。
+    </p>
+    <pre>
+      .wrapper {
+        background-color: rgb(79,185,227);
+        padding: 10px;
+        color: #fff;
+        overflow: auto;
+      }
+    </pre>
+    <h3>display: flow-root</h3>
+    <p>
+      最先进的解决办法的问题就是使用<code>display</code>属性和他对应的<code>display</code>特性。这个办法其实也是创建了一个bfc，但是没使用奇奇怪怪的手段，且没有什么奇奇怪怪的后果。因此
+    </p>
+    <pre>
+      .wrapper {
+        background-color: rgb(79,185,227);
+        padding: 10px;
+        color: #fff;
+        display: flow-root;
+      }
+    </pre>
+  </body>
 </html>
