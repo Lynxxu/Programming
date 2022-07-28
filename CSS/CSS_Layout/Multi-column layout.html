@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      html {
+        margin-bottom: 3rem;
+      }
+
+      body {
+        width: 80%;
+        max-width: 1000px;
+        margin: auto;
+      }
+
+      div {
+        background-color: rgba(0, 0, 0, 5%);
+        padding: 1rem;
+        border: 2px rgb(104, 101, 101) dotted;
+      }
+
+      .multi-column-count {
+        column-count: 3;
+      }
+
+      .multi-column-width {
+        column-width: 200px;
+      }
+
+      .dotted {
+        column-gap: 30px;
+        column-rule: 4px dotted skyblue;
+      }
+
+      .break-column {
+        border: 2px solid whitesmoke;
+        background-color: antiquewhite;
+        color: black;
+        column-span: all;
+        border-radius: 10px;
+        display: block;
+      }
+
+      .col-box {
+        background-color: antiquewhite;
+        color: black;
+        border: 2px solid gray;
+        margin: 10px;
+        padding: 10px;
+      }
+
+      .avoid-break {
+        break-inside: avoid;
+      }
+    </style>
+    <title>Multi-column layout</title>
+  </head>
+  <body>
+    <h1>Multi-column layout</h1>
+    <p>
+      Multi-column
+      layout能提供一个将content以多个column展出的形式，类似报纸和论文那样
+    </p>
+    <h2>Example</h2>
+    <p>
+      和之前一样，依旧是由exmple为导向的教程，一步一步来创建一个mult-column
+      layout。
+    </p>
+    <p>
+      首先第一步，创造一个container
+      class，这里将使用div作为container。此时使用<code>column-count</code>或者<code>column-width</code>其中一个property便可以创建multi-column
+      layout。区别是前者根据数值创建columns的数量，而后者将会创建尽可能多的指定宽度的column.
+    </p>
+    <p>下面的这个段落便是使用了以下代码指定3个column生成的</p>
+    <pre>
+      .multi-column-count {
+        column-count: 3;
+      }
+    </pre>
+    <div class="multi-column-count">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Vestibulum sed arcu
+      non odio euismod lacinia at quis risus. Mauris commodo quis imperdiet
+      massa. Quis imperdiet massa tincidunt nunc pulvinar sapien et. Amet tellus
+      cras adipiscing enim eu turpis egestas pretium aenean. Mattis aliquam
+      faucibus purus in massa tempor nec feugiat. Facilisis magna etiam tempor
+      orci eu lobortis. Accumsan in nisl nisi scelerisque eu ultrices vitae.
+      Interdum posuere lorem ipsum dolor sit. Dolor purus non enim praesent
+      elementum. A diam maecenas sed enim ut sem viverra. Turpis massa sed
+      elementum tempus. Augue interdum velit euismod in pellentesque massa
+      placerat duis. Viverra nibh cras pulvinar mattis nunc sed blandit libero.
+      Vitae tempus quam pellentesque nec nam aliquam.
+    </div>
+    <p>而下面这个段落则是指定了column width的，=</p>
+    <pre>
+      .multi-column-width {
+        column-width: 200px;
+      }
+    </pre>
+    <div class="multi-column-width">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Vestibulum sed arcu
+      non odio euismod lacinia at quis risus. Mauris commodo quis imperdiet
+      massa. Quis imperdiet massa tincidunt nunc pulvinar sapien et. Amet tellus
+      cras adipiscing enim eu turpis egestas pretium aenean. Mattis aliquam
+      faucibus purus in massa tempor nec feugiat. Facilisis magna etiam tempor
+      orci eu lobortis. Accumsan in nisl nisi scelerisque eu ultrices vitae.
+      Interdum posuere lorem ipsum dolor sit. Dolor purus non enim praesent
+      elementum. A diam maecenas sed enim ut sem viverra. Turpis massa sed
+      elementum tempus. Augue interdum velit euismod in pellentesque massa
+      placerat duis. Viverra nibh cras pulvinar mattis nunc sed blandit libero.
+      Vitae tempus quam pellentesque nec nam aliquam.
+    </div>
+    <p>
+      需要注意的是，因为浏览器的responsive
+      design，即使指定了200px的column-width，并不代表column会是严格的200px，除非刚刚好是200px的倍数。
+    </p>
+
+    <h2>Styling columns</h2>
+    <p>
+      使用column-count或者width创造出的columns不能被单独的style。比如不可能让一个column比另一个大很多，或者单独给某一个column上
+      background
+      color。但是可以更改的由column之间的间隔大小和style，使用<code>column-gap</code>以及<code>column-rule</code>来达到目的
+    </p>
+    <pre>
+      .dotted {
+        column-gap: 30px;
+        column-rule: 4px dotted skyblue;
+      }
+    </pre>
+    <div class="dotted multi-column-count">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Vestibulum sed arcu
+      non odio euismod lacinia at quis risus. Mauris commodo quis imperdiet
+      massa. Quis imperdiet massa tincidunt nunc pulvinar sapien et. Amet tellus
+      cras adipiscing enim eu turpis egestas pretium aenean. Mattis aliquam
+      faucibus purus in massa tempor nec feugiat. Facilisis magna etiam tempor
+      orci eu lobortis. Accumsan in nisl nisi scelerisque eu ultrices vitae.
+      Interdum posuere lorem ipsum dolor sit. Dolor purus non enim praesent
+      elementum. A diam maecenas sed enim ut sem viverra. Turpis massa sed
+      elementum tempus. Augue interdum velit euismod in pellentesque massa
+      placerat duis. Viverra nibh cras pulvinar mattis nunc sed blandit libero.
+      Vitae tempus quam pellentesque nec nam aliquam.
+    </div>
+    <p>需要注意几点:</p>
+    <ul>
+      <li>
+        <code>column-rule</code
+        >产生的边界线是不含任何尺寸的，若想要调整column之间的边距，仍需要使用column-gap
+      </li>
+      <li>
+        <code>column-rule</code
+        >和border类似，也是一个shorthand，代表的是<code>column-rule-color</code>,
+        <code>column-rule-style</code>以及<code>column-rule-width</code>
+      </li>
+    </ul>
+    <h2>Spanning columns</h2>
+    <p>
+      若想要某个元素插入在column内且跨越全部的column，可以使用<code>column-span</code>属性来让columns在设置了
+      column
+      spand元素处的位置断开。需要注意的是，<code>column-span</code>仅接受none或者all，所以是不可以仅span部分column的
+    </p>
+    <div class="dotted multi-column-count">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Vestibulum sed arcu
+      non odio euismod lacinia at quis risus. Mauris commodo quis imperdiet
+      massa. Quis imperdiet massa tincidunt nunc pulvinar sapien et. Amet tellus
+      cras adipiscing enim eu turpis egestas pretium aenean.
+      <h2 class="break-column">
+        THIS LINE BREAKS COLUMN, SPAN ACROSS ALL COLUMNS
+      </h2>
+      Mattis aliquam faucibus purus in massa tempor nec feugiat. Facilisis magna
+      etiam tempor orci eu lobortis. Accumsan in nisl nisi scelerisque eu
+      ultrices vitae. Interdum posuere lorem ipsum dolor sit. Dolor purus non
+      enim praesent elementum. A diam maecenas sed enim ut sem viverra. Turpis
+      massa sed elementum tempus. Augue interdum velit euismod in pellentesque
+      massa placerat duis. Viverra nibh cras pulvinar mattis nunc sed blandit
+      libero. Vitae tempus quam pellentesque nec nam aliquam.
+    </div>
+    <h2>Columns and fragmentation</h2>
+    <p>
+      一个multi-column layout，若不进行特殊设置，有的时候会的产生fragmented
+      box，也就是被clipped的box，类似下图：
+    </p>
+    <div class="multi-column-count">
+      <p class="col-box">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+        aliquam dolor, eu lacinia lorem placerat vulputate. Duis felis orci,
+        pulvinar id metus ut, rutrum luctus orci. Cras porttitor imperdiet nunc,
+        at ultricies tellus laoreet sit amet. Sed auctor cursus massa at porta.
+        Integer ligula ipsum, tristique sit amet orci vel, viverra egestas
+        ligula.
+      </p>
+      <p class="col-box">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+        aliquam dolor, eu lacinia lorem placerat vulputate. Duis felis orci,
+        pulvinar id metus ut, rutrum luctus orci. Cras porttitor imperdiet nunc,
+        at ultricies tellus laoreet sit amet. Sed auctor cursus massa at porta.
+        Integer ligula ipsum, tristique sit amet orci vel, viverra egestas
+        ligula.
+      </p>
+    </div>
+    <h3>Use <code>break-inside</code></h3>
+    <p>
+      幸运的是，有办法解决这个问题，只需使用<code>break-inside</code>属性即可，将上面的每段的column
+      style加上<code>break-inside: avoid</code>，结果如下：
+    </p>
+    <div class="multi-column-count">
+      <p class="col-box avoid-break">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+        aliquam dolor, eu lacinia lorem placerat vulputate. Duis felis orci,
+        pulvinar id metus ut, rutrum luctus orci. Cras porttitor imperdiet nunc,
+        at ultricies tellus laoreet sit amet. Sed auctor cursus massa at porta.
+        Integer ligula ipsum, tristique sit amet orci vel, viverra egestas
+        ligula.
+      </p>
+      <p class="col-box avoid-break">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus
+        aliquam dolor, eu lacinia lorem placerat vulputate. Duis felis orci,
+        pulvinar id metus ut, rutrum luctus orci. Cras porttitor imperdiet nunc,
+        at ultricies tellus laoreet sit amet. Sed auctor cursus massa at porta.
+        Integer ligula ipsum, tristique sit amet orci vel, viverra egestas
+        ligula.
+      </p>
+    </div>
+  </body>
+</html>
