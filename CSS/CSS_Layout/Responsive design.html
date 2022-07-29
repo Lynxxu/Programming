@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        width: 80%;
+        max-width: 1000px;
+        margin: auto;
+      }
+
+      @media screen and (min-width: 800px) {
+        .color {
+          background-color: antiquewhite;
+          color: black;
+        }
+      }
+    </style>
+    <title>Responsive design</title>
+  </head>
+  <body>
+    <h1>Responsive Design</h1>
+    <p>
+      在早期网页设计，大多数设计都是基于特定的屏幕尺寸来的，因此对于非指定尺寸屏幕的设备，会产生各种奇奇怪怪的结果。随着科技发展，RWD(responsive
+      web
+      design)逐渐浮出水面，也就是一种自适应，可灵活用于各种尺寸，分辨率的网页设计理念。
+    </p>
+
+    <h2>Historic website layouts</h2>
+    <p>
+      html本身就是responsive的，如果将一个网页收缩，放大或者切换道不同尺寸屏幕来展示，浏览器会自动重新排列文字来适应窗口。这被称为<b
+        >liquid layout</b
+      >
+    </p>
+    <p>
+      但是问题来了，假设仅仅使用html的自带liquid
+      layout，那么对于一长段话来说，当屏幕很大，这段话会变得太长，可读性很差。而当屏幕小的时候这些字又会挤在一起，可读性依旧很差
+    </p>
+    <p>
+      此时的一个解决方案是使用fixed width
+      element，也就是将所有元素都设定成固定尺寸，但是若屏幕太小了，就会产生horizontal
+      scrollbar。而屏幕太大的时候却又会浪费太多空间。
+    </p>
+    <p>
+      当手机浏览器开始变得常见，很多网页针对手机创建了专门的mobile
+      version，使用不同的url，也就是说开发者需同时维护两份代码。话虽如此，mobile
+      sites一般来说功能会受限，即使手机性能越来越强，手机网页却没见到太大的提升
+    </p>
+
+    <h2>Felxible layout before responsive design</h2>
+    <p>
+      在responsive design出现之前，有许多layout
+      approaches被发明出来，试图解决liquid，fixed width
+      layout带来的问题。在2004年，Cameron
+      Adams提出了使用JS探测屏幕尺寸后载入对应的css以达到<a
+        href="https://www.themaninblue.com/writing/perspective/2004/09/21/"
+        >Resolution Dependent layout</a
+      >，后面在2008年，Zoe Mickley Gillenwater总结了创建flexible
+      sites的办法，在那以后人们就在尝试寻找一个在fixed和liquid之间的折中方案
+    </p>
+
+    <h2>Responsive design</h2>
+    <p>
+      responsive design的概念是由<a
+        href="https://alistapart.com/article/responsive-web-design/"
+        >Ethan Marcotte</a
+      >在2010年发明出来的，用于描述以下三种技巧的结合：
+    </p>
+    <ol>
+      <li>Fluid grids，也就是自适应的column width，固定的gutter和边缘margin</li>
+      <li>
+        Fluid
+        images，也就是我一直都在使用的办法。将<code>max-width:100%</code>设置在image即可，因为设置好了最大值为100%时，若其containing
+        block被调整缩小，那么图也会缩小，但是图却不会增长至pixelated。
+      </li>
+      <li>
+        使用<a
+          href="https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries"
+          >Media query</a
+        >，后面会具体提，目前来说就是根据探测某种状态来调整使用的css
+        layout，只不过不用JS而是纯css
+      </li>
+    </ol>
+    <p>
+      值得一提的是，responsive web
+      design不是一个独立的技术，而是一个用于描述一种自适应的网站设计手段。从十几年前开始，responsive
+      design变的越来越重要，也越来越简单实现。此篇文章剩下的篇幅将用于展示一下一些可用的自适应设计手法
+    </p>
+
+    <h2>Media Queries</h2>
+    <p>
+      responsive design最初就是由media queries实现的。media
+      queries允许浏览器进行一系列测试（布尔运算），然后使用指定的css来进行styling
+    </p>
+    <p>
+      假设我想指定在某个最少有800px的屏幕上展示出不同的背景颜色，那么可以使用以下代码来判定：
+    </p>
+    <pre>
+      @media screen and (min-width: 800px) {
+        .color {
+          background-color: antiquewhite;
+          color:black;
+        }
+      }
+    </pre>
+    <p class="color">
+      看这段话，这个p就是指定了color
+      class的，假设条件满足，那么这段话便会切换颜色。可以试着将viewport调整至大于800px，此时背景应该会展示
+    </p>
+    <p>
+      在一个stylesheet内可以加入多个media
+      queries，根据不同的情况判定以采用不同的layout，当layout变化时，我们称其为<code
+        >breakpoints</code
+      >
+    </p>
+    <p>
+      一个比较常见的meida
+      queries使用方式就是判断屏幕尺寸大小，为手机用户设计一套single
+      column，narrow
+      screen的设计，然后为电脑使用另一套方案。这种设计准则被称为mobile first
+      design
+    </p>
+    <h2>Flexible grids</h2>
+    <p>
+      自适应网站不会仅仅在breakpoint处切换layout，他们是基于flexible
+      grids的。也就是说，当未达到breakpoints时，自适应的flexible
+      grids会自动调整大小，直至切换到breakpoints
+    </p>
+    <p>
+      在早期responsive design，以上提到的办法只有float能实现。flexible floated
+      layout是让每一个float元素使用percentage
+      width达到的自适应。然后保证这些元素的总widht不会超过100%。
+    </p>
+    <pre>
+      @media screen and (min-width: 600px) {
+        .col1 {
+          width: 31.24999999%;
+          float: left;
+        }
+
+        .col2 {
+          width: 64.58333331%;
+          float: right;
+        }
+      }
+    </pre>
+    <p>
+      以上的代码就是个例子，当屏幕宽于600px时，两个column便会变成float，一个浮在左边，是屏幕的31%
+      width，另一个浮在右边，是屏幕的64% width。如此一来，当media
+      queries生效时，这俩columns便会分开，当media queires未生效，则作为normal
+      flow的正常文档，这俩则会上下显示。
+    </p>
+    <p>
+      这种方法虽然已经过时了，但是很多网页依旧仍在使用。在后面的legacy
+      layout会更详细的学习
+    </p>
+    <h2>Modern layout tech</h2>
+    <p>
+      前面学过的grid, flexbox, multiple-column
+      layout均默认是自适应的。他们都以自适应为前提进行styling，因此比较好用
+    </p>
+    <h3>multicol</h3>
+    <p>
+      modern
+      layout内使用最悠久的是multicol，也就是使用<code>column-count</code>或者<code>column-width</code>来定义multi-column
+      layout的用法。前者是固定column数量，调整column大小，后者是根据column
+      width做判断进行不同的自适应column
+    </p>
+    <h3>Flexbox</h3>
+    <p>
+      而flexbox已经是老朋友了，使用<code>display:flex</code>可以设置flex
+      layout，然后对下属的flex items使用<code>flex</code>
+      property可以指定items的空间增长，缩小以及基础大小。使用flex基本可以完美替代以float实现的自适应网页
+    </p>
+    <h3>CSS grid</h3>
+    <p>
+      在css grid layout内，使用<code>fr</code>
+      unit可以控制grid之间的空间分配。这也是一种自适应设计。使用<code
+        >grid-template-columns:1fr 1fr 1fr</code
+      >便可以完美做到均匀分配。
+    </p>
+    <h2>Responsive images</h2>
+    <p>
+      最简单的responsive实现方式只需要一行代码:
+      <code>max-width:100%</code>。这个办法十分常见且时至今日都在广泛使用。
+    </p>
+    <p>
+      但是很明显，这个办法也有小毛病：当我们使用比较小的设备时，图片会比较小，分辨率同理。而此时若只有一个图片文件，用户可能被迫下载过大的文件浪费带宽。
+      亦或者说你想在手机上显示方形图片，而在电脑上显示原本的aspect ratio。
+    </p>
+    <p>
+      如果还记得的话，这两个问题已经在学习html时的<a
+        href="..\..\HTML5/basics\Semantics\Multimedia & embedding\Responsive Image.html"
+        >Responsive images</a
+      >处讲过了。
+    </p>
+    <p>
+      简单提一下的话，就是使用<code>img</code>的<code>srcset</code>和<code
+        >sizes</code
+      >
+      attributes来解决这两个问题。前者使用不同大小的文件来针对不同屏幕尺寸切换。后者使用不同尺寸的图片来根据屏幕切换
+    </p>
+    <h2>Responsive typography</h2>
+    <p>
+      在早期自适应设计内未被提到过的一个概念是responsive
+      typography，本质上来说就是使用meida
+      queries来切换字体的大小，以转换字体占屏幕大小的比例
+    </p>
+    <p>
+      实现的办法也很简单，基于cascade rule和media
+      queries，当屏幕尺寸大于某个值的时候，切换到大字体即可，如下：
+    </p>
+    <pre>
+      html {
+        font-size: 1em;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      @media (min-width: 1200px) {
+        h1 {
+          font-size: 4rem;
+        }
+      }
+    </pre>
+    <h2>use viewport units for responsive typography</h2>
+    <p>
+      一个比较有趣的办法实现responsive typography是使用viewport
+      units，即<code>vw</code>，1vw等于1% viewport width。
+    </p>
+    <p>
+      但是问题来了，当用户想要使用ctrl +
+      滚轮放大页面的时候，使用vw定义的字体是不会有任何变化的，因为它仅基于vw
+    </p>
+    <p>
+      解决方案当然是有的，使用<code>calc()</code>即可。因为当使用calc将vw和固定尺寸单位相加时，他们就又变得可以缩放了。具体来说，vw会在固定尺寸缩放结束后加上。
+      这种方法非常好用，因为不需要使用media
+      queries来单独设置不同尺寸的屏幕但是依旧可以做到随着viewport变大而变大，而且依旧保持自适应的特性
+    </p>
+    <h3>viewport meta</h3>
+    <p>写html文档的时候，编译器开头都会帮我写下这一段代码：</p>
+    <pre>
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    </pre>
+    <p>
+      其实这段代码是非常必须的，这里的meta tag相当于叫手机浏览器的viewport
+      width和device
+      width相等，然后将文档由100%原始尺寸展示出来，这样之前设计的自适应便可以达到效果
+    </p>
+    <p>
+      这个meta
+      tag存在的理由其实是一个历史遗留问题。由于早期手机浏览器还没有被广泛支持，所以由苹果带头，手机浏览器会将viewport设置
+      成980px的大小，在这个尺寸渲染网页以得到一种放大化的电脑版网页。用户可以放大缩小，移动网页来观看全部内容，但是可想而知，体验不咋样
+    </p>
+    <p>
+      于是，因为这个设定至今还存在，如果你使用480px以下的width作为breakpoint，那么一个默认是980px的viewport
+      width永远不会激活该breakpoint。所以说使用这个meta
+      tag来设置<code>width=device-width</code>可以直接覆写浏览器的默认width=980px，达到原本的自适应目的，因此基本上在任何html文档内，这个met
+      tag都是必备的
+    </p>
+  </body>
+</html>
