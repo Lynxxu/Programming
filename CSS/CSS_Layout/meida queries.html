@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Beginner's guide to media queries</h1>
+    <p>
+      CSS media
+      queries，基本上就是一个if判断后使用的css代码。允许人们使用条件判断来启动特定的rules。
+      在某些情况下非常好用，尤其是对于自适应设计，因为它可以基于屏幕尺寸，显示类型等等来判断。
+    </p>
+    <h2>Basics</h2>
+    <p>基本的media query语法如下</p>
+    <pre>
+      @media media-type and (media-feature-rule){
+        css rules
+      }
+    </pre>
+    <p>它含有以下要素：</p>
+    <ul>
+      <li>media type, 也就是告诉浏览器该段代码的适用type（比如屏幕，打印）</li>
+      <li>media expression，也就是使用代码时必须满足的条件</li>
+      <li>一系列css代码，满足要求时使用</li>
+    </ul>
+    <h3>Meida type</h3>
+    <p>
+      上面提到的media
+      type可以接受三种值，分别是全部，打印和屏幕。也就是<code>all</code>，<code>print</code>，<code>screen</code>。以下的一段代码的意思是将body的全部文字尺寸设置为12px，前提是在print
+      page的时候，若是正常时刻则不会显示
+    </p>
+    <pre>
+      @media print{
+        body{
+          font-size: 12px;
+        }
+      }
+    </pre>
+    <h3>media feature rules</h3>
+    <p>
+      在指定了生效文件类型后，还需要指定media
+      feature来细分要求以达到自适应设计的效果
+    </p>
+    <h4>Width and height</h4>
+    <p>
+      一般来说在自适应网页设计内，使用的最多且支持最光的便是viewport
+      width和height了，以此来判定breakpoint并切换layout达到目的。具体可以使用的是min-width,
+      max-width以及width，当然height同理
+    </p>
+    <p>
+      比如以下的代码便是指定浏览器在屏幕显示时，且viewport必须是600px的时候，将整个body变成红色字体
+    </p>
+    <pre>
+      @media screen and (width: 600px) {
+        body {
+            color: red;
+        }
+      }
+    </pre>
+    <p>
+      当然，也可也使用min，max来指定范围是否是最低还是最好，比如以下代码便是指定了屏幕展示，以及max-width为600px，也就是说屏幕尺寸不高于600px的时候就会生效
+    </p>
+    <pre>
+      @media screen and (max-width: 600px){
+        body{
+          color:blue
+        }
+      }
+    </pre>
+    <p>
+      需要注意的是，media queries支持的media features远不止于此，可以使用<a
+        href="https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries#media_features"
+        >mdn</a
+      >的specification来探寻一下更多的用途。
+    </p>
+    <h4>Orientation</h3>
+    <p>
+      另一个被广泛支持的media feature是<code>orientation</code>, 其允许我们对浏览器的展示方向进行选择，比如是横屏还是竖屏。默认的网页设计基本上都是基于电脑的横板展示模式，在手机端不一定会很好看，因此可以使用media queries来探测protrait并对其进行独特的styling
+    </p>
+    <p>
+      关于这种media feature，可以使用<code>orientation: landscape</code>或者<code>orientation: portrait</code>来对应横屏/竖屏，比如以下的代码便是说，在landscape时把颜色改成绿色：
+    </p>
+    <pre>
+      @media (orientation: landscape){
+        body{
+          color: green;
+        }
+      }
+    </pre>
+    <h4>pointing device</h4>
+    <p>
+      media feature还有一个比较好用，但是支持并没有那么广泛的<code>hover</code> feature。用于探测用户是否可以使用pointing device。需要注意的是，键盘和触摸屏算不上pointing device.
+      而media feature可以接受以下的值：
+    </p>
+    <ul>
+      <li>none: 没有pointing device，也就是纯键盘或者语音控制设备i</li>
+      <li>fine：限于精细的device，比如鼠标和触控板</li>
+      <li>coarse: 触摸屏</li>
+    </ul>
+    <p>这个功能看起啦没什么用，但是其实还不错，比如可以针对触摸屏的用户设计更大的hit area</p>
+    
+    <h2>More on media queries</h2>
+    <p>
+      media queries不只能是单个条件，也可也使用<code>and</code>，<code>or</code>来调整media queries的范围
+    </p>
+    <p>
+      就像其他比编程语言语言一样，使用media queries可以添加各种逻辑判断，比如以下的代码就是限于屏幕展示，且必须是横屏显示，最小600px的宽度
+    </p>
+    <pre>
+      @media screen and (min-width:600px) and (orientation: landscape){
+        body{
+          color:blue
+        }
+      }
+    </pre>
+    <p>
+      而可以接受的和其他语言内的逻辑判断也大差不差，具体如下:
+    </p>
+    <ul>
+      <li><code>and</code>，即上面写的例子，必须同时满足</li>
+      <li><code>,</code> 也就是<code>or</code>的逻辑，只需要满足其中一个逻辑便可</li>
+      <li><code>not</code>，逻辑和其他的编程语言也不太相同，是直接将整个media query的意义给反转</li>
+    </ul>
+    <pre>
+      @media not all and (orientation: landscape)
+      @media screen (orientation:portrait) and (hover:coarse)
+      @media portrait (max-width:600px), (orientaiton: portrait)
+    </pre>
+    <p>
+      以上三个边分别对应了1.任何设备的竖直屏幕展示方式 2. 竖直显示的触控屏设备 3. 最大600像素的垂直显示设备
+    </p>
+    <h2>选择breakpoints</h2>
+    <p>
+      在网页设计早期阶段，许多设计者会给特定的屏幕尺寸单独设计网页。因此大多数手机为了这种目的会将其考虑在手机尺寸设计内。
+      但是到了现在，无数不同尺寸的电子设备被设计出来，因此不如设计一套自自适应网页，然后在某些元素因尺寸变得扭曲时，切换为别的layout。
+      切换的节点便是breakpoints
+    </p>
+    <p>
+      很多浏览器都含有内置的针对自适应设计的devtools，在chrome内只需要打开devtool，左上角便可以选择出来，模拟各种手机尺寸，改变显示位置等等
+    </p>
+    <img src="../Resources/responsive devtool.png" alt="chrome devtools example png">
+  </body>
+  <h2>Example: mobile first responsive design</h2>
+  <p>
+    在<a href="Examples/mobile example.html">该例子</a>内，我加上了
+  </p>
+  <pre>
+    @media screen and (min-width: 40em) {
+      article {
+          display: grid;
+          grid-template-columns: 3fr 1fr;
+          column-gap: 20px;
+      }
+  
+      nav ul {
+          display: flex;
+      }
+  
+      nav li {
+          flex: 1;
+      }
+    } 
+  </pre>
+  <p>
+    上面即限定了在70em以上的屏幕时，使article变成2个grid，按3：1分配，20px的间隔。然后将导航栏内的list改成flex形式
+  </p>
+  <pre>
+    @media screen and (min-width: 70em) {
+      main {
+          display: grid;
+          grid-template-columns: 3fr 1fr;
+          column-gap: 20px;
+      }
+  
+      article {
+          margin-bottom: 0;
+      }
+  
+      footer {
+          border-top: 1px solid #ccc;
+          margin-top: 2em;
+      }
+  }
+  </pre>
+  <p>
+    而上面代码的则是限定了70em的最低尺寸，但是将整个main都调整为grid，3：1的形式。然后去除掉article的底部编剧，且把footer切换成一条线
+  </p>
+  <p>
+    因此，这个网页当在手机，或者说最大尺寸是40em的电子设备上，就会变成自上往下的normal flow形式，但是当超过了40em，小于70em时，会将主要的内容，也就是article调整成grid，3：1的分配。
+    同时将顶上的导航栏变成横条的。
+  </p>
+  <p>
+    然后当该网页到了70em以上的设备，保持40em的内容不变，然后将main也切换成grid，同样是3：1的分配，然后同时取消article的底边距，添加一条footer的线。此时整个页面就变成了一个嵌套grid，main包含3：1的两个column，其中一个column是包含了article的，而article同样也是3：1分配的2个column，而另外一个column则是sidebar
+  </p>
+</html>

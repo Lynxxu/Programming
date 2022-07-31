@@ -262,5 +262,12 @@
       tag来设置<code>width=device-width</code>可以直接覆写浏览器的默认width=980px，达到原本的自适应目的，因此基本上在任何html文档内，这个met
       tag都是必备的
     </p>
+    <h3>Are media query necessary</h3>
+    <p>
+      虽然绝大多数时刻media queries都很有用，但是有的时候是不需要使用media
+      query的。现代的layout
+      techniques基本上都自带自适应效果，特别是grid，使用<code>column-width</code>可以自动调节column的数量，若将column的样式改成卡片或者别的，那么在屏幕小的时候便会变成一整块大的卡，那么这个就不需要media
+      query来实现了
+    </p>
   </body>
 </html>
