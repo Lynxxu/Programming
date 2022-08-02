@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <style>
+      .button {
+        font-family: "helvetica neue", helvetica, sans-serif;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: center;
+        border: 2px solid rgba(0, 0, 200, 0.6);
+        background: rgba(0, 0, 200, 0.3);
+        color: rgba(0, 0, 200, 0.6);
+        box-shadow: 1px 1px 2px rgba(0, 0, 200, 0.4);
+        border-radius: 10px;
+        padding: 3px 10px;
+        display: inline-block;
+        cursor: pointer;
+      }
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What's JavaScript</title>
+  </head>
+
+  <body>
+    <h1>What is JavaScript</h1>
+    <p>
+      JavaScript是一个脚本语言<code>scripting language</code
+      >，用于创造各种浏览器的动效，交互等等。
+      html和css分别用于构造一个网页的骨架和装饰，而javascript则用于控制多媒体文件，网页交互，动效以及基本上其他在网页上见得到的东西。js基于css+html，css基于html，这三大件相互间配合组成了各种炫酷网页
+    </p>
+    <div class="button">Enter ur name</div>
+    <p>上面就是一个js，css和html相结合做成的简单交互式按钮</p>
+    <h2>JS: what does it really do?</h2>
+    <p>核心的的客户端js编程包含了很多和其他编程语言类似的要素：</p>
+    <ul>
+      <li>
+        使用变量来储存值，上面的那个button的例子就是将用户输入的值储存至<code
+          >name</code
+        >
+      </li>
+      <li>
+        对于字符串的操作，比如上面的string就是My name
+        is，加上之前输入并储存的name变量
+      </li>
+      <li>
+        用于反应某些操作，比如上面是一个<code>click</code>
+        event用于探测button是否被点击过了
+      </li>
+    </ul>
+    <p>
+      一些更重要的东西则是被称为API(Application Programming Interfaces),
+      这种东西基于客户端js，十分有用
+    </p>
+    <p>
+      API为预设好的代买快，用于帮助实现一些不太容易手写的操作。就很像各种ready-made
+      kit，只不过是编程层面的。
+    </p>
+    <p>一般来说API分为两种：browser API和3rd party API。首先是浏览器api：</p>
+    <p>
+      浏览器api都是内置在浏览器内的，可以从电脑的环境来放置/接受数据。具体如下：
+    </p>
+    <ul>
+      <li>
+        DOM (document object model)
+        API允许我们操作html，css，创造，移除以及更改html，现场添加styles等等。一般来说，每一次有个新的pop
+        up或者新内容，那么都是DOM带来的效果
+      </li>
+      <li>Geolocation API可以获得地理内容，Google maps也是这样。</li>
+      <li>
+        <code>Canvas</code>和<code>WebGL</code>
+        API允许我们创建2d，3d动效。这些api被用于生成一些非常惊艳的效果，比如<a
+          href="https://experiments.withgoogle.com/collection/chrome"
+          >Chrome Experiments</a
+        >和一个动态草地<a href="https://webglsamples.org/field/field.html"
+          >来源于webglsamples</a
+        >
+      </li>
+      <li>
+        audio and video
+        API，比如<code>HTMLMediaElement</code>以及<code>WebRTC</code>，用于操作多媒体文件，比如在web内放音视频，甚至抓取我的web
+        camera，将视频传送到其他电脑上
+      </li>
+    </ul>
+    <p>
+      第三方api，也就是Third party
+      APIs不是内置于浏览器的，一般来说需要从网络上抓取这些代码。很多软件厂商会将他们的api公开出来，鼓励别人将这些东西内置到网页里（合法合规的前提），比如<a
+        href="https://developer.twitter.com/en/docs"
+        >Twitter API</a
+      >以及<a href="https://developers.google.com/maps/">google map</a>
+    </p>
+    <p>
+      这些api一般比较advanced，后面才会接触，但是api不只有这些，所以得先学完基础再说
+    </p>
+    <h2>What does JS do to the page</h2>
+    <p>现在来解析一点真代码，然后也分析一下JS具体是怎么运行的。</p>
+    <p>
+      首先来复习以下，当载入一个网页的时候，实际上就是在execution
+      environment(也就是浏览器的页面）运行代码（HTML，CSS，JS）。就像是一个工厂，接受raw代码，输出网页
+    </p>
+    <p>
+      一个非常常见的JS用途就是将html和css动态化，（基于DOM
+      API）。一般来说网页的代码在浏览器渲染之前就被执行过了。但是如果JS在html和css之前就被加载了，有可能会出bug。因为你不能更改一个还未被创建出来的object
+    </p>
+    <h3>Browser security</h3>
+    <p>
+      每一个浏览器tab都有单独的execution
+      environment。每一个tab独立于其他tab，相互不能直接影响。一般来说这是个好处，因为可能有人会借此劫持其他网页的信息。虽然有办法安全传输，但是比较深入
+    </p>
+    <h3>JS的顺序</h3>
+    <p>
+      浏览器操作js代码的基本流程和html，css一样由上到下，所以需要注意写js代码的顺序，看下面的一段代码，也就是刚刚的button的js
+    </p>
+    <pre>
+      const button = document.querySelector(".button");
+
+      button.addEventListener("click", updateName);
+
+      function updateName() {
+        const name = prompt("Enter a new name");
+        button.textContent = `My name is ${name}`;
+      }
+    </pre>
+    <p>
+      分析一下，第一行是用于选择.button类，然后在第三行给他附上event
+      listener。当这个button类被点击后，<code>updateName()</code>代码块就会被执行（5-8行）。这个<code>updateName</code>代码被称为functions，可重复使用，和其他语言里面的function类似。那么工作逻辑其实也差不多，比如说如果我将前两段代码的顺序调换，那么会得到一个<code
+        >TypeError: button is undefined</code
+      >，因为我试图在创建变量前引用它。
+    </p>
+    <h3>Interpreted vs. complied code</h3>
+    <p>
+      之前就听说过<b>interpreted</b>和<b>complied code</b>这两概念，interpreted
+      code，也就是解释型语言，电脑会从上往下直接被执行，不需要将代码转化成其他形式或做其他更改。一般来说这种代码是programmer-friendly
+      text form
+    </p>
+    <p>
+      剩下的就是编译语言，complied
+      language。比如C/C++将会被编译成二进制机械码，然后由电脑执行。
+    </p>
+    <p>
+      JS是一种轻量级的interpreted programming
+      language，也就是说浏览器会接受js的源代码然后直接运行script。绝大多是现代js
+      interpreter都会使用一种<b>just-in-time compling</b
+      >的技术来提升performance。js源代码会在被使用时编译转化成二进制形式以便快速执行。但是js依然是一个解释型语言，因为这些编译是在被执行的同时启用的，而不是执行前被编译
+    </p>
+    <h3>Server-side vs. client-side code</h3>
+    <p>
+      另外一个耳熟能详的概念时<b>server-side</b>和<b>client-side</b>
+      code，也就是服务端代码和客户端代码。客户端代码是在用户的电脑上执行的。当一个网页被打开的时候，网页的客户端代码会被下载后执行。
+    </p>
+    <p>
+      <b>server-side</b>
+      code则是在服务器上运转，但是运转后的结果会被下载并展示在浏览器上。几个服务端语言的例子有php,
+      python, ruby, asp.net，甚至js也可以用于服务端，比如非常受欢迎的Node.js
+      environment
+    </p>
+    <h3>Dynamic vs static code</h3>
+    <p>
+      <b>dynamic</b
+      >这个词被用于描述客户端js以及服务端语言。具体来说，就是根据不同情况来生成，调整并展示不同的web
+      page或app。服务端code会在服务器上生成新内容，比如从数据库上提取数据。客户端js则是在客户端浏览器内动态生成内容，比如创建html表格，从服务器提取数据且塞入表格等等。这两种虽然不同，但是有关系，且一般一起使用
+    </p>
+    <p>static就简单了，一个不能更新内容的网页就是静态网页，内容是固定的。</p>
+    <h2>如何往网页内添加js</h2>
+    <p>
+      往html内加入js的办法和css类似，css使用<code>&lt;link&gt;</code>来加入外置stylesheet，然后使用<code>&lt;style&gt;</code>来加入内置styles。JS则只需要一个tag，也就是<code
+        >&lt;script&gt;</code
+      >
+    </p>
+    <h3>Internal JS</h3>
+    <button>Click to add</button>
+    <p>
+      看上面的button，点击后就可以在网页下加上一小段话。其实这个和css的逻辑是一模一样的，我只是在html文档的最下面加上了以下代码：
+    </p>
+    <pre>
+    &lt;script&gt;
+      // add paragraph
+      document.addEventListener("DOMContentLoaded", () => {
+        function createParagraph() {
+          const para = document.createElement("p");
+          para.textContent = "You clicked the button!";
+          document.body.appendChild(para);
+        }
+
+        const buttons = document.querySelectorAll("button");
+
+        for (const button of buttons) {
+          button.addEventListener("click", createParagraph);
+        }
+      });
+    &lt;script&gt;
+    </pre>
+    <h3>External JS</h3>
+    <p>
+      虽然上面的内置js没问题，但是如果我们想要添加外置script也是可以的，只需要将之前的相同的代码放在一个文件内，注意文件的得是<code>.js</code>后缀，然后将<code>&lt;script&gt;</code>改成<code
+        >&lt; src="script.js" defer&gt; &lt;script&gt;</code
+      >。这两种办法的效果是完全相同的，但是创建外置script更加容易维护，且也可以重复使用
+    </p>
+    <h3>Inline JS handlers</h3>
+    <p>
+      一样的，js也可作为inline形式存在，虽然和css的inline概念不太一样。比如下面的两块代码：
+    </p>
+    <pre>
+      function createParagraph(){
+        const para = document.createElement('p');
+        para.textContent = 'You clicked the button!';
+        document.body.appendClid(para);
+      }
+    </pre>
+    <pre>
+      &lt;button onclick="createParagraph()"&gt;Click me! &lt;/button&gt;
+    </pre>
+    <p>
+      得到的结果就是这个button
+      <button onclick="createParagraph()">Click me!</button
+      >，虽然结果是一样的，但是不建议这样使用。因为效率很低，需要给指定的元素单独加上attribute，也就是<code
+        >onclick="createParagraph()"</code
+      >
+    </p>
+    <h3>使用<code>addEventListener</code></h3>
+    <p>
+      有一个办法可以创建类似其他语言内的for循环，使用<code>.addEventListener()</code>来给每一个button提供一个handle。这个比<code
+        >onclick</code
+      >
+      attribute长一点，但这个可以target每一个button，比如这个没有任何attribute的<button>
+        button
+      </button>
+    </p>
+    <pre>
+        const buttons = document.querySelectorAll('button');
+
+        for (const button of buttons) {
+          button.addEventListener('click', createParagraph);
+        }
+      </pre
+    >
+    <h3>Script loading strategies</h3>
+    <p>
+      有点时候往html内加入script有的时候会有很多bug。一个和比较常见的就是js在html之前被加载了。很多人会把js的内容加载head上，这种情况下就可能出bug了，因为html文档还没加载。
+    </p>
+    <p>
+      在上面讲过的inline js载入办法，开头是这个event
+      listener。用于回应浏览器的<code>DOMContentLoaded</code>
+      event，相当于告诉浏览器让html加载解析完毕后再加载js
+    </p>
+    <pre>
+      document.addEventListener("DOMContentLoaded", () => {
+
+      }
+    </pre>
+    <p>
+      而在external的例子内，我们使用了<code>defer</code>
+      attribute。其告诉浏览器继续下载html content，因此这两操作会同时进行
+    </p>
+    <pre>
+      &lt;script src="script.js" defer&gt;&lt;/script&gt;
+    </pre>
+    <p>
+      还有一个比较old
+      fashion的办法，也就是将script元素放在整个文档的最下方，<code>&lt;body&gt;</code>结束之前。但是这个方法也有问题：script在html完全解析完之前是完全不会动的，所以对于大网站来说会带来性能问题。
+    </p>
+    <h3>async and defer</h3>
+    <p>
+      除了之前提到的defer，还有一个现代的解决手段。使用<code>async</code>会下载script，但是不会立刻执行。但是下载完了就会执行script，即使会打断渲染页面。一般来说<code>async</code>只能在每一个script都是独立的情况才能使用，因为这个办法不会保证script运行的顺序
+    </p>
+    <p>
+      使用<code>defer</code>则可以保证按顺序执行script，因为defer会使得html
+      content下载的同时fetch js的内容，<b
+        >但是仅会在html content加载完后才会执行JS</b
+      >
+    </p>
+    <p>
+      一个比较直观的例子如下：普通的script将打断html
+      parsing，直接fetch并执行scrip。而defer则是会在html渲染的同时fetch
+      js内容，但是得在html内容结束后才会执行。至于async，则是会同时下载html和js的内容，但是等到js的内容fetch完成后就会执行，即使会打断渲染
+    </p>
+    <img src="../Resources/async-defer.jpg" alt="async defer definition" />
+    <p>
+      <code>async</code
+      >一般在很多后台script时使用，比如我需要一些内容来提前加载，且加载完后就想要直接执行。比如一个游戏的开头可以先加载intro，title，而不是坐着等其他内容加载完
+    </p>
+    <p>
+      假设有多个script，那么使用defer的scripts会由上而下加载，比如下面三个的加载顺序就是jquery,
+      script2, script3，他们不会同时加载，只会加载完了一个才继续<br />
+
+      &lt;code&lt;script defer src="js/vendor/jquery.js"&gt;&lt;/script&gt;
+      <br />
+      &lt;script defer src="js/script2.js"&gt;&lt;/script&gt;
+      <br />
+      &lt;script defer src="js/script3.js"&gt;&lt;/script>&lt;/code&gt;
+    </p>
+    <h3>注释</h3>
+    <p>
+      和html，css一样，使用js写注释也是一个逻辑。单行使用//comments来写注释。多行则可以使用/*Comments*/来包含
+    </p>
+    <script>
+      // button
+      const button = document.querySelector(".button");
+
+      button.addEventListener("click", updateName);
+
+      function updateName() {
+        const name = prompt("Enter a new name");
+        button.textContent = `My name is ${name}`;
+      }
+
+      // add paragraph
+      document.addEventListener("DOMContentLoaded", () => {
+        function createParagraph() {
+          const para = document.createElement("p");
+          para.textContent = "You clicked the button!";
+          document.body.appendChild(para);
+        }
+
+        const buttons = document.querySelectorAll("button");
+
+        for (const button of buttons) {
+          button.addEventListener("click", createParagraph);
+        }
+      });
+
+      // inline JS
+      function createParagraph() {
+        const para = document.createElement("p");
+        para.textContent = "You clicked the button!";
+        document.body.appendClid(para);
+      }
+
+      // add every button
+      // const buttons = document.querySelectorAll("button");
+
+      // for (const button of buttons) {
+      //   button.addEventListener("click", createParagraph);
+      // }
+    </script>
+  </body>
+</html>
