@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      table {
+        border-collapse: collapse;
+        border: 2px solid rgb(200, 200, 200);
+        letter-spacing: 1px;
+        font-size: 0.8rem;
+      }
+
+      td,
+      th {
+        border: 1px solid rgb(190, 190, 190);
+        padding: 10px 20px;
+      }
+
+      th {
+        background-color: rgb(235, 235, 235);
+      }
+
+      td {
+        text-align: center;
+      }
+
+      caption {
+        padding: 10px;
+      }
+    </style>
+    <title>A first impression on JS</title>
+  </head>
+  <body>
+    <h1>A first impression on JS</h1>
+    <p>
+      前面讲了一下基本的js理论和插入方式，这里学一下创建简单js的过程，js的组成部分以及他们之间如何相互合作的。
+    </p>
+    <h2>Think like a programmer</h2>
+    <p>
+      学习编程语言的一个重点是使用学习的成果来解决实际问题，为此需要以程序员的角度思考，想要达到这个境界需要很多的练习，对语法的熟悉和各种奇思妙想。所以写代码时多思考
+    </p>
+    <h2>例子：猜数字</h2>
+    <p>首先看一下下面的例子：</p>
+
+    <h1>Number guessing game</h1>
+
+    <p>
+      We have selected a random number between 1 and 100. See if you can guess
+      it in 10 turns or fewer. We'll tell you if your guess was too high or too
+      low.
+    </p>
+
+    <div class="form">
+      <label for="guessField">Enter a guess: </label>
+      <input type="text" id="guessField" class="guessField" />
+      <input type="submit" value="Submit guess" class="guessSubmit" />
+    </div>
+
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+    <p>
+      例子看完了后，可以看出基本的逻辑：随机选择一个1-100之间的数字，
+      然后让用户输入一个猜的数字，然后根据数字的大小来返回response且记录错误的数字，错了就继续猜。达到了一定次数若还没猜对数字则会game
+      over
+    </p>
+    <p>下一步就是将这个步骤给分解成小段小段的编程可实现的任务</p>
+    <ol>
+      <li>生成1-100之间的数字</li>
+      <li>记录用户测试过的次数，从1开始</li>
+      <li>提供一个输入的办法让用户提交答案</li>
+      <li>当用户提交答案后，将之前的答案记录下在页面上</li>
+      <li>查看用户输入的数字是不是正确数字</li>
+      <li>
+        如果是对的：
+        <ol>
+          <li>展示congrats</li>
+          <li>停止游戏，让用户不能在输入答案</li>
+          <li>提供一个restart的手段</li>
+        </ol>
+      </li>
+      <li>
+        如果是错的，但是用户还有尝试次数：
+        <ol>
+          <li>提示用户是写错了还是对的</li>
+          <li>让有用户在猜一次</li>
+          <li>把尝试次数+1</li>
+        </ol>
+      </li>
+      <li>
+        如果是错的，且用户没有次数了：
+        <ol>
+          <li>提示game over</li>
+          <li>关闭游戏，让用户不能在输入答案</li>
+          <li>提供restart的手段</li>
+        </ol>
+      </li>
+      <li>假设游戏restart了，需要将所有的东西reset到原本状态，回到第一步</li>
+    </ol>
+    <h2>Start & Add variables</h2>
+    <p>
+      首先第一步肯定是加上一个<code>script</code>
+      tag在文章底部，或者作为外置的script，inline引用等。这里就放在最下面
+    </p>
+    <p>然后加上以下的代码：</p>
+    <pre>
+      let randomNumber = Math.floor(Math.random() * 100) + 1;
+
+      const guesses = document.querySelector('.guesses');
+      const lastResult = document.querySelector('.lastResult');
+      const lowOrHi = document.querySelector('.lowOrHi');
+
+      const guessSubmit = document.querySelector('.guessSubmit');
+      const guessField = document.querySelector('.guessField');
+
+      let guessCount = 1;
+      let resetButton;
+    </pre>
+    <p>
+      上面的这些代码设置了变量和常数，用于储存数据。和其他语言差不多，变量基本上是value的名字。在script内，我们使用<code>let</code>在js内定义变量
+    </p>
+    <p>
+      constant，常量也是值的名字，但是这个值是无法改变的，在这个例子内用于当作user
+      interface的部分，使用<code>const</code>来定义常量。使用等号<code>=</code>来赋值
+    </p>
+    <p>在这个例子内：</p>
+    <ul>
+      <li>第一个变量，<code>randomNumber</code>，被用于指定随机数字</li>
+      <li>
+        前三个<b>常量</b>则是用于储存html段落的reference，就像这样
+        <pre>
+          &lt;div class="resultParas"&gt;
+            &lt;p class="guesses"&gt;&lt;/p&gt;
+            &lt;p class="lastResult"&gt;&lt;/p&gt;
+            &lt;p class="lowOrHi"&gt;&lt;/p&gt;
+          &lt;/div>
+        </pre>
+        在后面，这些被指定的段落会被用于输出，类似作为string的用法
+      </li>
+    </ul>
+    <li>后面两个常数则是作为储存输入数字使用的。 后面会被用于各种判断等</li>
+    <li>最后两个变量定义了1.猜的次数，由1开始，然后2.reference for reset</li>
+    <h3>Function</h3>
+    <p>
+      然后将<code>function checkGuess() {}</code
+      >加入代码内，这个代表的是一个函数的框架。
+    </p>
+    <p>
+      函数为可重复使用的blocks，只用写一次，后面只用引用就可以。定义函数的办法有很多，不过现在就使用<code>function</code>作为开始的办法，具体是<code
+        >function functionName(){}</code
+      >也就是分别对应的关键词，函数名称，函数输入值在括号内，大括号则是运行内容
+    </p>
+    <h3>Operator</h3>
+    <p>JS operator被用于开展测试，比较，链接字符串等等。</p>
+    <table>
+      <thead>
+        <tr>
+          <td>Operator</td>
+          <td>Name</td>
+          <td>Exmaple</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>+</code></td>
+          <td>Addition</td>
+          <td>6+99</td>
+        </tr>
+        <tr>
+          <td><code>-</code></td>
+          <td>Subtraction</td>
+          <td>1-1</td>
+        </tr>
+        <tr>
+          <td><code>*</code></td>
+          <td>Multiplication</td>
+          <td>4*7</td>
+        </tr>
+        <tr>
+          <td><code>/</code></td>
+          <td>Division</td>
+          <td>10/2</td>
+        </tr>
+        <tr>
+          <td><code>===</code></td>
+          <td>Strict equality(完全一致）</td>
+          <td>5 === 2+3 // true <br />2 ==="2" //false</td>
+        </tr>
+        <tr>
+          <td><code>!==</code></td>
+          <td>non-equality(same or not)</td>
+          <td>
+            2 !== 1+2 //true <br />
+            5!== 2+3 //false
+          </td>
+        </tr>
+        <tr>
+          <td><code>&lt;</code></td>
+          <td>Less than</td>
+          <td>
+            5 &lt; 3 // false <br />
+            20 &lt; 30// true
+          </td>
+        </tr>
+        <tr>
+          <td><code>&gt;</code></td>
+          <td>Greater than</td>
+          <td>
+            4 &gt; 3 // false <br />
+            20 &gt; 2 // true
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      上面的表格基本上一下就很清楚了。需要注意的是还有类似python内的复合operator，具体见<a
+        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators#expressions_and_operators_by_category"
+        >mdn</a
+      >，比如下面两片代码的效果是完全相同的：
+    </p>
+    <pre>
+      let name1 = "chalin";
+      name1 += "is an idiot"
+    </pre>
+    <pre>
+      let name2 = "chalin";
+      name2 = name2 + "is an idiot"
+    </pre>
+
+    <h3>Conditionals</h3>
+    <p>回到之前的函数，现在把函数的完全体放在下面:</p>
+    <pre>
+      function checkGuess() {
+        const userGuess = Number(guessField.value);
+        if (guessCount === 1) {
+          guesses.textContent = 'Previous guesses: ';
+        }
+        guesses.textContent += userGuess + ' ';
+      
+        if (userGuess === randomNumber) {
+          lastResult.textContent = 'Congratulations! You got it right!';
+          lastResult.style.backgroundColor = 'green';
+          lowOrHi.textContent = '';
+          setGameOver();
+        } else if (guessCount === 10) {
+          lastResult.textContent = '!!!GAME OVER!!!';
+          lowOrHi.textContent = '';
+          setGameOver();
+        } else {
+          lastResult.textContent = 'Wrong!';
+          lastResult.style.backgroundColor = 'red';
+          if(userGuess < randomNumber) {
+            lowOrHi.textContent = 'Last guess was too low!';
+          } else if(userGuess > randomNumber) {
+            lowOrHi.textContent = 'Last guess was too high!';
+          }
+        }
+      
+        guessCount++;
+        guessField.value = '';
+        guessField.focus();
+      }      
+    </pre>
+    <p>来细讲一下：</p>
+    <ul>
+      <li>
+        第一行代码是创建函数，略过不提。第二行代码就定义了一个常量，名字为<code>userGuess</code>，值为来自<code
+          >Number()</code
+        >
+        construct。因为我们不打算改变它，所以使用常量
+      </li>
+      <li>
+        然后第三行代码就是conditional code
+        block，允许我们进行判断且根据结果来进行下一步的操作。
+        关键词是<code>if</code>，后面跟着小括号+大括号，小括号里面是判断代码，若判定为真，则会启动后面大括号的代码
+        在这例子里，判断的code是<code>guessCount === 1</code
+        >，用于判断<code>guessCode</code>变量是不是等于1
+      </li>
+      <li>
+        第七行代码则是将userGuess的值加在guesses段落后面，以及一个空格来保证每一个guess都隔开了
+      </li>
+      <li>
+        后面的几个code block则是一整个if线：
+        <ul>
+          <li>
+            首先的<code>if(){}</code>探测<code>userGuess</code>是否等于<code>randomNumber</code>，
+            也就是用户猜的值和本来的值是不是相同。如果相同的话就生成一小段恭喜的话，然后重置一下之前的lowOrHi值，也就是展示上一个猜测是高还是低。最后运行<code>setGmaeOver()</code>函数
+          </li>
+          <li>
+            下一个则是使用<code>else if()</code
+            >用于判断第二种情况，也就是是否猜了10次。机制基本一样，后面展示一段game
+            over的话和也运行<code>setGameOver()</code>
+          </li>
+          <li>
+            最后一段code
+            block，也就是<code>else{}</code>，将会在所有情况都不满足的时候运行。在这个else里面嵌套类另一个if结构，用于判断上一个数值是高了还是低了并且根据这个来进行后续回复。
+          </li>
+        </ul>
+      </li>
+      <li>
+        最后三行代码把<code>guessCount</code>加1（这里用的是<code>++</code>)，然后清空之前的uessField.value且重新focus一次。
+      </li>
+    </ul>
+    <h3>Events</h3>
+    <p>
+      现在上面的代码已经算是完成了<code>checkGuess()</code>方程，但是还没使用（call）它。在js内我们将启动手段称为<b>event</b>。比如被点击的button，播放的视频，加载的网页等等。<b
+        >Event listener</b
+      >将会观察指定的events且启动<b>event handlers</b>，也就是用于repsond
+      event的代码块
+    </p>
+    <pre>
+      guessSubmit.addEventListener('click', checkGuess);
+    </pre>
+    <p>
+      上面这行代码往<code>guessSubmit</code> button上加了一个event
+      listener。这个event类型可以接受两个输入值，被称为arguments，在上面的情况是click以及checkGuess函数。也就是说当click过后就会激活checkGuess函数。现在这个小游戏已经有基本功能了，但是它不会结算，也就是说一旦猜对了，或者猜错10次，就结束且不能重启了，因为我们还没有定义<code>setGameOver()</code>函数
+    </p>
+    <h3>结束，重启游戏</h3>
+    <p>现在来实现一下<code>setGameOver()</code>函数，具体来看以下代码：</p>
+    <pre>
+      function setGameOver() {
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        resetButton = document.createElement('button');
+        resetButton.textContent = 'Start new game';
+        document.body.append(resetButton);
+        resetButton.addEventListener('click', resetGame);
+      }
+    </pre>
+    <ul>
+      <li>
+        前面两行代码将text
+        input和button禁用了，这样当游戏结束了的时候就可以禁止用户输入。
+      </li>
+      <li>
+        后三行代码则是生成了新的了一个新的button，然后将其的label改成"start new
+        game"，将其加到html的最下方
+      </li>
+      <li>
+        最后一行代码设置了新的event
+        listener在刚刚的button上，如果该button被点击了，那么将运行resetGame()函数。注意在<code>addEventListener()</code>内不需要加括号
+      </li>
+    </ul>
+    <p>
+      因为刚刚的函数内又嵌套引用了<code>resetGame()</code>，我们需要将他也定义好。加上以下代码：
+    </p>
+    <pre>
+      function resetGame() {
+        guessCount = 1;
+      
+        const resetParas = document.querySelectorAll('.resultParas p');
+        for (const resetPara of resetParas) {
+          resetPara.textContent = '';
+        }
+      
+        resetButton.parentNode.removeChild(resetButton);
+      
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = '';
+        guessField.focus();
+      
+        lastResult.style.backgroundColor = 'white';
+      
+        randomNumber = Math.floor(Math.random() * 100) + 1;
+      }
+    </pre>
+    <p>上面这些代码的解读如下：</p>
+    <ul>
+      <li>设置<code>guessCount</code>重回1</li>
+      <li>
+        我们选择了<code>&lt;div class="resultParas"&gt;&lt;/div&gt;</code
+        >内的全部段落，使用for循环遍历过去将其的<code>textContext</code>重置
+      </li>
+      <li>去除reset button</li>
+      <li>打开form元素，清空text和focus field以允许重新输入</li>
+      <li>去除<code>lastResult</code>内的背景色</li>
+      <li>生成一个新的随机数</li>
+    </ul>
+    <h2>Other annotation</h2>
+    上面基本的code结构已经讲完了，现在细讲一些特殊结构：
+    <h3>Loops</h3>
+    <p>
+      在上面的例子我们使用了for
+      of循环，这个逻辑基本上是和其他语言相同的，比如python里面的<code
+        >for ... in ...</code
+      >
+    </p>
+    <p>一个简单的例子如下：</p>
+    <pre>
+      const fruits = ['apples', 'bananas', 'cherries'];
+      for (const fruit of fruits) {
+        console.log(fruit);
+      }
+    </pre>
+    <p>
+      上面的代码其实基本上和python也是一个逻辑。首先创建了一个array，也就是fruit，里面包含了三个水果的string。而后面的for
+      ... of loop则是以下的作用：
+    </p>
+    <ul>
+      <li>获得<code>fruits</code>内的第一个项</li>
+      <li>
+        将<code>fruit</code>变量设置成刚刚的item，然后对其进行大括号内的操作
+      </li>
+      <li>获得<code>fruits</code>内的下一个项，重复上面的步骤直到全部项结束</li>
+    </ul>
+    <p>而在原JS内的for循环如下：</p>
+    <pre>
+      const resetParas = document.querySelectorAll('.resultParas p');
+      for (const resetPara of resetParas) {
+        resetPara.textContent = '';
+      }
+    </pre>
+    <p>
+      这段代码创建了一个变量<code>resetPrars</code>，将其选择<code
+        >&lt;div class="resultParas"&gt;</code
+      >内的全部段落（使用<code>querySelectorAll()</code>）method，然后将里面的每一个内容清空
+    </p>
+    <h3>Objects</h3>
+    <p>
+      往js代码内加上<code>guessField.focus()</code>。这行使用了<code
+        >focus()</code
+      >
+      method来让<code>&lt;input&gt;</code> text
+      fiedl自动对准。每次页面刷新的时候都会激活输入框，而不用点击输入框
+    </p>
+    <p>
+      JS内，绝大多数可操纵的items均为objects。一个object是一些相关的功能的组合。虽然可以自己创建object，但是比较复杂，所以现在先用内置的objects
+    </p>
+    <p>
+      在这个例子内，我们创建一个常数<code>guessField</code>，用于储存html内的input
+      field的输入内容
+    </p>
+    <pre>
+      const guessField = document.querySelector('.guessField');
+    </pre>
+    <p>
+      具体来说，我们使用了<code>querySelector()</code>
+      method，属于<code>document</code>内的object。<code>querySelector()</code>可以选择一个info。这个css
+      selector用于选择想reference的element
+    </p>
+    <p>
+      因为之前<code>guessField</code>的设置，现在其包含了<code>&lt;input&gt;</code>元素，所以它有了很多properties（也就是objects内的variable）和methods（也就是objects内的function），一个method是<code>focus()</code>，所以我们可以使用<code>guessField.focus()</code>来focus
+      text
+      input。但是并不是全部的元素都有focus()。比如<code>guesses</code>常数是reference
+      <code>&lt;p&gt;</code>，而<code>guessCount</code>则包含了数字
+    </p>
+    <h3>Browser objects</h3>
+    <p>
+      一个比较好玩的东西是devtools内的js
+      console。可以输入guessField.value，guesses.value等等可以看出现在js内的object
+    </p>
+    <script>
+      let randomNumber = Math.floor(Math.random() * 100) + 1;
+      const guesses = document.querySelector(".guesses");
+      const lastResult = document.querySelector(".lastResult");
+      const lowOrHi = document.querySelector(".lowOrHi");
+      const guessSubmit = document.querySelector(".guessSubmit");
+      const guessField = document.querySelector(".guessField");
+      let guessCount = 1;
+      let resetButton;
+
+      function checkGuess() {
+        const userGuess = Number(guessField.value);
+        if (guessCount === 1) {
+          guesses.textContent = "Previous guesses: ";
+        }
+
+        guesses.textContent += userGuess + " ";
+
+        if (userGuess === randomNumber) {
+          lastResult.textContent = "Congratulations! You got it right!";
+          lastResult.style.backgroundColor = "green";
+          lowOrHi.textContent = "";
+          setGameOver();
+        } else if (guessCount === 10) {
+          lastResult.textContent = "!!!GAME OVER!!!";
+          lowOrHi.textContent = "";
+          setGameOver();
+        } else {
+          lastResult.textContent = "Wrong!";
+          lastResult.style.backgroundColor = "red";
+          if (userGuess < randomNumber) {
+            lowOrHi.textContent = "Last guess was too low!";
+          } else if (userGuess > randomNumber) {
+            lowOrHi.textContent = "Last guess was too high!";
+          }
+        }
+
+        guessCount++;
+        guessField.value = "";
+        guessField.focus();
+      }
+
+      guessSubmit.addEventListener("click", checkGuess);
+
+      function setGameOver() {
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        resetButton = document.createElement("button");
+        resetButton.textContent = "Start new game";
+        document.body.appendChild(resetButton);
+        resetButton.addEventListener("click", resetGame);
+      }
+
+      function resetGame() {
+        guessCount = 1;
+        const resetParas = document.querySelectorAll(".resultParas p");
+        for (const resetPara of resetParas) {
+          resetPara.textContent = "";
+        }
+
+        resetButton.parentNode.removeChild(resetButton);
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = "";
+        guessField.focus();
+        lastResult.style.backgroundColor = "white";
+        randomNumber = Math.floor(Math.random() * 100) + 1;
+      }
+      guessField.focus();
+    </script>
+  </body>
+</html>
