@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Variables</title>
+  </head>
+  <body>
+    <h1>Variables</h1>
+    <p>前面讲过了基本的逻辑和debug问题，现在将会开始细讲一下JS的variable</p>
+    <h2>Definition</h2>
+    <p>varibale，变量，是一种用于储存值的容器，比如一个数字，字符串等等</p>
+    <h3>Variable example</h3>
+    <button id="button_A">Press me</button>
+    <h3 id="heading_A"></h3>
+    <p>
+      上面的button是使用以下代码实现的。可以看出来我们使用了<code>name</code>当作variable用于储存用户输入的名字。若不想使用函数，则需要使用<code
+        >${prompt('What is your name?')}</code
+      >来代替每一个name函数。
+    </p>
+    <pre>
+      &lt;button id="button_A"&gt;Press me&Lt;/button&gt;
+      &Lt;h3 id="heading_A"&gt;&lt;/h3&gt;
+      const buttonA = document.querySelector('#button_A');
+      const headingA = document.querySelector('#heading_A');
+
+      buttonA.onclick = () => {
+        const name = prompt('What is your name?');
+        alert(`Hello ${name}, nice to see you!`);
+        headingA.textContent = `Welcome ${name}`;
+      }
+
+    </pre>
+    <h2>Declare variable</h2>
+    <p>
+      使用variable前，我们得先创建，或者declare(声明）它，使用<code>let</code>关键词+变量名来创建，比如<code
+        >let name</code
+      >和<code>let age</code
+      >分别创建了name和age变量。但是我们没有给变量value。此时若我们使用了console来输入<code>name</code>，会得到返回的undefined值.
+    </p>
+    <h2>初始化变量</h2>
+    <p>
+      当我们声明完了一个变量，我们可以使用一个值来将其初始化。只用等于号即可。比如还是刚刚的两个变量，我们使用<code
+        >name = 'Chalin'</code
+      >，<code>age = 99</code
+      >这个时候在使用console就可以看到这两个变量的对应值了。
+    </p>
+    <p>
+      需要注意的是我们可以同时declare和initialize一个变量，比如<code
+        >let name = 'Chalin'</code
+      >
+    </p>
+    <h2>Var</h2>
+    <p>
+      虽然可以使用<code>let</code>来声明变量。同样也可也使用<code>var</code>
+      keywords来声明变量，类似<code>var name</code>和<code>var age</code>
+    </p>
+    <p>
+      当JS刚创立的时候，这是唯一的办法，但是这个办法比较confusing，所以到了现代JS，一个新的keyword，也就是<code>let</code>。但是这两个是不完全相同的，比如let是不能重复声明相同变量的。
+    </p>
+    <pre>
+      var name = 'chalin';
+      var name = 'bob';
+    </pre>
+    <p>
+      上面的两行代码可以运行，因为var可以重新声明和初始化变量，但是将var改成let就会报错。
+    </p>
+    <pre>
+      let name = 'Chris';
+      let name = 'Bob';
+    </pre>
+    <p>若想要let生效，可以忽略掉关键词，重新初始化，也就是：</p>
+    <pre>
+      let name = 'Chris';
+      name = 'Bob';
+    </pre>
+    <h2>Update variable</h2>
+    <p>
+      当一个变量被初始化且赋值过，我们可以更改值。比如之前已经将name赋值给chalin，若我想更改的话，就直接使用<code
+        >name = 'JIM'</code
+      >来更改值
+    </p>
+    <h3>Naming rules</h3>
+    <p>
+      虽然基本可以使用任何名称来定义一个变量，但是命名肯定是有规范的，总的来说，只能使用下划线，拉丁字母和数字
+    </p>
+    <ul>
+      <li>别使用其他字符，因为可能会出问题，比如其他国家的开发者可能看不懂</li>
+      <li>
+        不能使用underscore来开头，因为JS有内置的功能，使用下划线开头会有特别的意思
+      </li>
+      <li>不能使用数字开头，因为JS不允许，会直接出bug</li>
+      <li>
+        一个比较常见的规范是<code>lower camel case</code
+        >，驼峰命名法。当想要使用多个单词命名时，使用小写开头，然后后面全部大写开头。比如<code
+          >myName</code
+        >
+      </li>
+      <li>
+        根据变量的用途命名，别取一个类似<code>rdsn1234</code>之类的没什么用的命名
+      </li>
+      <li>变量是大小写敏感的</li>
+      <li>
+        最后一点：最好别使用JS预备的关键词当作变量名。就是JS语法的关键词，比如<code>var</code>,
+        <code>function</code>等等。浏览器将会把他认成关键词
+      </li>
+    </ul>
+    <h2>Variable types</h2>
+    <p>变量里面可以储存多种数据。上面两个例子是数字和字符串。但是还有别的：</p>
+    <h3>Numebrs</h3>
+    <p>
+      当我们使用变量来储存数字的时候，比如30, 3.14(也被称为floats,
+      decimal)。在JS内不用特别declare variable
+      type，只需要直接带数字进去即可，类似<code>let hisName = 'Chalin'</code>
+    </p>
+    <h3>String</h3>
+    <p>
+      字符串是pieces of
+      texts，当我们给变量一个字符串的值时，需要加上单或双引号不然JS会把它认成别的。比如<code
+        >let goodByeWord = 'Chalin is an idiot but thank you'</code
+      >
+    </p>
+    <h3>Booleans</h3>
+    <p>
+      布尔值，也就是true/false。可以接受的就是<code>true</code>和<code>false</code>两个值，一般用于测试某个条件是否为真。比如<code
+        >let amChalinAIidiot = true</code
+      >，不过其实<code>let amChalinAIidiot = 4 > 3</code>和这个是一个效果。
+    </p>
+    <h3>Array</h3>
+    <p>array，数组是单个object，但是使用方括号储存着多个值。比如:</p>
+    <pre>
+      let theNameArray = ['JIM', 'chalin', 'oscar'];
+      let theNumebrArray = [1, 2 , 3]
+    </pre>
+    <p>
+      这样数组就创建完了。对数组的操作也差不多相同，可以使用index来查找数组内数据位置，由0开始，类似：
+    </p>
+    <pre>
+      theNameArray[0]; //得到的是'JIM'
+      theNumebrArray[2]; //得到的是 3
+    </pre>
+    <h3>Object</h3>
+    <p>
+      在编程内，一个object就和现实中一样，基本上可以代表任何东西，比如一个object代表一个人，里面包含他们的信息。后面会专门学习object
+    </p>
+    <pre>
+      let dog = { name: 'chalin', breed : 'homo sapien'}
+    </pre>
+    <h2>Dynamic typing</h2>
+    <p>
+      JS是一种dynamically typed
+      language，意思是不用像其他语言一样声明变量内的数据类型，<code
+        >let myString = 'chalin'</code
+      >和<code>let myNumber = '15'</code
+      >其实都是相同的数据类型，也就是字符串。但是当去掉了引号的时候就可以正确认出来是数字了。可以使用<code>typeof</code>来查询变量的属性
+    </p>
+    <h2>Constants</h2>
+    <p>和变量相同，我们也可声明变量。这些和变量很相似，但是有以下区别：</p>
+    <ul>
+      <li>必须在声明的同时初始化</li>
+      <li>初始化后无法再次改变值</li>
+    </ul>
+    <p>
+      比如<code>let count;</code>可以创建一个叫做count的变量，但是<code
+        >const count;</code
+      >是无法执行的。
+    </p>
+    <p>同理，下面的第一段变量代码可以更改，但第2段代码不可以</p>
+    <pre>
+      let count = 1;
+      count = 2;
+    </pre>
+    <pre>
+      const count = 1;
+      count = 2;
+    </pre>
+    <p>
+      需要注意的是，虽然constant在JS内必须得命名有相同的值，但是若其是一个object包含类似数组这样的东西，则可以更改key对应的value，比如<code
+        >const names{first: 'chalin'};</code
+      >创建了一个arrary后，不能覆写掉整个object，但是可以更改，就像是<code
+        >name.first = 'jim</code
+      >就可以把chalin改成jim。因为逻辑上来说，即使object的content改变了，object依然是相同的。
+    </p>
+
+    <h2>const vs let</h2>
+    <p>
+      <code>const</code
+      >没有<code>let</code>那么多操作，那么为什么要用const？其实用const在大多数情况都会更好，因为const是固定的，在其他人维护一段代码是，看到了const的名字就知道是什么东西了。一般来说，<i
+        >Use const when you can, use let when you have to</i
+      >。意思就是说如果打算创建一个只用一次的变量，那么就使用const吧
+    </p>
+  </body>
+  <script>
+    const buttonA = document.querySelector("#button_A");
+    const headingA = document.querySelector("#heading_A");
+
+    buttonA.onclick = () => {
+      const name = prompt("What is your name?");
+      alert(`Hello ${name}, nice to see you!`);
+      headingA.textContent = `Welcome ${name}`;
+    };
+  </script>
+</html>
