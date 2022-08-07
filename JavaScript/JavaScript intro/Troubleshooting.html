@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../general.css" />
+    <title>Troubleshooting JS</title>
+  </head>
+  <body>
+    <h1>Troubleshooting JS</h1>
+    <p>在真正开始学语法前，先学一下troubleshooting的办法</p>
+    <h2>Types of error</h2>
+    <p>一般来说，当JS出现的问题都基本上以下两种：</p>
+    <ul>
+      <li>
+        <b>Syntax errors</b>:
+        拼写问题，一般来说要是打错字了。这种问题很简单就可以解决
+      </li>
+      <li>
+        <b>logic errors</b>:
+        这种问题一般是语法没问题。但是程序运行成功后结果不对，一般来说这种问题不容易解决，因为也不会报错
+      </li>
+    </ul>
+    <h2>An error example</h2>
+    <p>
+      根据mdn的配套材料，使用之前写出来的guessing game<a
+        href="error example.html"
+        >Example</a
+      >，只不过这次里面有bug。将其打开后在打开console看一下问题。
+    </p>
+    <h2>Fixing syntax error</h2>
+    <p>
+      在打开devtool console后，可以看到报错：<code
+        >Uncaught TypeError: guessSubmit.addeventListener is not a function at
+        number-game-errors.html:86:15</code
+      >，这个很清楚一看就知道哪里的问题，因为在devtools内可以直接refer到出问题的代码处：
+    </p>
+    <img src="../Resources/TypeError.png" alt="typeError" />`
+    <p>具体来说，这个debugger内展示了以下休息：</p>
+    <ul>
+      <li>红色的<code>x</code>，表示问题</li>
+      <li>一个error message，也就是上面写的</li>
+      <li>JS的位置，点击可以直接连接到出问题的位置</li>
+    </ul>
+    <p>
+      按照上面的位置，出问题的代码是<code
+        >guessSubmit.addeventListener('click', checkGuess); </code
+      >，说是... is not a
+      function，意思是JS认不出来这个function。一般来说这个问题来源于拼写错误，一个比较好的办法是直接查正确拼写。在这个情况下，正确的拼写是<code
+        >addEventListener()</code
+      >
+    </p>
+    <h3>Syntax 2</h3>
+    <p>
+      现在解决了第一个问题，输入一个数字后看console，得到<code
+        >error example.html:117 Uncaught TypeError: Cannot set properties of
+        null (setting 'textContent') at HTMLInputElement.checkGuess (error
+        example.html:117:31)</code
+      >报错代码。
+    </p>
+    <p>
+      按照报错代码的来源，可以看见第78行，<code
+        >lowOrHi.textContent = 'Last guess was too high!'; </code
+      >是问题来源。这一行是将<code>lowOrHi</code>常数的<code>textContent</code>属性改成一串字符串。但是并没有达到效果，因为<code>lowOrHi</code>并不包含它应有的。
+    </p>
+    <p>
+      此时若使用<code>console.log(lowOrHi)</code>在JS
+      console内，在49行内，也就是lowOrHi的第一次出现，是null。意思是其已经被declared，且也被初始化了，但是没有赋值，没有type和value
+    </p>
+    <p>
+      回到之前的html代码，可以看见使用该<code>lowOrHi</code>的class是<code
+        >&lt;p class="lowOrHi"&gt;&lt;/p&gt;</code
+      >，但是第一次定义<code>lowOrHi</code>的代码却是<code
+        >const lowOrHi = document.querySelector('lowOrHi'); </code
+      >，而里面是没有带点的，所以将其改成<code>.lowOrHi</code>就解决了
+    </p>
+    <h3>Syntax 3</h3>
+    <p>
+      解决了上面两个问题后，试着故意输错10次，此时可以发现游戏无法重开了，打开console得到这个报错:
+      <code
+        >Uncaught TypeError: resetButton.addeventListener is not a function at
+        setGameOver (error example.html:133:19) at HTMLInputElement.checkGuess
+        (error example.html:110:9)</code
+      >
+    </p>
+    <p>
+      直接点回去，就看得出来问题了：在<code>setGmaeOver()</code>函数内我们使用了<code
+        >resetButton.addeventListener("click", resetGame);</code
+      >，很明显这里写错了method，然后第二个报错则是来自启动<code>setGameOver()</code>的时候，毕竟我们函数里面写错了
+    </p>
+    <h2>Logical Erorr</h2>
+    <p>
+      这下代码基本没有大问题了，但是多试几次就会发现，不论是多少次，答案永远都是1。这个就属于是逻辑问题了，因为语法上来说是没有问题的，只不过我们写出来的东西和预想的不一样
+    </p>
+    <p>
+      首先得知道问题来源，我们是使用了<code>randomNumber</code>来储存随机数。在44行代码我们定义了
+      :
+      <code>let randomNumber = Math.floor(Math.random()) + 1; </code
+      >，以及第113行相同的代码，只不过这一次是在<code>resetGame()</code>内，用于每次重置游戏的时候重置randomNumber
+    </p>
+    <p>
+      这里面的逻辑其实很简单。<code>Math.random()</code>将会创建一个0~1之间的随机数。而<code>Math.floor()</code>函数将会使指定的数字向下取整，最后把整个东西+1，我们就得到了：<code
+        >let randomNumber = Math.floor(Math.random()) + 1; </code
+      >，也就是上面写的代码。但是实际上这个意思只是创建一个0~1之间的小数，将他向下取整（也就是0），后面再加1，所以说之前的代码其实一直都是1，而不是随机
+    </p>
+    <p>
+      一个比较ok的改进手段是把生成的随机数x100，也就是<code>Math.floor(Math.random()*100)+1;</code>。在极值，也就是0和99的时候，最终结果是1~100，也就是之前想要的结果。
+    </p>
+    <h2>Other Common errors</h2>
+    <p>下面是一些比较常见的errors</p>
+    <h3>SyntaxError: missing ; before statement</h3>
+    <p>
+      一般来说这个报错就是少了个colon，但是不一定一直都是少了colon。比如说我们将<code
+        >const userGuess = Number(guessField.value)</code
+      >错写成了<code
+        >const userGuess ===
+        Number(guessField.value)，这两个一个是用于定义变量，第二个用于测试布尔值。同样也会报错成missing
+        colon。</code
+      >
+    </p>
+    <h3>SyntaxError: missing ) after argument list</h3>
+    <p>很简单，就是某个function或者method忘记括号结尾了</p>
+  </body>
+</html>
