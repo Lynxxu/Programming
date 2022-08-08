@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../general.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Numbers and operators in JS</title>
+  </head>
+  <body>
+    <h1>Basic math in JS: numbers and operator</h1>
+    <p>
+      依旧和其他编程语言一样，js也有着内置的各种运算符和math等等。虽然并不是完全一样的，但是逻辑基本相同。
+    </p>
+    <h2>Number types</h2>
+    <p>
+      首先来讲一下数字类型，编程语言的数字系统有很多种，数字类型也有很多种。总的来说分为：
+    </p>
+    <ul>
+      <li><b>integers</b>， 整数，可负可正。比如1，23，0，-6</li>
+      <li>
+        <b>Floating point numbers</b>，小数，也就是含有decimal的数字，比如1.35
+      </li>
+      <li>
+        <b>Doubles</b>， 是一种特殊的floating point
+        number，含有更多的小数位，更加精确
+      </li>
+    </ul>
+    <p>
+      而数字类型就很多了，有正常的10进制，有二进制<b>binary</b>，八进制<b>octal</b>和十六进制<b>Hexadecimal</b>。但是好消息是，JS不在乎这些，上面的所有数字类型在JS里面等于一种：<code>Number</code>，并且使用方式基本相同
+    </p>
+    <p>
+      一个验证方法是使用console，定义两个变量，分别是小数和整数，使用<code>typeof</code>关键词来查询，将会发现是输出的都是<code
+        >number</code
+      >
+    </p>
+    <h2>Number methods</h2>
+    <p>
+      <code>Numebr</code>
+      object是一个代表了所有JS内使用的标准数字实例*instance。有很多methods来用于操作数字，比如取整，取小数位等等。比如<code>toFixed(2)</code>就是取2位小数，只用将这个method加在变量，常量后面即可。
+    </p>
+    <pre>
+      const manyDecimal = 1.23432546547475;
+      console.log(manyDecimal)
+
+      const twoDecimal = manyDecimal.toFixed(2);
+      console.log(twoDecimal)
+    </pre>
+    <p>
+      有的时候可能会遇到比较奇怪的问题，比如一个数字被定义成了字符串类型，这个时候直接使用<code
+        >Number()</code
+      >
+      construct来改数据类型即可。例子如下:
+    </p>
+    <pre>
+      let myNumber = '74';
+      myNumber = Number(myNumber);
+    </pre>
+    <h2>Arithmetic Operator</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Operator</th>
+          <th scope="col">Name</th>
+          <th scope="col">Purpose</th>
+          <th scope="col">Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>+</td>
+          <td>Addition</td>
+          <td>Add two numbers together</td>
+          <td>5 + 1</td>
+        </tr>
+        <tr>
+          <td>-</td>
+          <td>Subtraction</td>
+          <td>Subtract right number from left number</td>
+          <td>2 - 1</td>
+        </tr>
+        <tr>
+          <td>*</td>
+          <td>Multiplication</td>
+          <td>multiply both numbers</td>
+          <td>2*8</td>
+        </tr>
+        <tr>
+          <td>/</td>
+          <td>Division</td>
+          <td>Divides left number by the right</td>
+          <td>10/2</td>
+        </tr>
+        <tr>
+          <td>%</td>
+          <td>Remainder (or modulo)</td>
+          <td>Returns the Remainder left over from the division</td>
+          <td>8 % 3 (returns 2)</td>
+        </tr>
+        <tr>
+          <td>**</td>
+          <td>Exponent</td>
+          <td>use the base number to the exponent power</td>
+          <td>2 ** 3</td>
+        </tr>
+      </tbody>
+    </table>
+    <p></p>
+  </body>
+  <script>
+    const myNumber = 1;
+    const anotherNumber = 2.3;
+    typeof myNumber;
+  </script>
+</html>
