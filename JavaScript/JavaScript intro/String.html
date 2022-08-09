@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>String in JS</title>
+  </head>
+  <body>
+    <h1>Handling text-JS strings</h1>
+    <p>现在来将重点转到字符串上，JS内的字符串创造，引用等等操作</p>
+    <h2>String - basics</h2>
+    <p>字符串有的时候和数字的操作很类似，但是并不完全相同。来看下面的操作：</p>
+    <h2>Creating string</h2>
+    <p>
+      创建string的逻辑和数字也差不多。先宣告变量或常数，使用一个字符串来初始化，在使用string的时候需要使用引号来指定字符串类型
+    </p>
+    <pre>
+      const string = 'chalin is an idiot';
+      console.log(string)
+    </pre>
+    <p>
+      若少了一个，或完全少了引号，那么会根据情况来报错。比如<code
+        >"missing; before statement"</code
+      >， <code>unterminated string literal</code>分别对应没有引号和没有完整引号
+    </p>
+    <h3>单/双括号</h3>
+    <p>
+      使用引号即可定义字符串。但是双引号和单引号是没什么区别的，只要在一个document内使用相同的格式即可。和其他语言类似，若使用引号在句子内，就可以使用另一种引号来保证string类型
+    </p>
+    <pre>
+      const singleQuote = 'this is a "single" quote';
+      const doubleQuote = "this is a double's quote";
+      console.log(singleQuote);
+      console.log(doubleQuote);
+    </pre>
+    <h3>Escaping character</h3>
+    <p>
+      虽然不能在一个字符串内使用同一个种类的引号，那么可以使用<code>\</code>来创建escape
+      character，意思是将character指定成字符，而不是JS的code。比如下面：
+    </p>
+    <pre>
+      const someEscape = 'I \'ve got this '
+    </pre>
+    <h2>Cocatenating strings</h2>
+    <p>
+      concatenate，意思就是"Join together"。在JS内，这种特殊字符被称为<i
+        >template literal</i
+      >。看起来和普通的字符串一模一样，且可以完成任何字符串的操作，只不过使用的是反引号(backtick
+      character <code>`</code>) 比如<code>const name = `chaln`</code>
+    </p>
+    <p>
+      但是与字符串不同的是，template
+      literal可以使用<code>${}</code>将其他的变量连起来。比如：
+    </p>
+    <pre>
+      name = 'chalin'
+      const greeting = `hello, ${name}`;
+      console.log(greeting);
+    </pre>
+    <p>当然也可使用两个变量来链接起来。类似：</p>
+    <pre>
+      const surname = 'Yang';
+      const lastName ='chalin';
+      const literal = `${surname} ${lastName}`;
+      console.log(literal);
+    </pre>
+    <h3>Concatenation in context</h3>
+    <p>
+      现在来一个实际的例子，在编程内我可以创建一个<button>button</button>，使用变量或常量来储存用户输入值，然后后面用template
+      literal来将值加在一起。下面是实际的代码：
+    </p>
+    <pre>
+      const button = document.querySelector("button");
+
+      function greet() {
+        const name = prompt("What is your name?");
+        alert(`Hello ${name}, nice to see you!`);
+      }
+  
+      button.addEventListener("click", greet);
+    </pre>
+    <p>
+      在这段代码里面，我们使用了<code>window.prompt()</code>函数来获得用户输入，然后使用<code>name</code>来储存输入。然后使用<code>window.alert()</code>来生成popup，其中使用template
+      literal加上之前的变量。
+    </p>
+    <h3>concatenation using +</h3>
+    <p>
+      我们也可也使用<code>+</code>运算符来链接字符串，最终的效果和template
+      literal是一样的，但是一般来说使用template literal可以有更好的可读性如下：
+    </p>
+    <pre>
+      const piece1 = 'hello';
+      const piece2 = 'nice to meet u'
+      console.log(piece1 + ',' + piece2);
+    </pre>
+    <p>而这个和下面使用literal是一个效果的</p>
+    <pre>
+      const piece1 = 'hello';
+      const piece2 = 'nice to meet u'
+      console.log(`${piece1}, ${piece2}`)
+    </pre>
+    <h2>Numebrs & Strings</h2>
+    <p>
+      当将一个字符串和数字连起来的时候，其实也没什么问题，因为JS会自动将把塞入字符串的数字变量转化成string
+    </p>
+    <pre>
+      const name = 'sb';
+      const num = '250';
+      console.log(`${name}${num}`);
+    </pre>
+    <p>
+      一般来说，将字符串变成数字类型是不太可行的，但是反过来，将数字用作字符串的时JS会自动识别。但是如果没有自动识别的话，还有以下的办法来改变类型：
+    </p>
+    <ul>
+      <li>
+        <code>Number</code> object将切换括号内的内容成数字，比如:
+        <pre>
+        const myString = '123';
+        const myNum = Numebr(myString);
+        console.log(typeof myNum);
+        </pre>
+      </li>
+      <li>
+        相反的，也可使用<code>toString</code> method来将类型切换成字符串：
+        <pre>
+        const myNum2 = 123;
+        const myString2 = myNum2.toString()
+        </pre>
+      </li>
+    </ul>
+    <p>
+      有的时候这些办法很好用，假设在某些时候我们需要用户输入数字，但是得到的却是字符串类型的数字。此时可以直接使用<code>Number()</code>来把每一个输入的内容给改成number属性。
+    </p>
+    <h2>Including expression in string</h2>
+    <p>在JS内，使用template literal是可以加上简单变量的。</p>
+    <pre>
+      const candidate = 'Chalin';
+      const score = 9;
+      cosnt maxScore = 10;
+      const output = `Hi ${candidate}, Your score is ${score/maxscore * 100}%.`
+    </pre>
+    <h3>Multiline string</h3>
+    <p>
+      template literal不会将line
+      break直接忽略。但是若使用string，则需要使用换行符<code>\n</code>来换行，也就是说下面两个是相同的效果:
+    </p>
+    <pre>
+      const output = `Hi Chalin,
+Your score is 90%.`;
+       console.log(output);
+    </pre>
+    <pre>
+      const output = 'Hi chalni, \nYour score is 90%';
+      console.log(output);
+    </pre>
+  </body>
+  <script>
+    const button = document.querySelector("button");
+
+    function greet() {
+      const name = prompt("What is your name?");
+      alert(`Hello ${name}, nice to see you!`);
+    }
+
+    button.addEventListener("click", greet);
+  </script>
+</html>
