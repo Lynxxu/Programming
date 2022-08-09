@@ -105,7 +105,127 @@
         </tr>
       </tbody>
     </table>
-    <p></p>
+    <p>
+      上面的就是基本运算符，很简单。需要注意的是<b>operator precedence</b
+      >是严格按照标准运算顺序来的。比如10+2/2+1等于12，而不是4。需要按照严格的数学逻辑来写算式
+    </p>
+    <h2>Increment/decrement operator</h2>
+    <p>
+      有的时候如果我想给一个变量加1或减1，那么可以使用<b
+        >increment or decrement operator</b
+      >，分别对应的是<code>++</code>，<code>--</code>。需要注意的是只能对于变量使用，不能类似<code
+        >3++</code
+      >
+    </p>
+    <pre>
+      let num = 1;
+      num++;
+    </pre>
+    <p>
+      需要注意的是，上面的代码若放在console内，会output出1，而这并不奇怪。这里面的逻辑是浏览器会先return
+      current value，然后再increment。当然也有解决方案：将increment
+      operator放在前面：
+    </p>
+    <pre>
+      let num2=1;
+      ++num;
+    </pre>
+    <h2>Assignment operator</h2>
+    <p>
+      assignment
+      operator是用于给变量赋值的运算符，最基本的是<code>=</code>，用左边的变量储存右边的值。不过还有以下几个常用的assignment
+      operator
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Operator</th>
+          <th scope="col">Name</th>
+          <th scope="col">Purpose</th>
+          <th scope="col">Example</th>
+          <th scope="col">Shortcut for</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>+=</td>
+          <td>Addition assignment</td>
+          <td>add the value on the right and return the new value</td>
+          <td>x += 5</td>
+          <td>x = x + 5</td>
+        </tr>
+        <tr>
+          <td>-=</td>
+          <td>subtraction assignment</td>
+          <td>subtract value on the right and return the new value</td>
+          <td>x -= 3</td>
+          <td>x = x - 3</td>
+        </tr>
+        <tr>
+          <td>*=</td>
+          <td>Multiplication assignment</td>
+          <td>multiples the right value and return the new value</td>
+          <td>x *= 3</td>
+          <td>x = x * 3</td>
+        </tr>
+        <tr>
+          <td>/=</td>
+          <td>Division assignment</td>
+          <td>divided by the number on the right and return the new value</td>
+          <td>x /= 5</td>
+          <td>x = x /5</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>基本就是以上内容了，很直观。</p>
+    <h2>Comparison operators</h2>
+    <p>
+      当我们需要使用运行布尔测试的时候，我们就用到comparsion
+      operator了。这种operator将会基于两个数字的条件来返回true/false
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Operator</th>
+          <th scope="col">Name</th>
+          <th scope="col">Purpose</th>
+          <th scope="col">Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>!==</code></td>
+          <td>Strict equality</td>
+          <td>Test if values are identical</td>
+          <td>6 == 3 + 3</td>
+        </tr>
+        <tr>
+          <td><code>!==</code></td>
+          <td>strict non equality</td>
+          <td>test if values are <b>NOT</b> identical</td>
+          <td>9 !== 5 + 4</td>
+        </tr>
+        <tr>
+          <td><code>&lt;</code></td>
+          <td>Less than</td>
+          <td>test if left is greater than right</td>
+          <td>10 &lt; 3</td>
+        </tr>
+        <tr>
+          <td><code>&gt;</code></td>
+          <td>Greater than</td>
+          <td>test if left is greater than right</td>
+          <td>19 &gt; 20</td>
+        </tr>
+        <tr>
+          <td><code>&lt;=</code></td>
+          <td>less than or equal to</td>
+          <td>test if left is smaller than equal to right</td>
+          <td>3 &lt;= 2</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>布尔值运算在和if，for循环判断结合后非常好用，可以用来判断各种情景</p>
   </body>
   <script>
     const myNumber = 1;

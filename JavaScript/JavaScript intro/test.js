@@ -10,3 +10,8 @@ console.log(manyDecimal);
 
 const twoDecimal = manyDecimal.toFixed(2);
 console.log(twoDecimal);
+
+// numbers and operators
+let num = 1;
+console.log(num++);
+console.log(num);
