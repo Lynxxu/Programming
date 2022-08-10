@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Useful string methods</title>
+  </head>
+  <body>
+    <h1>Useful string methods</h1>
+    <p>
+      之前讲过了基本的<a href="String.html">Strings</a
+      >，现在将会深入讲一些JS的内置字符串操作。比如探测string长度，链接，断开，替换字符等等。
+    </p>
+    <h2>Strings as object</h2>
+    <p>
+      绝大多数的JS内容都是objects。当我们创建一个string的时候，比如<code
+        >const string = 'some stings'</code
+      >。这个时候变量就变成了一个string object
+      instance。意思就是说我们可以使用各种properties和methods。这个时候可以参考mdn的<a
+        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String"
+        >string</a
+      >
+      object
+      page，然后就可以看见一堆可用的methods了。这种比较具体的信息可以当作词典使用，但是并不是每一种都百分百用得到，在这里就讲一下比较常用的
+    </p>
+    <h2>Length</h2>
+    <p>
+      使用<code>length</code>属性来查询一个字符串的长度。这个属性很好用，在很多时候可以用来根据长度排序，检测用户输入长度是否太长等等。比如下面的代码就会return
+      6
+    </p>
+    <pre>
+      const browserType = "chrome";
+      console.log(browserType.length);      
+    </pre>
+    <h2>Retrieving a specific character</h2>
+    <p>
+      另一个常用的东西是提取一个字符串内的指定character。可以使用square bracket
+      notation，也就是<code>[]</code>和python差不多。从0开始数，下面的代码就会返回<code
+        >c</code
+      >
+    </p>
+    <pre>
+      browserType[0];
+    </pre>
+    <p>
+      假设我想要获得变量的最后一个字符，可以使用<code>varName[varName.length-1]</code>来提取，因为使用了长度减1，也就是最后一个字符的index
+    </p>
+    <h2>Test substring</h2>
+    <p>
+      有的时候如果想要探测一个字符串内是否包含小字符串（substring），可以使用<code>include()</code>method来返回true/false。
+    </p>
+    <pre>
+      const names = 'ChalinJimOscar';
+
+      if (names.include(Jim)) {
+        console.log('found JIM');
+      } else{
+        console.long('No jim here');
+      }
+    </pre>
+    <p>
+      上面的逻辑就是一个简单的if判断变量<code>names</code>内是否包含jim，然后根据情况来返回回复。和这个类似的属性还可以探测是不是由某些substring开始或结束的，分别对应<code>startsWith()</code>和<code>endWith()</code>下面两个分别对应探测jim是否是开头或结尾，
+    </p>
+    <pre>
+      const names = 'ChalinJimOscar';
+
+      if (names.startsWith(Jim)) {
+        console.log('Jim is no.1');
+      } else{
+        console.long('Jim is not No.1');
+      }
+    </pre>
+    <pre>
+      const names = 'ChalinJimOscar';
+
+      if (names.endsWith(Jim)) {
+        console.log('Jim is the last');
+      } else{
+        console.long('Jim is not last');
+      }
+    </pre>
+    <h2>Find position of substring in string</h2>
+    <p>
+      可以使用<code>indexOf()</code>
+      method来查询一个substring在一个更大string的位置。这个method需要两个参数，一个是需要查询位置的substring在括号内，以及大string在前面
+    </p>
+    <pre>
+      const bigString = 'chalin jim and oscar are groups of idiots';
+      console.log(bigString.indexOf(idiots));
+    </pre>
+    <p>
+      按照上面的代码，从0开始往后数到指定字符的位置，得到的返回就是35。需要注意的是，如果指定的substring不在范围内，那么将会返回<code
+        >-1</code
+      >
+    </p>
+    <p>
+      <code>indexOf()</code>
+      method还可以多接受一个数字值。若不加上它，那么将会直接从0开始算到第一次出现。而如果加上一个数字值，则将会从数字指定的位置开始搜索。
+    </p>
+    <pre>
+      const bigString = "chalin jim and oscar are groups of idiots idiots";
+      const firstOccurrence = bigString.indexOf("idiots");
+      cosnt secondOccurrence = bigString.indexOf('idiots', firstOccurrence + 1);
+
+      console.log(firstOccurrence);
+      console.log(secondOccurrence)
+    </pre>
+    <p>
+      上面的代码块就会返回两个idiots分别出现的位置，后面可以用相同的逻辑继续写下去
+    </p>
+    <h2>Extracting substring from string</h2>
+    <p>
+      另外一个比较常用的method是<code>slice()</code>，依旧和python比较类似，可以接受两个值：第一个值指定开始切片的位置，第二个值指定停下的位置（不包含该位置的值）。若直接忽略第二个值，则会从第一个值开始截到最后一个字
+    </p>
+    <pre>
+      const browserType = "chrome";
+      console.log(browserType.slice(1, 2));
+      console.log(browserType.slice(1));
+    </pre>
+    <p>
+      上面两个slice分别会返回<code>h</code>和<code>hrome</code>。注意第一个slice是接受1，2的，意思是从index
+      = 1处开始，到index=2处结束且<b>不包含index =2</b
+      >，所以我们只获得了一个字符
+    </p>
+    <h3>Changing cases</h3>
+    <p>
+      在很多时候可以使用<code>toLowerCase()</code>和<code>toUpperCase()</code>调整字符串的大小写。这个用法在用户输入一些大小写不敏感的内容时很重要。例子如下：
+    </p>
+    <pre>
+      const messedCap = 'SOme RandOM caPtaliZed WorDs'
+      console.log(messedCap.toLowerCase());
+      console.log(messedCap.toUpperCase())
+    </pre>
+    <h2>Replacing parts of string</h2>
+    <p>
+      使用<code>replace()</code>和<code>replaceAll()</code>来将字符串内的某些部分指定换成其他内容，前者只会更换第一次出现的而后者会将全部符合的都换掉。
+    </p>
+    <pre>
+      let sample = 'chalin is messing up with jim's network with oscar';
+      const updatedSample = sample.replace('jim', 'william');
+
+      console.log(sample);
+      console.log(updatedSample);
+    </pre>
+    <p>
+      就像上面的例子，replace和replaceAll接受两个值，一个是需要替换的值，第二个是替换成的值。需要注意的是使用这个method将不会对string造成影响，而是直接返回新的string，所以想要储存变化，需要重新赋值
+    </p>
+  </body>
+</html>
