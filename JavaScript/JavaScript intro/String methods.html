@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="../general.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Useful string methods</title>
   </head>
@@ -53,7 +54,7 @@
     <pre>
       const names = 'ChalinJimOscar';
 
-      if (names.include(Jim)) {
+      if (names.includes('Jim')) {
         console.log('found JIM');
       } else{
         console.long('No jim here');
@@ -65,7 +66,7 @@
     <pre>
       const names = 'ChalinJimOscar';
 
-      if (names.startsWith(Jim)) {
+      if (names.startsWith('Jim')) {
         console.log('Jim is no.1');
       } else{
         console.long('Jim is not No.1');
@@ -74,7 +75,7 @@
     <pre>
       const names = 'ChalinJimOscar';
 
-      if (names.endsWith(Jim)) {
+      if (names.endsWith('Jim')) {
         console.log('Jim is the last');
       } else{
         console.long('Jim is not last');
@@ -87,7 +88,7 @@
     </p>
     <pre>
       const bigString = 'chalin jim and oscar are groups of idiots';
-      console.log(bigString.indexOf(idiots));
+      console.log(bigString.indexOf('idiots'));
     </pre>
     <p>
       按照上面的代码，从0开始往后数到指定字符的位置，得到的返回就是35。需要注意的是，如果指定的substring不在范围内，那么将会返回<code
@@ -146,5 +147,50 @@
     <p>
       就像上面的例子，replace和replaceAll接受两个值，一个是需要替换的值，第二个是替换成的值。需要注意的是使用这个method将不会对string造成影响，而是直接返回新的string，所以想要储存变化，需要重新赋值
     </p>
+    <h2>例子：首字母大写器</h2>
+    <p>
+      假设我有一个array，里面包含了一堆大小写混乱的单词，我们可以使用以下代码逻辑把它弄成首字母大写：
+    </p>
+    <ol>
+      <li>写一个for循环，将array里面的每一个项遍历以下操作：</li>
+      <li>将项切换成全小写，储存在另一个变量里面</li>
+      <li>将项的首字母单独提出来，储存在另外一个变量内</li>
+      <li>使用replace()来将全小写的项的首字母替换成大写的首字母</li>
+    </ol>
+    <p>对应代码和效果如下：</p>
+    <pre>
+      const list = document.querySelector('.output ul');
+      list.innerHTML = '';
+      const cities = ['lonDon', 'ManCHESTer', 'BiRmiNGHAM', 'liVERpoOL'];
+
+      for (let city of cities) {
+        lowerCity = city.toLowerCase();
+        firstLetter = lowerCity[0];
+        capitalized = lowerCity.replace(firstLetter, firstLetter.toUpperCase());
+        const result = capitalized;
+        const listItem = document.createElement('li');
+        listItem.textContent = result;
+        list.appendChild(listItem);
+      }
+    </pre>
+    <div class="output"><ul></ul></div>
   </body>
+  <script>
+    const list = document.querySelector(".output ul");
+    list.innerHTML = "";
+    const cities = ["lonDon", "ManCHESTer", "BiRmiNGHAM", "liVERpoOL"];
+
+    for (let city of cities) {
+      const lowerCity = city.toLowerCase();
+      const firstLetter = lowerCity[0];
+      const capitalized = lowerCity.replace(
+        firstLetter,
+        firstLetter.toUpperCase()
+      );
+      const result = capitalized;
+      const listItem = document.createElement("li");
+      listItem.textContent = result;
+      list.appendChild(listItem);
+    }
+  </script>
 </html>

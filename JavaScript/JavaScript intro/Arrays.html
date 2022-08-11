@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../general.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arrays</title>
+  </head>
+  <body>
+    <h1>Arrays</h1>
+    <p>
+      array，数组，一般用于描述类似list-like
+      object所用。其实就是一个可以储存多个value的object。array
+      object可以储存在变量内，且可以对他进行各种操作，比如遍历循环提取存入等等。
+    </p>
+    <h2>Creating arrays</h2>
+    <p>
+      arrays由方括号开始，里面的values由括号隔开。values可以是各种内容，比如字符串，数字，嵌套array，object等等
+    </p>
+    <pre>
+      const random = ['jim', 3, [2,3,'chalin']]
+    </pre>
+    <h2>Length of array</h2>
+    <p>
+      查询array的长度和字符串的操作一模一样，只需要使用<code>length</code>属性即可。上面的那个array便是可以使用<code>console.log(random.length)</code>来求长度的。
+    </p>
+    <h2>Access & modify array items</h2>
+    <p>
+      和字符串的操作类似，一个array的index也是由0开始，而由此可衍生的操作有提取和更改：
+    </p>
+    <ul>
+      <li>
+        使用方括号来提取指定index处的item。比如
+        <pre>
+          const random = ['jim', 3, [2,3,'chalin']];
+          console.log(random[0]);
+        </pre>
+      </li>
+      <li>
+        使用指定index的位置来更改值：
+        <pre>
+          const random = ['jim', 3, [2,3,'chalin']];
+          random[0] = 'chalin';
+          console.log(random);
+        </pre>
+      </li>
+      <li>
+        嵌套查询，假设一个array内包含了array，那么可以使用多次方括号进行精细操作：
+        <pre>
+          const random = ['jim', 3, [2,3,'chalin']];
+          console.log(random[2][0]);
+        </pre>
+      </li>
+    </ul>
+    <h2>Find items in array</h2>
+    <p>
+      假设不知道某个item的index位置时，可以使用<code>indexOf()</code>来查询某一个特定值的位置。没错，这个和字符串的method是一样的。该方法将会返回所在的index位置（如果没有则是0）
+    </p>
+    <pre>
+      const random = ['jim', 3, [2,3,'chalin']];
+      console.log(random.indexOf('jim'));
+    </pre>
+    <h2>Adding items</h2>
+    <p>
+      想要给array添加item时，可以使用<code>push()</code>和<code>unshift()</code>
+      method，分别对应从尾和从头添加，均可以接受多个值。需要注意的是，当item被添加成功时，这两个method会自动返回添加后的数组长度，此时可以使用一个专门的变量把他存起来。
+    </p>
+    <pre>
+      const random = ['jim', 3, [2,3,'chalin']];
+      const newLength = random.push('999999999');
+      console.log(random);
+      console.log(newLength);
+    </pre>
+    <p>而在array开头添加同理：</p>
+    <pre>
+      const random = ['jim', 3, [2,3,'chalin']];
+      const newLength = random.unshift('999999999');
+      console.log(random);
+      console.log(newLength);
+    </pre>
+    <h2>Removing items</h2>
+    <p>
+      想要将array内的某个项移除有三种办法：<code>pop()</code>，<code>shift()</code>和<code>splice()</code>，分别对应从尾，头和指定index处移除item。
+    </p>
+    <pre>
+      const random = ['jim', 3, [2,3,'chalin']];
+      random.pop();
+      console.log(random);
+    </pre>
+    <pre>
+      const random = ['jim', 3, [2,3,'chalin']];
+      random.shift();
+      cosole.log(random)
+    </pre>
+    <p>
+      而比较特殊的<code>splice()</code>可以移除指定index位置的值，也可以指定删除多个值。比如说我想将jim和他后面的一个项移除，那么就可以使用<code>indexOf()</code>和if相结合，写一个简单的逻辑：
+    </p>
+    <pre>
+      const random = [1, 'jim', 3, 'chalin'];
+      const index = random.indexOf('jim');
+      if (index !== -1){
+        random.splice(index, 2);
+      }
+      console.log(random);
+    </pre>
+    <h2>Access every items</h2>
+    <p>
+      很多时候我们可以使用<code>for... of</code
+      >循环来遍历每一个项。而JS还有内置的<code>map()</code>和<code>filter()</code>用于更改每一个项，类似一个简化版的for循环用于特定目的
+    </p>
+    <p>
+      一个简单的for循环如下，需要注意的for循环的语法略有不同，需要特地declare项作为变量，且使用of，而不是in
+    </p>
+    <pre>
+      const random = [1, 'jim', 3, 'chalin'];
+      for (const item of random){
+        console.log(item)
+      }
+    </pre>
+    <p>
+      而map则是将array内的每一个项塞入某种函数处理。比如将所有值乘2可以使用for来完成，也可单独写一个函数，交由map来将每一个项处理；
+    </p>
+    <pre>
+      function double(number){
+        return number *2;
+      }
+      const nums= [1, 2, 3, 4, 5];
+      const doubled = nums.map(double)
+      console.log(doubled)
+    </pre>
+    <p>而filter()则是差不多的逻辑，但是只接受TF值，若true则将item保留：</p>
+    <pre>
+      function isOdd(num){
+        return num % 2 == 1;
+      }
+
+      const nums= [1, 2, 3, 4, 5];
+      const odd = nums.filter(isOdd)
+      console.log(odd)
+    </pre>
+    <h2>Convert strings & arrays</h2>
+    <p>
+      有的时候我们会遇到很长一条的字符串，而我们想把它给分开变成一个数组。我们可以使用<code>split()</code>来完成。该method可接受多个值，详见<a
+        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split"
+        >mdn</a
+      >。一般来说只是用一个separator，也就是根据字符串内的某个单词来分开。
+    </p>
+    <pre>
+      const data = 'chalin,jim,oscar,userName,kunjingkao';
+      const names = data.split(',');
+      console.log(names);
+    </pre>
+    <p>相反的，可以使用<code>join()</code>来把他们给变回去：</p>
+    <pre>
+      const rejoined = names.join(',');
+      console.log(rejoined);
+    </pre>
+    <p>
+      另外一种将array转化成string的办法是使用<code>toString()</code>
+      method。这个method和join不同的是，<code>toString()</code>接受不了值，只能使用逗号分开每一个项，但是<code>join()</code>却可以自定义separator
+    </p>
+    <pre>
+     const string = names.toString();
+     console.log(string);
+    </pre>
+  </body>
+</html>
