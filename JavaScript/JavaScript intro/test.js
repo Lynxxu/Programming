@@ -61,3 +61,40 @@ const updatedSample = sample.replace("jim", "william");
 
 console.log(sample);
 console.log(updatedSample);
+
+let myArray = [
+  "Ryu",
+  "Ken",
+  "Chun-Li",
+  "Cammy",
+  "Guile",
+  "Sakura",
+  "Sagat",
+  "Juri",
+];
+
+// https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/Test_your_skills:_Arrays
+myArray.pop();
+myArray.push("name1", "name2");
+
+for (item of myArray) {
+  const index = myArray.indexOf(item);
+  myArray[index] = `${item}(${index})`;
+  console.log(item);
+}
+
+const myString = myArray.join("-");
+
+console.log(myString);
+
+const birds = ["Parrots", "Falcons", "Eagles", "Emus", "Caracaras", "Egrets"];
+
+const index = birds.indexOf("Eagles");
+birds.pop(index);
+
+eBirds = [];
+for (bird of birds) {
+  if (bird.startsWith("E")) {
+    eBirds.push(bird);
+  }
+}
