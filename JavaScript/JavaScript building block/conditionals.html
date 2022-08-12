@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conditionals</title>
+  </head>
+  <body>
+    <h1>Conditionals in JS</h1>
+    <p>
+      conditional在各种编程语言都是不可少的，用于根据input或其他情况来发出对应的指令
+    </p>
+    <h2>if...else statement</h2>
+    <p>来看一下最常用的conditional statement：<code>if else</code>结构</p>
+    <h3>Basic syntax</h3>
+    <p>一个最基本的<code>if else</code>结构如下：</p>
+    <pre>
+      if (condition){
+        //code
+      } else {
+        //code
+      }
+    </pre>
+    <p>
+      逻辑很简单，使用<code>if</code>关键词来开启statement，然后后面的小括号则是condition，也就是用来判断情况的条件。可以接受任何能返回true/false的expression。而后面则是花括号，代表条件=<code>true</code>时运行的代码。然后跟上else结构，将在false时运行。
+    </p>
+    <p>
+      其实else部分是可以舍去的。只留下if的话则不会在false时产生任何反应，只需要注意写在if(){}结构后面的代码就不属于conditional了，会直接运行。
+    </p>
+    <pre>
+      if (customName.value !== "") {
+        const name = customName.value;
+        newStory = newStory.replace("Bob", name);
+      }else{
+        const name = 'Wrong!'
+      }
+    </pre>
+    <h3>else if</h3>
+    <p>
+      一个最基本的if结构只能给我们1~2个选择，取决于带不带else结构。但是可以使用<code
+        >else if</code
+      >结构来增加判断次数，以及相对应的结果。只需要将一块<code>else if(){}</code
+      >加入代码内便可以了
+    </p>
+    <pre>
+      if (customName.value !== "") {
+        const name = customName.value;
+        newStory = newStory.replace("Bob", name);
+      }else if(customName.value == 'jim'){
+        const name = 'jim' 
+      }else{
+        const name = 'Wrong!'
+      }
+    </pre>
+    <p>
+      需要注意的是，if
+      else结构可以接受的不只是true和false。与false相对应的有<code>undefined</code>，<code>null</code>，<code>0</code>，<code>NaN</code>和<code>''</code>空字符串。而其他的所有值都会返回true，比如一个随便的字符串。
+    </p>
+    <h3>Logical operators</h3>
+    <p>
+      假设我想要实现嵌套if结构，办法其实不只有使用嵌套结构，另外一个办法就是逻辑运算符<code>AND</code>和<code
+        >OR</code
+      >
+    </p>
+    <ul>
+      <li>
+        <code>&&</code>： AND，若多个expressions同时为true才可运行true的代码
+      </li>
+      <li><code>||</code>: OR，多个expression只要其中一个为true即可运行</li>
+    </ul>
+    <p>需要注意的时，和py不同，JS内的逻辑运算符得在小括号内使用，如下：</p>
+    <pre>
+      if (name === 'chalin' && age === '19'){
+        console.log('welcome chalin Yang');
+      } else{
+        console.log('you are not the owner of this account');
+      }
+    </pre>
+    <p>
+      剩下的还有NOT运算符，由<code>!</code>定义，将会把整个expression
+      negate过来。
+    </p>
+    <pre>
+      const fireInHouse = false;
+      const shopping = 'yes';
+      if (!(fireInHouse || shopping === 'yes')){
+        console.log('stay at home then');
+      } else{
+        console.log('go ahead and leave home');
+      }
+    </pre>
+    <p>
+      上面的一片代码内，如果conditional返回了true，那么<code>！</code>，NOT逻辑符便会将整个转过来变成flase。因此上面的conditional其实是返回<code>true</code>的。
+    </p>
+    <p>
+      而上面的所有逻辑符都可以嵌套使用，比如<code
+        >((name ==='chalin' || name ==='jim') && (age &lt; 1))</code
+      >
+    </p>
+    <h2>Switch statement</h2>
+    <p>
+      <code>if...else</code>
+      statement虽然可以解决很大部分问题，但是有的时候可能会太麻烦了，比如我想要检查一个变量是否等于某个或多个值时，直接使用<code>if-else-if</code>会变得很冗长。这个时候使用<code
+        >switch</code
+      >
+      statement则可以完全解决这个问题，switch接受一个expression/value，然后一直判断直到找到正确的value并执行代码
+    </p>
+    <pre>
+      switch (expression){
+        case choice1:
+          run code
+          break;
+        
+        case choice2:
+          run code instead
+          break;
+
+        // 加上更多
+
+        default:
+          run this code if all above not works
+      }
+    </pre>
+    <p>switch的逻辑如下：</p>
+    <ul>
+      <li>使用<code>switch</code>关键词来定义switch结构</li>
+      <li>一个expression或value放在小括号内</li>
+      <li>关键词<code>case</code>，和相对应的代码块</li>
+      <li>
+        <code>break</code>
+        statement，以及分号。如果之前的choice不符合，则浏览器会停止这一块代码执行并往下执行
+      </li>
+      <li>往里面加case</li>
+      <li>
+        最后使用<code>default</code>关键词，以及一个代码块，但是不用加上break，因为这就是最后一行代码块了，如果前面都不满足，那么这个就类似一个else的用法。比如创建一个waether
+        response。
+      </li>
+    </ul>
+    <p>使用的代码如下：</p>
+    <pre>
+      function setWeather() {
+        const choice = select.value;
+  
+        switch (choice) {
+          case "sunny":
+            para.textContent =
+              "It is nice and sunny outside today. Wear shorts! Go to the beach, or the park, and get an ice cream.";
+            break;
+          case "rainy":
+            para.textContent =
+              "Rain is falling outside; take a rain coat and an umbrella, and don't stay out for too long.";
+            break;
+          case "snowing":
+            para.textContent =
+              "The snow is coming down — it is freezing! Best to stay in with a cup of hot chocolate, or go build a snowman.";
+            break;
+          case "overcast":
+            para.textContent =
+              "It isn't raining, but the sky is grey and gloomy; it could turn any minute, so take a rain coat just in case.";
+            break;
+          default:
+            para.textContent = "";
+        }
+      }
+    </pre>
+    <h2>Ternary operator</h2>
+    <p>
+      最后一个语法是三元运算符，tenary
+      operator。这个运算符可以理解为一个简化版的if-else结构，将会测试一个condition，true或者false都将会生成相对的回应。基本语法如下：
+    </p>
+    <pre>
+      condition 
+      ? run this code
+      : this code instead;
+    </pre>
+    <p>
+      一个实际的例子如下，当今天的greeting是anniversary，也就是true,那么将生成纪念日消息，如果是false则推送正常消息
+    </p>
+    <pre>
+      const greeting = isAnniversary
+      ? 'Happy anniversary chalin'
+      : 'GM chalin';
+    </pre>
+    <h3>Ternary operator e.g.</h3>
+    <label for="theme">Select theme: </label>
+    <select id="theme">
+      <option value="white">White</option>
+      <option value="black">Black</option>
+    </select>
+    <p>
+      上面的button可以用于转换dark
+      theme。这里的逻辑是创建了一个<code>update()</code>函数来在ternary
+      operator内使用。测试condition为<code>select.value === 'black'</code
+      >，如果是true，则运行update函数，反之亦然
+    </p>
+  </body>
+  <script>
+    const select = document.querySelector("select");
+    const html = document.querySelector("html");
+    document.body.style.padding = "10px";
+
+    function update(bgColor, textColor) {
+      html.style.backgroundColor = bgColor;
+      html.style.color = textColor;
+    }
+
+    select.addEventListener("change", () =>
+      select.value === "black"
+        ? update("black", "white")
+        : update("white", "black")
+    );
+  </script>
+</html>
