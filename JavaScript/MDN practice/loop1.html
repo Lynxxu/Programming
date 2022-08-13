@@ -24,9 +24,13 @@
     const list = document.createElement("ul");
 
     // Add your code here
-    for (food of myArray) {
-      list += `${food}`;
+
+    for (item of myArray) {
+      const listItem = document.createElement("li");
+      listItem.textContent = `${item}`;
+      list.appendChild(listItem);
     }
+
     // Don't edit the code below here!
 
     const section = document.querySelector("section");

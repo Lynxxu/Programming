@@ -2,10 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <style>
+      .somepara {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      .sect {
+        background-color: antiquewhite;
+      }
+    </style>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="../general.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Manipulating DOM</title>
   </head>
   <body>
     <h1>Manipulating document</h1>
@@ -79,10 +87,167 @@
       </li>
     </ul>
     <h2>Basic DOM manipulation e.g.</h2>
-    <p></p>
+    <p>
+      一个比较简单的DOM
+      manipulation例子是改变某个html元素的文字内容。比如把以下代码塞入<code>script</code>内：
+    </p>
+    <pre>
+      const link = document.querySelector("a");
+      link.textContent = "chalin is idiot";
+    </pre>
+    <p>
+      达到的效果是超链接的描述变成了更改后的字符串。里面的逻辑上是首先将需要操作的元素存在变量内，然后就可以对该变量使用各种method了，具体可使用的属性和方法查看对应的<a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement"
+        >interface：HTMLAnchorElement（对a来说）</a
+      >，在这里我们使用了总的interface：<a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement"
+        >HTMLElement</a
+      >和<a href="https://developer.mozilla.org/en-US/docs/Web/API/Node">Node</a
+      >，可以调整的有很多，这里的例子仅仅是使用了<code>link.textContent</code>
+    </p>
+    <p>
+      JS内选择element的手段有很多种，但是一般来说使用<code>Document.querySelector</code>是最常见的办法。这个办法很好用，因为我们还可以使用它来选择CSS
+      selector。上面的<code>querySelector()</code>会选择第一个<code>&lt;a&gt;</code>，若想要选择全部的元素，可以使用<code>Document.querySelectorAll()</code>，然后使用<code>NodeList</code>来储存这一系列reference
+    </p>
+    <p>
+      另外还有其他种更老的选择method，对比较老的浏览器很好用，下面是两个例子
+    </p>
+    <ul>
+      <li>
+        <code>Document.getElementById()</code>:
+        选择对应id的元素，比如一个id为sb的p元素的选择就是<code
+          >const pRef = document.getElementById('sb')</code
+        >
+      </li>
+      <li>
+        <code>Document.getElementByTagName()</code>: 返回一个array-like
+        object，内含所有对应tag的元素。注意这个和querySelector不同的是，querySelector选择的是CSS
+        selector，也就是说可以细分，但是这个会直接选择一切对应tag。比如我像选中整个文档内的p元素，那我们可以使用<code
+          >const pRefArray = document.getElementByTagName('p')</code
+        >
+      </li>
+    </ul>
+    <h3>Create and place new nodes</h3>
+    <p>
+      更深一点，我们可以创建新的node，也就是新的元素。首先把这行代码加入script内：
+    </p>
+    <pre>
+      const sect = document.querySelector("section");
+      const para = document.createElement("p");
+      para.textContent = "chlalin and jim are noobs";
+      sect.appendChild(para);
+
+      const text = document.createTextNode("oscar and william and handsome");
+      const linkPara = document.querySelector("div p");
+      linkPara.appendChild(text);
+    </pre>
+    <div>
+      <p></p>
+    </div>
+    <section></section>
+
+    <p>
+      然后再往代码内加上一个<code>section</code>和<code>p</code>，注意p要在div内。此时就可以看见section和p凭空出现了两串字。分析一下其实结构很简单：
+    </p>
+    <p>
+      首先使用<code>sect</code>作为变量名，用它来储存querySelector选择的section，然后再创建一个叫做<code>para</code>的变量，用于储存使用<code>createElement</code>创建出来的p元素。
+      此时再使用<code>textContent</code>来把刚刚创建的p加上字符串。最后使用<code>appendChild()</code>来给section把para变量加上去。
+    </p>
+    <p>
+      而下面第二个字符串则是创建了一个textNode，里面包含了一个字符串，然后使用querySelector来选择对应的p元素，最后字符串append到元素内即可。实际上，这个用法和之前用的<code>textContent</code>是一样的，和下面的代码对应：
+    </p>
+    <pre>
+      const somePara = document.querySelector("div p");
+      somePara.textContent = 'some text to be added'
+    </pre>
+    <h3>Moving & deleting elements</h3>
+    <p>
+      假设我想要更改dom
+      node，比如移动到别的位置，或者直接删除node，那么可以使用下面几个办法：
+    </p>
+    <p>
+      对于移动element，直接使用<code>appendChild()</code>即可解决问题，假设我想把之前例子内的<code>somePara</code>从div
+      p内移动到section下面，则可直接使用
+    </p>
+    <pre>
+      sect.appendChild(somePara);
+    </pre>
+    <p>
+      即可解决问题，但是需要注意的是，使用这个方法并不是创建新的一个div
+      p变量，而是将之前创建的div
+      p整个移动到section里面作为child。注意这里移动的是tag，而不是textContent。
+    </p>
+    <p>而移除一个node的方法比较多：</p>
+    <ul>
+      <li>
+        假设想要移除某个node的child，则可以使用<code>Node.removeChild()</code>来删除掉它
+      </li>
+      <li>
+        如果想根据这个node自己的信息来删除，也就是直接删掉本身，那么可以使用<code>Element.remove()</code>，需要注意的是这个方法在老浏览器内可能不支持，因此可以使用下面的方法来根据自己移除自身：
+      </li>
+      <li>node.parentNode.removeChlid(node)</li>
+    </ul>
+    <p>
+      在我们上面的例子内，假设要移除掉<code>somePara</code>，那么对应的三个办法分别是：<code>sect.removeChild(somePara)</code>，
+      <code>somePara.remove();</code>和<code
+        >somePara.sect.removeChild(somePara)</code
+      >
+    </p>
+    <h3>Manipulating styles</h3>
+    <p>
+      不仅仅是html，我们也可通过JS来调整CSS
+      styles，首先我们可以使用<code>Document.stylesheets</code>来获得一个array-like
+      object（CSSStyelSheet object），但是这个已经算是过时了，不太会使用
+    </p>
+    <p>
+      现代的比较简单的办法有直接加入inline
+      style来覆写前面的，通过<code>HTMLElement.style</code>属性实现。还是之前的例子，假设我想给div内的p加上style，然后给section加上style以区分他们的node关系，可以使用下面的代码：
+    </p>
+    <pre>
+      somePara.style.backgroundColor = "rgba(0,0,0, 10%)";
+      sect.style.backgroundColor = "antiquewhite";
+    </pre>
+    <p>
+      另外还有第二种办法，使用<code>Element.setAttribute()</code>来将class加给某个元素。这个办法的本质是放一个internal
+      css，然后使用JS设置元素的class值。比如依旧是上面的两个styling，对应的代码则有两块：
+    </p>
+    <pre>
+      &lt;style&gt;
+      .somepara {
+        background-color: rgba(0,0,0 0.1);
+      }
+      .sect{
+        background-color: antiquewhite;
+      }
+      &lt;/style&gt;
+    </pre>
+    <pre>
+      somePara.setAttribute('class', 'somepara');
+      sect.setAttribute('class','sect');
+    </pre>
+    <p>
+      这两种办法都可行，但是需要注意的是，若直接通过JS写入inline
+      style，那么我们会不可避免的使用JS写css的语法，会让脑子比较混乱，并且如果想对一个元素进行多个更改，会需要写很多行JS代码。对于在head内写上class后JS赋值则是此时更好的办法。毕竟不需要把JS和css混到一起，也可一次性写出class，具体使用什么看情况
+    </p>
     <script>
       const link = document.querySelector("a");
       link.textContent = "chalin is idiot";
+
+      const sect = document.querySelector("section");
+      const para = document.createElement("p");
+      para.textContent = "chlalin and jim are noobs";
+      sect.appendChild(para);
+
+      const text = document.createTextNode("oscar and william and handsome");
+      const somePara = document.querySelector("div p");
+      somePara.appendChild(text);
+      // sect.appendChild(somePara);
+      // somePara.remove();
+      somePara.style.backgroundColor = "rgba(0,0,0, 10%)";
+      sect.style.backgroundColor = "antiquewhite";
+
+      // somePara.setAttribute("class", "somepara");
+      // sect.setAttribute("class", "sect");
     </script>
   </body>
 </html>

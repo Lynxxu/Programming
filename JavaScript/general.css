@@ -32,3 +32,8 @@ td {
 caption {
   padding: 10px;
 }
+
+pre {
+  display: flex;
+  margin-left: 10vw;
+}
