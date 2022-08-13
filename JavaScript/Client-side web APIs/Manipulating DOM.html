@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="../general.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Manipulating document</h1>
+    <p>
+      当编写动态网页时，我们经常需要更改或操纵网页的结构，一般通过DOM（document
+      object model）实现。DON是一系列的API，用于控制<code>document</code>
+      object内的HTML以及styling info。
+    </p>
+    <h2>Parts of web browser</h2>
+    <p>
+      网页浏览器一般会锁定很多网页内容用于防止恶意行为，但是即便有这些限制，web
+      API依旧有很多有用的东西，比如一个浏览器的部分如下：
+    </p>
+    <img src="../Resources/web api.png" alt="web apis" />
+    <ul>
+      <li>
+        看上图，我们大概可以将浏览器分成几个部分，第一个就是window，即brower
+        tab和网页载入的地方，在JS内这个东西是<code>window</code>
+        object。对其使用methods可以调整window的尺寸，操控载入的网页，在客户端储存数据，添加event
+        handler等等
+      </li>
+      <li>
+        navigator bar，也就是浏览器的state和identity。对应的是<code
+          >navigator</code
+        >
+        object，可以用于查看用户的优先语言，webcam等等（也就是user agent）
+      </li>
+      <li>
+        document，也就是浏览器内的DOM，即在window内载入的网页，对应的是JS的<code
+          >Document</code
+        >
+        object，可以使用这个object来调整html和css的内容，比如改变某个id的element的content，增加style，往已有元素内添加或删减子母元素等等。
+      </li>
+    </ul>
+    <h2>Document object model</h2>
+    <p>
+      在浏览器tab内载入的网页就是由DON代表的，他类似一种tree
+      structure，由浏览器根据html创建，可以用于给其他编程语言access，浏览器自己就是根据DOM来上style的，而web
+      developer则可以根据DOM来在网页渲染结束后操控html
+    </p>
+    <p>
+      一个比较简单的网页类似<a href="simple dom example.html">这样</a
+      >，而其对应的DOM如下：
+    </p>
+    <img src="../Resources/DOM view.png" alt="DOM View" />
+    <p>
+      这个tree里面的每一个entry都被称为一个node，比如图片里面的<code>HTML</code>,
+      <code>HEAD</code>,
+      <code>META</code
+      >和用于代表文字的<code>#text</code>等等，虽然还有别的node，但是上面的是主要node了
+    </p>
+    <p>node也可根据其在树内的位置命名。比如：</p>
+    <ul>
+      <li>
+        <b>Root node</b>:
+        最高的node，在html内永远是<code>html</code>，但是其他语言可能不一样，比如svg和xml可以有不同的root
+      </li>
+      <li>
+        <b>child node</b>:
+        一个在其他node内的node，必须得是下一级的。比如上面的<code>IMG</code>是<code>SECTION</code>的child
+        node
+      </li>
+      <li>
+        <b>descendant node</b>:
+        一个在其他node内任意位置的node，比如<code>IMG</code>不是<code>BODY</code>的child，但是却是descendant
+      </li>
+      <li><b>parent node</b>: 含有任意node在内的node都可以被称为parent node</li>
+      <li>
+        <b>sibling node</b>:
+        同级的node，比如<code>IMG</code>和<code>p</code>就是sibling nodes
+      </li>
+    </ul>
+    <h2>Basic DOM manipulation e.g.</h2>
+    <p></p>
+    <script>
+      const link = document.querySelector("a");
+      link.textContent = "chalin is idiot";
+    </script>
+  </body>
+</html>

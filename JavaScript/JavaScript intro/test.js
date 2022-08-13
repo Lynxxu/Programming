@@ -92,9 +92,31 @@ const birds = ["Parrots", "Falcons", "Eagles", "Emus", "Caracaras", "Egrets"];
 const index = birds.indexOf("Eagles");
 birds.pop(index);
 
-eBirds = [];
+let eBirds = [];
 for (bird of birds) {
   if (bird.startsWith("E")) {
     eBirds.push(bird);
   }
 }
+
+//loops
+chars = ["Noelle", "Alice", "Elysia", "KEQING"];
+
+let output1 = "names are: ";
+for (const char of chars) {
+  output1 += `${char}, `;
+}
+
+console.log(output1);
+
+let output2 = "names are: ";
+
+for (const char of chars) {
+  if (chars.indexOf(`${char}`) + 1 !== chars.length) {
+    output2 += `${char}, `;
+  } else {
+    output2 += `and ${char}.`;
+  }
+}
+
+console.log(output2);

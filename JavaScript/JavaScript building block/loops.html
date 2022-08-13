@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      canvas {
+        width: 100%;
+        max-height: 100%;
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+    </style>
+    <title>Looping code</title>
+  </head>
+  <body>
+    <h1>Loops</h1>
+    <p>loop结构很重要，用于重复操作直到某个条件被满足</p>
+    <h2>loop example</h2>
+    <button>update</button>
+    <canvas></canvas>
+    <p>上面的button可以随机创建100个透明的红圈，代码如下：</p>
+    <pre>
+      const btn = document.querySelector('button');
+      const canvas = document.querySelector('canvas');
+      const ctx = canvas.getContext('2d');
+
+      document.addEventListener('DOMContentLoaded', () => {
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+      })
+
+      function random(number) {
+        return Math.floor(Math.random()*number);
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i &lt; 100; i++) {
+          ctx.beginPath();
+          ctx.fillStyle = 'rgba(255,0,0,0.5)';
+          ctx.arc(random(canvas.width), random(canvas.height), random(50), 0, 2 * Math.PI);
+          ctx.fill();
+        }
+      }
+
+      btn.addEventListener('click',draw);
+    </pre>
+    <p>
+      因为这个代码有很多没学过，所以这里重点讲用于生成100个圈的function内的for循环。在上面的for循环内，我们使用了1作为计数器，由0开始直到99，也就是100次。然后下面的代码用于生成随机大小的圈圈。如果我们不使用loop，则我们得把类似上面的代码写100次。
+    </p>
+    <h2>Looping through collection</h2>
+    <p>
+      当使用一个loop时，基本上都有一个collection of
+      items用于遍历。虽然也有用于计数器的情况（如之前的例子），但是使用for循环来遍历collection内的每一个项是基本操作：
+    </p>
+    <h3>for...of</h3>
+    <pre>
+      const homoSapien=['chalin', 'jim', 'oscar','kk'];
+      for (const person of homoSapien){
+        console.log(person);
+      }
+    </pre>
+    <p>
+      按照上面的for of
+      loop，我们首先定义了一个array，然后在for循环内将array内遍历的项存在变量<code>human</code>内，执行大括号内代码后继续循环。
+    </p>
+    <h3>map() and filter()</h3>
+    <p>
+      在之前的<a href="../JavaScript intro/Arrays.html">array</a
+      >内学过，<code>map</code>和<code>filter</code>也属于loop，只不过这个loop是只能对collection使用的。分别对应将collection的项经过function处理和true/false保留
+    </p>
+    <pre>
+      function toLower(string){
+        return string.toLowerCase();
+      }
+
+      const homoSapien=['Chalin', 'jIm', 'oScAr','KkKk'];
+      const lowerHuman = homoSapien.map(toLower);
+
+      console.log(lowerHuman);
+    </pre>
+    <p>
+      <code>map()</code
+      >需要两个值，一个放在前面，用于处理的collection。而第二个参数则在括号内，代表需要经过的处理，也就是function。在上面的例子内，我们使用一个array，通过toLower函数来变成小写
+    </p>
+    <pre>
+      function LessThan5(string){
+        return string.length &lt; 5;
+      }
+
+      const homoSapien=['Chalin', 'jIm', 'oScAr','KkKk'];
+      shortName = homoSapien.filter(LessThan5);
+      console.log(shortName);
+    </pre>
+    <p>
+      而filter是一个逻辑，只不过接受的参数方程只能是true/false。然后由此来判断每一个item是true还是false，以此决定是否保留在新collection内
+    </p>
+    <h2>标准for loop</h2>
+    <p>
+      在最开始的随机画圈圈例子内，我们使用的for循环没有遍历collection，而只将相同的代码运行100边。代码结构如下：
+    </p>
+    <pre>for (initializer; condition; final-expression){}</pre>
+    <ol>
+      <li>关键词<code>for</code>以及小括号</li>
+      <li>
+        在小括号内有三个部分，由分号分开：
+        <ul>
+          <li>
+            <b>initializer</b> -
+            一般是一个变量，设置为某个数字，将会在loop开始后慢慢增加，被称为<b
+              >counter variable</b
+            >
+          </li>
+          <li>
+            <b>condition</b> - 定义loop停止的时机，一般是一个comparison
+            operator，也可是任意返回布尔值的expression。当值变成了false时便会结束loop
+          </li>
+          <li>
+            <b>final-expression</b> -
+            这个地方的expression会在每一次iteration结束后运行一次。一般用于ounter
+            variable的increment/decrement
+          </li>
+        </ul>
+      </li>
+      <li>花括号内的运行代码</li>
+    </ol>
+    <h3>例子：calculate squares</h3>
+    <button id="calculate">Calculate</button>
+    <button id="clear">Clear</button>
+    <pre id="results"></pre>
+    <p>
+      上面的两个button分别生成了1到9的自己的次方和删除全部的输出，而里面的核心代码，也就是生成计算结果如下：
+    </p>
+    <pre>
+      function calculate(){
+        for (let i=1; i&lt;10; i++){
+          const newResult = `${i} x ${i}=${i * i}`;
+          result.textContent += `${newResult}\n`;
+        }
+        result.textContent += '\nFinished';
+      }
+    </pre>
+    <p>
+      分析一下，首先是一个函数的框架。然后使用for关键词，里面是<code
+        >let i=1; i&lt;10, i++</code
+      >，也就是设置了counter = 1，结束条件为i&gt;=10，每次iteration加1。
+    </p>
+    <p>
+      在loop内，使用newResult常量储存输出。由于这里使用的是counter，所以变量<code>i</code>就是使用的计算。里面使用\n换行符来保证没问题。第一轮i=1，于是输出的是1
+      x 1 =1，第二轮是i = 2, 2 x 2 =4，以此类推直到9
+    </p>
+    <h3>Loop with collection</h3>
+    <p>
+      一般来说，我们使用<code>for...of</code>
+      loop来遍历collection，但是仅仅使用<code>for</code>也可以达到效果，只需要使用counter和increment，设置成小于collection的length即可。下面两个代码块是相同的效果：
+    </p>
+    <pre>
+      chars = ['Noelle', 'Alice', 'Elysia', 'KEQING'];
+
+      for (const char of chars){
+        console.log(char);
+      }
+
+      for (let i = 0; i &lt; chars.length; i++){
+        console.log(chars[i]);
+      }
+    </pre>
+    <p>
+      这两个代码的效果基本上是完全一样的，其实在早期JS没有for
+      of结构时，标准的collection遍历结构就是这个办法。需要注意的是这里很容易出bug，比如容易把counter初始值填成<code>1</code>，但是array的index是0开始的。因为类似这样的原因，我们一般使用for
+      of结构。
+    </p>
+    <p>但是有的时候，使用for循环来遍历collection有自己的优势。</p>
+    <pre>
+      chars = ['Noelle', 'Alice', 'Elysia', 'KEQING'];
+
+      output = 'names are: ';
+      for (const char of chars){
+        output += `${char}, `;
+      }
+
+      console.log(output)
+    </pre>
+    <p>
+      上面的代码的输出会是<i>names are: Noelle, Alice, Elysia, KEQING,</i
+      >。仔细一看很奇怪，因为最后是用逗号结尾且读的不顺。一般来说我们想让他变成：<i
+        >names are: Noelle, Alice, Elysia and KEQING.</i
+      >。但是若使用for
+      of循环，可以解决问题，但是需要使用indexOf和length以及if代码块来判断。
+    </p>
+    <p>
+      但是，使用for循环就可以解决了，只需要使用counter，判断是否在列表的尾端即可。如下：
+    </p>
+    <pre>
+      for (let i = 0; i &lt; chars.length; i ++){
+        if (i !== chars.length -1){
+          output += `${char}, `;
+        } else{
+          output += `and ${char}.`;
+        }
+      }
+    </pre>
+    <h2>Exiting loop with break</h2>
+    <p>
+      假设想要在某个时候直接关掉loop，而不是等到全部遍历结束。我们可以使用<code>break</code>，之前在学习switch就已经用过了。基本来说，只要是在loop内执行了break，那么将会立刻推出循环，这一点在switch和for都是一样的。
+    </p>
+    <p>
+      一般来说，会在loop内内置一个if结构，然后在里面塞入break，一旦loop到了想要的结果就执行if内的代码且结束循环。
+    </p>
+    <label for="search">Search by contact name: </label>
+    <input id="search" type="text" />
+    <button>Search</button>
+    <p>
+      上面的button可以用来查询一个人的号码，代码的逻辑是有一个array储存着人名和电话号码，使用for循环遍历每一个array项，使用if判断是否和输入值相对应。当对应的时候输出电话号码后break即可。这里的button不能使用，因为前面有一个button占用了listener
+    </p>
+
+    <h2>Skipping iteration: continue</h2>
+    <p>
+      有一个和break很相似的逻辑，<code>continue</code>
+      statement，只不过是将代码当前的iteration跳过，然后执行下一个loop。比较常见的用法依旧是在if结构内，若某个条件达成，则直接跳过该次循环
+    </p>
+    <p>
+      一个例子是展示比某个数字小的所有squares,
+      而跳过某些特殊数字。逻辑就是创建一个for循环，使用counter和用户数字来决定遍历次数，创建一个变量来储存数字的平方，然后使用if来判断数字是否为特殊数字，如果是就skip目前的iteration.
+    </p>
+    <pre>
+      let num = 10;
+      cont = '';
+      for (i = 1; i &lt;= num; i++){
+        const sq = i ** 2;
+        if (sq === 64){
+          continue;
+        }
+        cont += `${sq} `
+      }
+    </pre>
+    <p>
+      把上面代码塞进console，可以得到输出<code>'1 4 9 16 25 36 49 81 100 '</code
+      >，可以看到64被跳过了，因为我们在if内设定了64时跳过
+    </p>
+    <h2>while & do-while</h2>
+    <p>
+      还有一个常见的循环办法：使用while和do
+      while循环。这种循环将会一直持续下去，直到某种条件被达成。<code>while</code>的基本语法如下：
+    </p>
+    <pre>
+      initializer
+      while(condition){
+        //code
+      }
+    </pre>
+    <p>
+      和for循环的不同处在于，while循环的counter，condition和increment在三个不同的地方，其他的地方和for循环基本上没有逻辑上的区别
+    </p>
+    <pre>
+      chars = ['Noelle', 'Alice', 'Elysia', 'KEQING'];
+
+      let output = 'names are: ';
+      let i = 0;
+
+      while(i &lt; chars.length){
+        if (i !== chars.length-1){
+          output += `${chars[i]}, `;
+        }else{
+          output += `and ${chars[i]}.`;
+        }
+        
+        i++
+      }
+
+      console.log(output)
+    </pre>
+    <p>
+      这个使用while达成的代码块和之前使用for循环得到的结果是一致的。而<code>do..while</code>循环就不太一样了。do
+      while循环的loop会最少运行一次，即使条件根本不满足。代码结构如下：
+    </p>
+    <pre>
+      chars = ['Noelle', 'Alice', 'Elysia', 'KEQING'];
+
+      let output = 'names are: ';
+      let i = 0;
+
+      do{
+        if (i !== chars.length-1){
+          output += `${chars[i]}, `;
+        } else{
+          output += `and ${chars[i]}.`;
+        }
+        i++
+      } while(i &lt; chars.length)
+
+      console.log(output);
+    </pre>
+    let i = 0;
+    <p>
+      这样一个<code>do-while</code>结构就完成了，和普通的while结构效果一致，但是不同的是他至少会执行一次
+    </p>
+
+    <h2>Choose loop</h2>
+    <p>
+      假设循环是对于array或者其他collection
+      object使用，且不需要使用index，则使用<code>for...of</code>循环是最好的选择
+    </p>
+    <p>
+      除了对于collection以外的用法来说，<code>for</code>,
+      <code>while</code
+      >和<code>do...while</code>一般都可以使用，他们的逻辑是一样的，使用哪个属于个人preference。一般来说用for是比较流行的，但是其他的当然也没问题
+    </p>
+    <script>
+      const btn = document.querySelector("button");
+      const canvas = document.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+
+      document.addEventListener("DOMContentLoaded", () => {
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+      });
+
+      function random(number) {
+        return Math.floor(Math.random() * number);
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < 100; i++) {
+          ctx.beginPath();
+          ctx.fillStyle = "rgba(255,0,0,0.5)";
+          ctx.arc(
+            random(canvas.width),
+            random(canvas.height),
+            random(50),
+            0,
+            2 * Math.PI
+          );
+          ctx.fill();
+        }
+      }
+
+      btn.addEventListener("click", draw);
+
+      /*
+      const results = document.querySelector("#results");
+
+      function calculate() {
+        for (let i = 1; i < 10; i++) {
+          const newResult = `${i} x ${i} = ${i * i}`;
+          results.textContent += `${newResult}\n`;
+        }
+        results.textContent += "\nFinished!";
+      }
+
+      const calculateBtn = document.querySelector("#calculate");
+      const clearBtn = document.querySelector("#clear");
+
+      calculateBtn.addEventListener("click", calculate);
+      clearBtn.addEventListener("click", () => (results.textContent = ""));
+
+      const contacts = [
+        "Chris:2232322",
+        "Sarah:3453456",
+        "Bill:7654322",
+        "Mary:9998769",
+        "Dianne:9384975",
+      ];
+      const para = document.querySelector("p");
+      const input = document.querySelector("input");
+      const btn1 = document.querySelector("button");
+
+      btn1.addEventListener("click", () => {
+        const searchName = input.value.toLowerCase();
+        input.value = "";
+        input.focus();
+        para.textContent = "";
+        for (const contact of contacts) {
+          const splitContact = contact.split(":");
+          if (splitContact[0].toLowerCase() === searchName) {
+            para.textContent =
+              splitContact[0] + "'s number is " + splitContact[1] + ".";
+            break;
+          }
+        }
+        if (para.textContent === "") {
+          para.textContent = "Contact not found.";
+        }
+      });
+      */
+    </script>
+  </body>
+</html>
