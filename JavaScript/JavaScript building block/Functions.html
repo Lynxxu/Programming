@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Functions</title>
+    <link rel="stylesheet" href="../general.css" />
+    <style>
+      .msgBox {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        background: #eee;
+        border-radius: 10%;
+      }
+
+      .msgBox p {
+        line-height: 1.5;
+        padding: 10px 20px;
+        color: #333;
+        padding-left: 80px;
+        background-position: 27px center;
+        background-repeat: no-repeat;
+      }
+
+      .msgBox button {
+        background: none;
+        border: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        font-size: 1.1rem;
+        color: #aaa;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Functions</h1>
+    <p>
+      作为编程语言，函数是极其重要的一环。基本来说，函数就是一块可以重复使用的代码。
+    </p>
+    <h2>built-in brower func</h2>
+    <p>
+      在前面没有系统学习function前，我们就已经在使用函数了，只不过是浏览器内置的。比如替换某个string使用的<code
+        >string.replace('string', 'newString')</code
+      >就是一种内置函数，使用后面的string替换前面的。
+    </p>
+    <p>
+      同理，还有很多内置的函数，基本上使用了小括号的非内置语法（比如loop，if等等）都是函数。因此类似<code>math.random()</code>和<code>string.join()</code>都属于函数
+    </p>
+    <p>
+      JS有很多内置函数，当我们invoke（或者run，execute）这些函数的时候，其实有一部分是使用浏览器代码运行的，也就是底层语言，类似C++的。另外还有许多内置函数并不是JS内的，而是属于浏览器API，因此甚至可以提供更多的功能
+    </p>
+    <h2>Functions vs. methods</h2>
+    <p>
+      我们将属于object的一部分的function称为<code>method</code>，虽然之前还没有细分过，但是已经用过很多次了。而我们自己在JS内创建的函数则被称为<b
+        >custom function</b
+      >, 这些函数，内置函数，method都在之前的随机画圈圈代码用过，详见<a
+        href="loops.html"
+        >loops</a
+      >
+    </p>
+    <h2>Invoking functions</h2>
+    <p>
+      当我们define（或declare）一个函数后，我们可以运行（invoke，run）它，方法是使用函数名和小括号，以及需要的参数（parameter）。有的函数，比如<code>math.random()</code>是不需要任何参数的，他会返回一个0~1的随机数。而有的函数需要参数才能运行，比如<code>replace</code>。也有的函数有optional
+      parameter，也就是可以选要不要参数，比如<code>join()</code>在没有参数的时候默认是使用逗号来将array内的字符串连起来
+    </p>
+    <h3>default parameter</h3>
+    <p>
+      假设我们想自己创造optional
+      parameter的函数，那么可以在函数的参数处设置一个默认值。下面的代码块就是一个例子，当invoke时若没有给参数，那么默认值就是ass
+    </p>
+    <pre>
+      function printInput(input = 'ass'){
+        console.log(`Hello ${input}`);
+      }
+    </pre>
+    <h2>Anonymous functions and arrow functions</h2>
+    <p>
+      其实除了我们还可以不给函数名称，一般来说这种无名(<b>Anonymous</b>函数会被当作参数，嵌套在其他的函数内。例子如下：
+    </p>
+    <pre>
+      function (){
+        alter('wuhu nice');
+      }
+    </pre>
+    <p>
+      假设我想要创造一个函数，当用户在text
+      box内输入了某个东西的时候就运行一些代码。我们可以使用<code>addEventListener()</code>函数来实现，这个函数需要至少两个参数，一个是需要关注的event，在这个例子内就是<code>keydown</code>，而另外一个例子则是event发动时启动的函数。
+    </p>
+    <p>那么按照正常做法，我们需要单独写一个函数，也就是按下按键对应的行为。</p>
+    <pre>
+      function keyRxn(event) {
+        alert(`you have pressed ${event.key}`);
+      }
+  
+      textBox.addEventListener("keydown", keyRxn);
+    </pre>
+    <p>
+      上面的代码就是正常的写法，我们首先定义了keyRxn，也就是按下的反应，然后使用addEventListener来引用它。但是使用匿名函数是完全没问题的，如下：
+    </p>
+    <pre>
+      textBox.addEventListener('keydown', function(){
+        alert(`you have pressed $(event.key)`);
+      })
+    </pre>
+    <h3>Arrow function</h3>
+    <p>
+      假设想要使用类似上面的匿名函数，还有一个办法，称为<b>arrow</b>
+      function，基本来说就是将<code>function(event)</code>换成<code
+        >（event)=>{}</code
+      >
+    </p>
+    <pre>
+      textBox.addEventListener('keydown', (event） => {
+        alert(`you have pressed ${event.key}`);
+      });
+    </pre>
+    <p>如果这个函数只有一行，那么也可忽略掉花括号，变成下面这样：</p>
+    <pre>
+      textBox.addEventListener('keydown', (event) => console.log(`you have pressed ${event.key}`));
+    </pre>
+    <p>
+      如果这个函数只有一个参数，那么甚至还可以把参数的小括号去掉，变成<code
+        >event => console.log(`you have....`)</code
+      >
+    </p>
+    <p>
+      假设这个函数只有一行且需要return值出去，那么也可去掉return关键词，比如我想要在一行内将某个array内的数字翻倍，可以使用以下代码：
+    </p>
+    <pre>
+      const nums = [1,2,3];
+
+      const double = nums.map((num)=> num *2);
+      
+      console.log(double);
+    </pre>
+    <p>
+      基本的逻辑也很简单，使用map来将array内的项目进行函数的处理，而这个函数就是<code
+        >(num) => num*2</code
+      >。这个arrow function和<code
+        >function double(num){return num
+        *2}是一个效果的，只不过前者不能多次引用。</code
+      >
+    </p>
+    <input type="text" id="textBox" />
+    <h3>Arrow func. Example</h3>
+    <p>
+      之前使用函数实现的textbox response，若使用arrow func实现，那么代码如下：
+    </p>
+    <pre>
+      const textBox = document.querySelector('#textbox');
+      const output = document.querySelector('#output');
+
+      textBox.addEventListener('keydown', (event) => output.textContent = `you pressed ${event.key}`);
+    </pre>
+    <input id="textbox" type="text" />
+    <div id="output"></div>
+    <p>以及对应的html代码：</p>
+    <pre>
+      &lt;input id="textbox" type="text"&gt; &lt;/input&gt;
+      &lt;div id ='output'&gt;&lt;/div&gt;
+    </pre>
+    <h2>Function scope and conflict</h2>
+    <p>
+      当处理函数问题的时候，我们需要注意scope，也就是函数的局限性。一个函数内定义的变量以及其他东西均被储存在其函数的scope内，意思是无法在其他地方进行引用。而函数外称为<code
+        >global scope</code
+      >，是可以在任意地方引用的。
+    </p>
+    <p>
+      这种设计是比较符合逻辑的，一般来说，让用户不能接触到函数内的变量是为了安全。还有的时候是为了组织问题。比如我将一个const放在函数外面，然后在两个JS
+      file内一起引用，此时只有第一个有效，因为const只能被定义一次。
+    </p>
+    <h2>Build function</h2>
+    <p>
+      来开始建一个方程把，叫做<code>displayMessage()</code>，用来展示一个message
+      box来代替浏览器的<code>alert()</code>函数。
+    </p>
+    <p>
+      浏览器的<code>alert</code>函数可以接受一个字符串参数，也就是用于展示的字符串。但是alert函数是有自己的局限性的，比如我们无法调整颜色，icon或其他的东西。
+    </p>
+
+    <h3>Basic function</h3>
+    <p>
+      在开始写函数之前，首先得知道函数的命名方式和变量是一样的，也就是lowerCamel。然后开始写函数的第一步就是命名和框架：
+    </p>
+    <pre>
+      function diaplayMessag(){
+
+      }
+    </pre>
+    <p>然后将函数主体加进去，就算完成了：</p>
+    <pre>
+      function displayMessage(){
+        const body = document.body;
+
+        const panel = document.createElement('div');
+        panel.setAttribute('class','msgBox');
+        body.appendChild(panel);
+        
+        const msg = document.createElement('p');
+        msg.textContent = 'This is a message box';
+        panel.appendChild(msg);
+        
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = 'x';
+        panel.appendChild(closeBtn);
+        
+        closeBtn.addEventListener('click', () => panel.parentNode.removeChild(panel));        
+      }
+    </pre>
+    <p>这里面有很多代码，我们一个一个分析过去：</p>
+    <p>
+      首先第一行代码使用<a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"
+        ><code>DOM API</code></a
+      >来选中html的body元素，然后将其储存在<code>body</code>变量内
+    </p>
+    <p>
+      第二块代码依旧是使用了DOM
+      API来创造元素，也就是<code>document.createElement()</code>，使用<code>panel</code>变量来把刚刚创建的div储存起来。然后使用另外一个DOM
+      API，也就是<code>Element.setAttribute()</code>来给刚刚的div设置一个class，为msgBox。这个样子我们就可以在head内调整css了。然后使用一个DOM函数<code>Node.appendChild</code>把刚刚
+    </p>
+    <p>
+      第三块代码和第二段代码是一个逻辑的。只不过这次生成的是<code>p</code>元素，更改的是textContent。然后把msg加在panel下面
+    </p>
+    <p>
+      最后创建一个button，更改这个button的textcontent。最后使用<code>addEventListener</code>来关注这个button，一旦点击后就运行<code>Node.removeChlid()</code>函数，将定义的html元素下的child移除。效果可以刷新浏览器看：
+    </p>
+    <p>
+      如果想要网页打开的时候就展示，那么直接在scirpt内call即可。但是肯定还有别的办法，比如我想要创建一个button，让这个msgbox在被点击后才开启，那么同理我们可以使用一个<code>addEventListener()</code>来探测click，并且对应执行函数。代码和效果如下：
+    </p>
+
+    <div><button>msg box</button></div>
+    <pre>
+      const btn = document.querySelector("div button");
+
+      btn.addEventListener("click", displayMessage);
+    </pre>
+    <p>
+      这里需要注意的是，我们使用的函数是没有加上括号的。类似这样的括号被称为<i
+        >function invocation operator</i
+      >，仅在需要函数立即在其scpe内运行的时候使用。也就是说如果我们想要严格的根据event，那么就需要延迟触发，去掉小括号即可。
+    </p>
+    <h3>Adding parameters</h3>
+    <p>现在已经完成了基本的功能，得到的msg如下</p>
+
+    <img src="../Resources/msfbox.png" alt="a msgbox example" />
+
+    <p>
+      而这肯定还是有提升空间的，首先就是调整parameter，比如我可以加上一个参数，用来替换msgbox的文字内容。也可加第二个参数，定义msgbox的类型，以此调整外观。
+    </p>
+    <p>
+      先说第一个，逻辑很简单，加参数，更改函数内的msgbox的<code>textContent</code>即可。代码如下：
+    </p>
+    <pre>
+      msg.textContent = msgText;
+    </pre>
+    <p>
+      还有一个问题，就是启动函数的button也要调整，注意因为之前讲过的原因，在函数启动button内也必须得延迟触发，这次括号里面有参数，所以我们可以使用匿名函数来实现：
+    </p>
+    <pre>
+      btn.addEventListener('click', () 
+          => displayMessage('some messsssssage'));
+    </pre>
+    <p>此时的box如下：</p>
+    <img src="../Resources/msgbox1.png" alt="alternateBox" />
+    <p>
+      然后我们就可以进行第二个参数的配置了。这里打算的是使用这个参数来定义box的外观，比如一个warning和一个chat。先放代码：
+    </p>
+    <pre>
+      if (msgType === 'warning') {
+        msg.style.backgroundImage = 'url(icons/warning.png)';
+        panel.style.backgroundColor = 'red';
+      } else if (msgType === 'chat') {
+        msg.style.backgroundImage = 'url(icons/chat.png)';
+        panel.style.backgroundColor = 'aqua';
+      } else {
+        msg.style.paddingLeft = '20px';
+      }
+    </pre>
+    <p>
+      上面的代码塞入function内，用于探测参数<code>msgType</code>是否是warning还是chat，然后根据情况来调整style和icon
+    </p>
+    <p>
+      同步更改以下msgbox的style，用于防止icon重复，错位等等，注意这里调整的是<code
+        >msgBox p</code
+      >
+    </p>
+    <pre>
+      .msgBox p {
+        padding-left: 80px;
+        background-position: 27px center;
+        background-repeat: no-repeat;
+      }
+    </pre>
+    <p>
+      此时基本上就完结了，只需要在引用的时候指定需要的msgtype即可完成。类似这样：
+    </p>
+    <pre>
+      btn.addEventListener("click", () =>
+      displayMessage("Brian: Hi there, how are you today?", "chat")
+    );
+    </pre>
+
+    <h2>Return value</h2>
+    <p>
+      函数的最后重要一部分就是return，虽然有的函数不需要返回值，但是这个部分依旧是必须要学习的。
+    </p>
+    <p>
+      return
+      value基本上就是字面意思，函数结束后返回的值。之前的很多函数都用到了，即使没有写出return值。比如<code>replace()</code>函数就是返回一个将指定词替换掉的字符串。而有的函数不返回值，比如上面的msgbox是展示一个box，类似这种的函数返回的是<code>void</code>或<code>undefined</code>，一般来说当函数被用于intermediate
+      step，或者计算时，用于返回最终结果用于储存到变量内。
+    </p>
+    <h3>custom function return</h3>
+    <p>
+      在自定义函数内，使用return只需要一个<code>return</code>关键词即可。而return关键词是可以结合各种experssion的。比如下面两块代码是相同的结果：
+    </p>
+    <pre>
+      function random(a, b) {
+        return Math.floor(Math.random() * (b - a + 1) + a);
+      }
+    </pre>
+    <p>
+      function random(a, b){ const result = Math.floor(Math.random() * (b - a +
+      1) + a); return result; }
+    </p>
+    <p>
+      当我们将类似上面包含return值的函数嵌套在另外的函数内，比如我写一个<code
+        >console.log(random(1,2), random(3,4), random(4,5))</code
+      >，那么其等同于<code>console.log(2,3,4)</code>，或者是任意random输出的随机值。
+    </p>
+    <script>
+      function keyRxn(event) {
+        alert(`you have pressed ${event.key}`);
+      }
+
+      textBox.addEventListener("keydown", keyRxn);
+
+      const textbox = document.querySelector("#textbox");
+      const output = document.querySelector("#output");
+
+      textbox.addEventListener(
+        "keydown",
+        (event) => (output.textContent = `you pressed ${event.key}`)
+      );
+
+      function displayMessage(msgText, msgType) {
+        const body = document.body;
+
+        const panel = document.createElement("div");
+        panel.setAttribute("class", "msgBox");
+        body.appendChild(panel);
+
+        const msg = document.createElement("p");
+        msg.textContent = msgText;
+        panel.appendChild(msg);
+
+        const closeBtn = document.createElement("button");
+        closeBtn.textContent = "x";
+        panel.appendChild(closeBtn);
+
+        closeBtn.addEventListener("click", () =>
+          panel.parentNode.removeChild(panel)
+        );
+
+        if (msgType === "warning") {
+          msg.style.backgroundImage = "url(../Resources/warning.png)";
+          panel.style.backgroundColor = "red";
+        } else if (msgType === "chat") {
+          msg.style.backgroundImage = "url(../Resources/chat.png)";
+          panel.style.backgroundColor = "aqua";
+        } else {
+          msg.style.paddingLeft = "20px";
+        }
+      }
+
+      const btn = document.querySelector("div button");
+
+      btn.addEventListener("click", () =>
+        displayMessage("Brian: Hi there, how are you today?", "chat")
+      );
+    </script>
+  </body>
+</html>

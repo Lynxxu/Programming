@@ -6,6 +6,8 @@ body {
 
 img {
   max-width: 100%;
+  display: flex;
+  margin: auto;
 }
 
 table {
@@ -31,9 +33,4 @@ td {
 
 caption {
   padding: 10px;
-}
-
-pre {
-  display: flex;
-  margin-left: 10vw;
 }
