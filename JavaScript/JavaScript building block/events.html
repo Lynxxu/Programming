@@ -549,7 +549,10 @@
       bgChange()。这个比较特殊的写法使用了event，用于target
       event所在的元素，也就是最里面的tiles。假设我想要target使用该handler的元素，那么可以使用event.currentTarget
     </p>
-    <p></p>
+    <p>
+      具体可以看<a href="events bubbling.html">event bubbling example</a
+      >，里面是一个编写好的三个div，点击div输出所在的位置。
+    </p>
     <script>
       const btn = document.querySelector("div button");
 
