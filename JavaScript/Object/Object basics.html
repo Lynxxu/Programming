@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object basics</title>
+  </head>
+  <body>
+    <h1>Object basics</h1>
+    <p>
+      一个object类似dictionary的概念，只不过object可以包含的东西更多，比如函数也可以在里面。
+    </p>
+    <p>和很多JS类似，首先得初始化且宣告variable用于储存object</p>
+    <pre>
+      const person = {}
+    </pre>
+    <p>
+      此时若使用devtools输入person，就看得出来我们已经成功创建了一个object。此时加一点内容：
+    </p>
+    <pre>
+      const person = {
+        name: ['chalin', 'yang'];
+        age:99,
+        bio: function(){
+          alert(`${this.name[0]}${this.name[1]} is ${this.age} years old`);
+        },
+        introduceSelf: function(){
+          alert(`Hi, I'm ${this.name[0]}.`)
+        }
+      }
+    </pre>
+    <p>此时，可以尝试按下以下按钮，看他们对应的代码有什么输出：</p>
+    <div id="btns"></div>
+    <p>
+      上面的button可以达到对应的输出，可以看到JS和python的词典是很类似的，只不过js是可以包含函数并且引用的。一个object的基本结构如下：
+    </p>
+    <pre>
+      const objectName ={
+        member1Name: member1Value,
+        member2Name: member2Value,
+        member3Name: member3Value
+      }
+    </pre>
+    <p>
+      假设一个object
+      member的value是值，比如字符串或者数字，那么我们称其为properties。对于储存在object内的函数，我们称其为methods。我们也可以将函数简化掉，去掉<code
+        >function ()</code
+      >
+    </p>
+    <pre>
+      const person = {
+        name: ['chalin', 'yang'];
+        age:99,
+        bio(){
+          alert(`${this.name[0]}${this.name[1]} is ${this.age} years old`);
+        },
+        introduceSelf(){
+          alert(`Hi, I'm ${this.name[0]}.`)
+        }
+      }
+    </pre>
+    <p>
+      一个类似这样的object被称为object
+      literal，也就是我们手动创建，定义内容的object。这种object经常被用于储存和传输有规律的数据。
+    </p>
+    <h2>Dot notation</h2>
+    <p>
+      一般来说，我们使用<b>dot notation</b
+      >来获得object的property和methods，object的名字（也就是上面的person）为namespace，必须写在dot前以指代access
+      object。比如<code>person.age</code>和<code>person.bio()</code>分别对应获得age的property和运行bio函数。
+    </p>
+    <h3>nested object properties</h3>
+    <p>
+      一个object
+      property本身也可以是一个object，比如我可以把刚刚的person内的name改成一个object，里面分别对应名和姓，而想要使用这个元素，直接多打一个dot即可。比如<code
+        >person.name.first</code
+      >
+    </p>
+    <pre>
+      const person = {
+        name: {
+          first: 'chalin',
+          last: 'yang',
+        },
+      }
+    </pre>
+    <h2>Bracket notation</h2>
+    <p>
+      除了dot
+      notation以外，还可以使用方括号来达到相同目的。基本上和array比较类似。比如我想引用刚刚的person
+      object内的first
+      name，那么代码为<code>person['name']['first']</code>。这个办法基本上和dot
+      notation是一样的，但有的时候你只能使用方括号。比如我想要创建一个object，但是根据用户输入来决定property
+      name。比如我想使用一个弹窗来得到用户需要的property，那么代码如下：
+    </p>
+    <pre>
+      const input = prompt("get name or age?");
+      console.log(person[input]);
+    </pre>
+    <h2>object members</h2>
+    <p>
+      到现在我们只看过了retrieving objects，而我们也可以set或update
+      value，也就是创造object
+      members，使用dot或者方括号。当然，除了更改之外也可以创建全新的property和methods。基本上来说就是一样的逻辑和语法。
+    </p>
+    <pre>
+      person.age = 90;
+      person['name']['last'] = 'Hu';
+    </pre>
+    <p>
+      可以看见，使用dot和bracket notation都可以更改object
+      value，同理也可以使用相同的办法来创建新的property value
+      pair。比如使用了下面的代码后就会多出对应的内容
+    </p>
+    <pre>
+      person['eyes'] = 'blue';
+      person.farewell = function(){
+        console.log('byebye')
+      }
+    </pre>
+    <p>
+      一般来说，使用bracket notation来创建新的property value
+      pair更加常见，因为bracket
+      notation可以做到根据变量来同时创建property和value。假设我想要把用户的某个数据储存在json内，可以将property和value分别储存在不同的变量内，然后使用bracket
+      notation来创建。
+    </p>
+    <pre>
+      const dataName = 'weight';
+      const dataValue = '60kg';
+      person[dataName] = dataValue
+    </pre>
+    <h2>什么是this</h2>
+    <p>在之前的method内，我们看见了<code>this</code>关键词：</p>
+    <pre>
+      introduceSelf() {
+        console.log(`hi I'm ${this.name[0]}.`)
+      }
+    </pre>
+    <p>
+      而这里面的<code>this</code>则是指代了代码运行处的object。其实在这里的话使用object自己的名字代替是完全可行的，比如改成<code
+        >console.log(`hi I'm ${person.name[0]}.`)</code
+      >的效果是完全一样的。<code>this</code>一般在多次创建相同的method时使用，比如我一个json文件可以包含几百人名，
+      而里面每一个人名都包含了上面的method，这个时候给每一个object
+      literal单独加上很很麻烦了
+    </p>
+    <h2>Constructors</h2>
+    <p>
+      假设我想要创建比较少量的object，使用object
+      literal没问题，但是假设我需要录入或更改多个数据，则使用construct可以
+    </p>
+    <p>
+      使用function的逻辑首先是需要一个object的框架，写下object内含有的method和property
+      value等等，比如下面的就是一个方程，scope内的便是一个简单的object，含有一个object
+      value pair和一个method，
+    </p>
+    <pre>
+      function createPerson(name) {
+        const obj = {};
+        obj.name = name;
+        obj.introduceSelf = function(){
+          console.log(`Hi, I'm ${this.name}`)
+        }
+        return obj;
+      }
+    </pre>
+    <p>然后使用函数来手动创建object:</p>
+    <pre>
+      const salva = createPerson('Salva');
+      const frankie = createPerson('Frankie')
+    </pre>
+    <p>
+      这个可行，完全没问题，但是这里面的逻辑比较绕，首先我们创建了空object，将其初始化后运行。而一个更加方便的办法是使用<b>constructor</b>，一个constructor其实就是一个使用<code>new</code>关键词激活的函数。当我们创建一个constructor时，相当于：
+    </p>
+    <ul>
+      <li>创建一个新的object</li>
+      <li>把this关键词和当前的object绑定</li>
+      <li>运行其中的代码</li>
+      <li>返回新的object</li>
+    </ul>
+    <p>constructors默认由大写字母开头，然后使用object的目的/类型来命名。</p>
+    <pre>
+      function Person(name){
+        this.name = name;
+        this.introduceSelf = function(){
+          console.log(`Hi I'm ${this.name}`)
+        }
+      }
+    </pre>
+    <p>
+      然后使用<code>Person()</code>和<code>new</code>来创建新的object，以下就是代码，和上面使用普通函数的效果完全相同
+    </p>
+    <pre>
+      const salva = new Person('Salva')
+      const frankie = new Person('Frankie')
+    </pre>
+    <h2>Built-in object</h2>
+    <p>
+      其实在学习object之前我们就一直在使用object了，比如最简单的DOM操纵。document.createElement()就是一个例子。当每一个网页被加载出来时，一个<code>Document</code>实例被创建出来，内包含了网页的结构，内容和features。而这些内置的ob
+    </p>
+    <script>
+      const person = {
+        name: ["chalin", "yang"],
+        age: 99,
+        bio: function () {
+          alert(`${this.name[0]}${this.name[1]} is ${this.age} years old`);
+        },
+        introduceSelf: function () {
+          alert(`Hi, I'm ${this.name[0]}.`);
+        },
+      };
+      const btnWrapper = document.querySelector("#btns");
+      const dots = [
+        "person.name",
+        "person.name[0]",
+        "person.age",
+        "person.bio()",
+        "person.introduceSelf()",
+      ];
+      let ctn = 1;
+      for (dot of dots) {
+        let newbtn = document.createElement("button");
+        newbtn.textContent = dot;
+        btnWrapper.appendChild(newbtn);
+
+        function somefunc(btn, dot) {
+          btn.addEventListener("click", (e) => {
+            if (dot.includes("()")) {
+              eval(dot);
+            } else {
+              alert(eval(dot));
+            }
+          });
+        }
+        // 这里使用函数的原因是为了创建一个closure，来产生private scope，因此保存下每一个dot的iteration成果，因为在此处的dot是一个global variable，若直接使用dot，只有最后的iteration得以保存
+        somefunc(newbtn, dot);
+      }
+    </script>
+  </body>
+</html>
