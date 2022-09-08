@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object prototypes</title>
+  </head>
+  <body>
+    <h1>Object prototypes</h1>
+    <p>
+      简单来说，prototypes为JS
+      object的继承机制。和之前一样，我们使用例子来解释：
+    </p>
+    <h2>The prototype chain</h2>
+    <p>首先创建这个object：</p>
+    <pre>
+     const myObject = {
+      city : 'toronto',
+      greet(){
+        console.log(`greetings from ${this.city}`)
+      }
+     }
+     myObject.greet();
+    </pre>
+    <p>
+      可以看出来这个object被称为<code>myObject</code>，里面含有一个property
+      value pair和一个method。如果在object
+      name后面跟上一个dot，比如<code>myObject.</code>那么则会弹出一系列的该object内的properties，比如：
+    </p>
+    <pre>
+      __defineGetter__
+      __defineSetter__
+      __lookupGetter__
+      __lookupSetter__
+      __proto__
+      city
+      constructor
+      greet
+      hasOwnProperty
+      isPrototypeOf
+      propertyIsEnumerable
+      toLocaleString
+      toString
+      toValueOf
+    </pre>
+    <p>
+      这些从objec内出来的properties被称为内置(<i>bulit-in</i>property，也就是<b>prototype</b>，prototype本身也是一种object，所以prototype也可以有prototype，加在一起就变成了prototype
+      但是一般来说，如果一个object的property指向的是prototype，我们不将其称为protot，而是<code>__proto__</code>。获得一个object的prototype办法一般是使用<code
+        >Object.getPrototypeOf()</code
+      >
+    </p>
+    <p>
+      当我么试图从一个object内取得property，首先我们查询该object本身，然后是property内的prototype，最后才是prototype的prototype，一直到prototype
+      chain最底部返回<code>undefined</code>
+    </p>
+    <p>
+      所以说，当我们使用<code>myObject.toString()</code>时，我们的浏览器会：
+    </p>
+    <ul>
+      <li>在myObject内寻找<code>toString</code></li>
+      <li>myObject内没有这个property，在其的prototype内寻找</li>
+      <li>prototype内找到了<code>toString()</code>，运行它</li>
+    </ul>
+    <p>
+      那么在上面的过程中，最后myObject内的prototype可以由<code>Object.getPrototypeOf()</code>来查询。
+    </p>
+    <pre>
+      Object.getPrototypeOf(myObject);
+      // Object{}
+    </pre>
+    <script>
+      const myObject = {
+        city: "toronto",
+        greet() {
+          console.log(`greetings from ${this.city}`);
+        },
+      };
+      //   let props = document.querySelector('#properties');
+      //   let info = myObject.
+    </script>
+  </body>
+</html>
