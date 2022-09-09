@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../general.css" />
     <title>Object prototypes</title>
   </head>
   <body>
@@ -51,7 +52,7 @@
       >
     </p>
     <p>
-      当我么试图从一个object内取得property，首先我们查询该object本身，然后是property内的prototype，最后才是prototype的prototype，一直到prototype
+      当我们试图从一个object内取得property，首先我们查询该object本身，然后是property内的prototype，最后才是prototype的prototype，一直到prototype
       chain最底部返回<code>undefined</code>
     </p>
     <p>
@@ -69,6 +70,110 @@
       Object.getPrototypeOf(myObject);
       // Object{}
     </pre>
+    <p>
+      这里面返回的就是被称为<code>Object.prototype</code>的最基本prototype，一切所有的object都含有这个prototype，而它没有下属的prototype，也就是说它是prototype
+      chain的最低端。但是需要注意的是，某些object的直属prototype并不是<code>Object.prototype</code>，比如使用<code
+        >Date</code
+      >
+      object，其下属的第一个prototype是<code>Date.prototype</code>，内包含了各种日期的methods。需要注意的，某个object的property，若指向了prototype，他们一般被称为<code>__proto__</code>，而取得一个obejct的prototype为<code
+        >Object.getPrototypeOf()</code
+      >
+    </p>
+    <h2>Shadowing properties</h2>
+    <p>
+      假设一个object有内置的prototype，然后我将其中的某一个property重新定义一次，那么原本的property会被覆写掉。这个行为被称为shadowing。比如还是上面的例子，我将他的prototype内的<code>toString()</code>覆写掉，那么后面运行得出的结果就是覆写后的了，按照下面的例子，得出的则是O"guess
+      this won't be the default answer you are expecting."
+    </p>
+    <pre>
+      myObject.toString();
+      myobject.toString = function(){
+        console.log("guess this won't be the default answer you are expecting.")
+      }
+      myObject.toString();
+    </pre>
+    <h2>Setting prototype</h2>
+    <p>
+      和property一个道理，我们也可以自己创造prototype。第一个是<code>object.create()</code>和constructors
+    </p>
+    <h3>Object.create</h3>
+    <p>
+      使用<code>object.create()</code>可以让我们创造新的object，且指定object来作为其的prototype
+    </p>
+    <pre>
+      const charPrototype={
+       greet(){
+        console.log('Hiii');
+       } 
+      }
+       
+      const noelle = Object.create(charPrototype);
+      noelle.greet();
+    </pre>
+    <p>
+      打开console，可以看出noelle的greet()
+      method被成功启动了。基本的逻辑是，我们创造了一个<code>charPrototype</code>
+      object，内包含了一个<code>greet()</code>
+      method，然后使用<code>Object.create()</code>生成一个新的object，且指定charPrototype为它的prototype。
+    </p>
+    <h3>constructor</h3>
+    <p>
+      在JS内，所有的函数均有一个被称为<code>prototype</code>的property，当我们使用一个函数作为constructor，
+      这个property会以__proto__为名字作为原object的prototype。
+    </p>
+    <p>
+      所以当我们设置或调整了一个constructor的prototype，我们就可以确定使用该constructors来生成的object一定包含了设置的prototype
+    </p>
+    <pre>
+      const genshinPrototype = {
+        greet() {
+          console.log(`hello, my name is ${this.name}`);
+        },
+      };
+
+      function char(name) {
+        this.name = name;
+      }
+
+      Object.assign(char.prototype, genshinPrototype);
+
+      const paimon = new char("paimon");
+      paimon.greet();
+    </pre>
+    <p>
+      这里面的逻辑也差不多，首先是创造了一个object，内含了一个greet()
+      method，然后创造了char(）constructor，用于初始化角色名称（也就是object）然后使用
+      <code>Object.assign</code
+      >函数将刚刚创造的object（paimon）加上一个genshin.prototype作为其prototype，而prototype内包含的property当然也会自动包含在里面
+    </p>
+    <h3>Own properties</h3>
+    <p>
+      上面我们使用<code>char</code>
+      constructor生成的object有两个property，第一个是<code>name</code>属性，由constructor内置，直接在object内的。和第二个<code
+        >greet()</code
+      >
+      method，存在prototype内。
+    </p>
+    <p>
+      一般来说上面的规律是比较常见的，因为methods经常会被重复使用在不同的object上，但是数据property一般是独立的（就像是所有web工程师可能身高名字都不同，但是他们都会debug）。而像<code>name</code>这样直接存在object内的属性我们称其为<b
+        >own properties</b
+      >，可以使用<code>Object.hasOwn()</code>来查询property是不是own:
+    </p>
+    <pre>
+      const aether = new char('Aether');
+
+      console.log(Object.hasOwn(aether, 'greet'));
+      console.log(Object.hasOwn(aether, 'name'))
+    </pre>
+    <h2>Prototypes and inheritance</h2>
+    <p>
+      prototypes在很多时候非常好用，比如重复使用某些代码并将其嵌入object内。而更加重要的是prototypes可以继承<b>inheritance</b>，在object-oriented
+      programming内非常重要的一个特性。开发者们使用面对对象变成的思想来创造object。比如我想要model一个学校，那么我们可以由学生和教授，此时教授和学生都有相同的特性：都是人，都有名字，但是他们肯定也有不同的，比如教授有研究领域，而学生有所在专业。此时在OOP
+      system内，我们称教授和学生都inherit form people
+    </p>
+    <p>
+      也就是说，在JS内，如果教授和学生object都有Person
+      prototype，那么他们就继承了“人”的prototype内的properties。
+    </p>
     <script>
       const myObject = {
         city: "toronto",
@@ -76,8 +181,44 @@
           console.log(`greetings from ${this.city}`);
         },
       };
-      //   let props = document.querySelector('#properties');
-      //   let info = myObject.
+      myObject.toString();
+      myObject.toString = function () {
+        console.log(
+          "guess this won't be the default answer you are expecting."
+        );
+      };
+      myObject.toString();
+
+      const charPrototype = {
+        greet() {
+          console.log("Hiii");
+        },
+      };
+
+      const noelle = Object.create(charPrototype);
+      noelle.greet();
+
+      const genshinPrototype = {
+        greet() {
+          console.log(`hello, my name is ${this.name}`);
+        },
+      };
+
+      function char(name) {
+        this.name = name;
+      }
+
+      Object.assign(char.prototype, genshinPrototype);
+
+      const paimon = new char("paimon");
+      paimon.greet();
+
+      const aether = new char("Aether");
+
+      console.log(
+        `Does Aether contain greet: ${Object.hasOwn(aether, "greet")}`
+      );
+      console.log(`Does Aether contian name: ${Object.hasOwn(aether, "name")}`);
     </script>
   </body>
 </html>
