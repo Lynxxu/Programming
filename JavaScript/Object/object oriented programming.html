@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object oriented programming</title>
+  </head>
+  <body>
+    <h1>Object-oriented progrmming</h1>
+    <p>
+      OOP的概念在很多编程语言和领域都用得上，OOP的基本概念含有类和实例：<b
+        >classes and instances</b
+      >，继承<b>inheritance</b>和封装<b>encapsulation</b>，这些概念在编程领域非常常见。
+    </p>
+    <p>
+      首先，OOP是关于object的collection，而每一个object都代表了系统的一部分。object包含了function（或method）和data。一个object提供了公开的interface用于更改调试和使用它，同时保证了系统的其他部分不会被它所影响
+    </p>
+    <h2>Classes and instances</h2>
+    <p>
+      当我们想要使用object来model一个问题时，我们经常会创造一种合集，用于包含或代表某种系统内的object，而这个概念就是class。比如之前提到过的学校例子，教授就可以是一个class，里面包含了教授都有的data和method。使用pseudocode类似这样：
+    </p>
+    <pre>
+      class Professor
+        properties
+          name
+          teaches
+        methods
+          grade(paper)
+          introduceSelf()
+    </pre>
+    <p>
+      如果仅是一个class，那么它其实没什么意义，因为class是一种创造某种object的模板，我们生成的每一个教授都是<code
+        >professor</code
+      >
+      class里面的一个实例<b>instance</b>，我们通过向<b>constructor</b>内输入需要的数据来创造且初始化实例，一般来说constructors会在class内定义好，且与class同名：
+    </p>
+    <pre>
+      class Professor
+        properties
+          name 
+          teaches
+        constructor
+          Professor(name, teaches)
+        method
+          grade(homework)
+          introduceSelf()
+    </pre>
+    <p>
+      就像上面的伪代码一样，我们的constructor应该包含所需要初始化的parameter，比如一个教授的名字和教学领域
+    </p>
+    <p>
+      而当我们创建好了constructor，则和object一样可以call
+      constructor，输入parameter然后创造class的实例
+    </p>
+    <h2>Inheritance</h2>
+    <p>
+      继续上面的学校例子，学生是没有教学领域和改作业的技能，但他们和professor一样有名字，也可以自我介绍，还属于不同年级。那么一个学生的class类似下面：
+    </p>
+    <pre>
+      class Student
+        properties 
+          name
+          year
+        constructor
+          Student(name,year)
+        methods
+          introduceSelf()
+    </pre>
+    <p>
+      可以看出来，学生和教授都包含了一些相同的特性，比如他们都是人，都可以自我介绍，这个时候我们就可以创建一个类，包含学生和教授的相同特性，比如说人。然后可以让教授和学生类从人derive（也就是inheritance）
+    </p>
+    <pre>
+      class Person 
+        properties 
+          name
+        constructor
+          Person(name)
+        methods
+          introduceSelf()
+        
+      class Professor : extends Person
+        properties
+          teaches
+        constructor
+          Professor(name, teaches)
+        method
+          grade(homework)
+          introduceSelf()
+
+      class Student : extneds Person
+        properties 
+          year
+        constructor
+          Student(name,year)
+        methods
+          introduceSelf()
+    </pre>
+    <p>
+      如果按照上面的结构来构建class，那么<code>Person</code>会是<code>Professor</code>和<code>Student</code>的parent
+      class，或superclass。则professor和student会是subclass，或child
+      class。这里需要注意的是，我们对两个类都进行了introduceSelf()
+      method的更新，因为一般来说每个人介绍自己的办法不同，且很有可能会和object内的其他属性进行联动。比如教授可以说"Hi,
+      I'm your professor for this year's
+      <i>teaches</i>"，而学生也有不同的年级用于介绍。
+    </p>
+    <p>
+      按照这里面的逻辑，即使是在parent
+      class内定义过的<code>introduceSelf()</code>函数，在不同的class内被重新定义，被称为<b>polymorphism</b>，而当subclass覆写掉了parent的method时，我们称其overrides
+      the superclass
+    </p>
+    <h2>Encapsulation</h2>
+    <p>
+      Object给我们提供了一个interface给其他的代码交互，同时保持了自己的功能与内容。object内的东西保持<b>private</b>，也就是说只能通过object自己的method来调用和获得，而不能从其他的object处获取。将object的internal
+      state和public interface分开的这个概念被称为<b>encapsulation</b>，封装
+    </p>
+    <p>
+      代码封装是非常重要的功能，因为它类似创造了一个防火墙，让被重复使用的代码（也就是private的部分）可以单独更改，调整，而不影响到其他的部分。比如说还是之前的学校例子，我希望让二年级以上的学生获得创立社团的权限，那么我们可以写一个简单的if代码来判断：
+    </p>
+    <pre>
+      if(student.year >1){
+        //gives access to start club
+      }
+    </pre>
+    <p>
+      但是问题来了，假设我希望把要求更新，比如说如果有老师的特许也可以建立。那么我需要在写了这个if判断的位置的每一处都进行调整，这个时候就没那么方便了。那么我们可以把这个method写入<code
+        >student</code
+      >
+      class内，那么每一个学生object便都可以继承这个method，而更改的时候也只需要改class内的即可。
+    </p>
+    <pre>
+      class Student : extneds Person
+        properties 
+          year
+        constructor
+          Student(name,year)
+        methods
+          introduceSelf()
+          canStartClub(){
+            return this.year > 1
+          }
+    </pre>
+    <p>
+      现在基本的一个学生类就算写完了，但是此时其他的代码依然有权限获得object的internal
+      state，让我们把希望变成private的property加上一个<code>private</code>。
+    </p>
+    <pre>
+      class Student : extneds Person
+      properties 
+        private year
+      constructor
+        Student(name,year)
+      methods
+        introduceSelf()
+        canStartClub(){
+          return this.year > 1
+        }
+    </pre>
+    <p>
+      这个时候，year就是private的了，如果我们试图从class外获得year属性，会得到报错
+    </p>
+    <h2>JS and OOP</h2>
+    <p>
+      上面讲的都是面对对象编程的基本概念，而对于JS来说，之前讲过的constructor和prototype也是一种OOP的概念：
+    </p>
+    <ul>
+      <li>
+        <b>constructor</b
+        >在JS内提供了一种类似class的概念，我们可以通过它来定义object的基本框架和属性。但是prototype也可以用上，假设一个method是在constructor的prototype内定义的，那么我们不需要在constructor内单独定义它，因为所有的object都可以通过prototype来得到这个method
+      </li>
+      <li>
+        <b>prototype chain</b>则类似inheritance的概念，假设我们有一个student
+        object，其prototype是<code>person</code>，那么这个student
+        object便可以继承里面的name属性，且覆写<code>introduceSelf()</code>
+      </li>
+    </ul>
+    <p>
+      但是虽然这些是有联系的，他们和传统的OOP依旧不太一样。首先在class-based
+      OOP内，class和object是分开的两个construct，而object永远是class创造出的实例。并且定义一个class和实例化一个object的语法是明显不同的。但是在JS内，我们经常脱离class创建object，比如使用函数或者literal，这种用法使得JS比传统OOP更简洁
+    </p>
+    <p>
+      然后，虽然prototype chain看起来是一个inheritance
+      hierarchy，但它依然与传统的oop概念不同。当一个subcalss被实例化时，一个object包含着subclass和更高阶层的class内的properties均会被创造。但是对于prototype来说，每一层hierarchy都是由一个单独的object代表，而他们均由<code>__proto__</code>连接到一起。这种prototype
+      chain的概念更加类似是<b>delegation</b>而不是inheritance。delegation的概念是，当一个object需要完成某项任务时，它可以向下属的object要求完成（delegate
+      to another
+      object)。在很多时候，delegation是一个比inheritance更加灵活的链接object的办法，比如说我可以在object运行的同时更改下属的delegate
+    </p>
+    <p>
+      也就是说，在JS内，OOP的实现方式是constructor和prototype，他们虽然和传统oop概念不同，但是却也可以完成OOP，甚至完成的更好
+    </p>
+  </body>
+</html>
