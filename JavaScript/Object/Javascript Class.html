@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>classes in JS</title>
+  </head>
+  <body>
+    <h1>JS classes</h1>
+    <p>
+      在<a href="object oriented programming.html">上篇文章</a
+      >我们讲过了基本的OOP概念，和如何使用JS内的prototype和constructor来实现oop，但是JS依旧也有实现传统oop的办法，即使他们依旧是prototypes。
+    </p>
+    <h2>Class & constructors</h2>
+    <p>
+      我们可以使用<code>class</code>关键词来宣告class，依旧是前面的person概念，把他从pseudocode转化成JS：
+    </p>
+    <pre>
+      class Person{
+        name;
+        
+        constructor(name){
+          this.name = name;
+        }
+        
+        introduceSelf(){
+          console.log("Hi I'm ${this.name}");
+        }
+      }
+    </pre>
+    <p>
+      上面的代码定义了一个叫做<code>Person</code>的类，其中包含了<code
+        >name</code
+      >
+      property，一个接受<code>name</code>后用来实例化新object的constuctor和一个<code>introduceSelf()</code>函数
+    </p>
+    <p>
+      需要注意的是，第一行的<code>name;</code>是可以忽略掉的，因为在constructor实例化新object时会接受一个name值并且使用
+      <code>this.name = name</code
+      >，也就是自动创建了name这个属性。但是写出来也不会有什么坏处，甚至还可以让你的代码可读性更强。
+    </p>
+    <p>
+      而里面的constructor则和普通class外的constructor一样，将会创建一个新的object，链接<code>this</code>然后运行constructor内的代码，返回新object。根据上面的class
+      declaration，我们可以定义一个新的Person instance如下：
+    </p>
+    <pre>
+      const chalin = new Person('chalin');
+
+      chalin.introduceSelf()
+    </pre>
+    <p>
+      假设在class内没有constructor，那么会有一个默认的constructor自动生成用于初始化和实例化，关键词就是class名
+    </p>
+    <pre>
+      class Char {
+        idle() {
+          console.log("I'm resting");
+        }
+      }
+
+      const noelle = new Char();
+      noelle.idle();
+    </pre>
+    <h2>Inheritance</h2>
+    <p>根据上面的person类，我们来往下定义一个professor的subclass：</p>
+    <pre>
+      class Professor extends Person {
+        teaches;
+
+        constructor(name, teaches) {
+          super(name);
+          this.teaches = teaches;
+        }
+        introduceSelf() {
+          console.log(
+            `I'm ${this.name} and I will be your prof for this year's ${this.teaches}`
+          );
+        }
+
+        mark(homework) {
+          const grade = Math.floor(Math.random() * 100 + 1);
+          console.log(grade);
+        }
+      }
+    </pre>
+    <p>
+      在上面我们使用了<code>extends</code>关键词来代表新的class是一个继承了Person的class。然后因为professor类需要新的教学领域属性，因此直接加入<code>teaches</code>属性在class内
+    </p>
+    <p>
+      然后重点来了，在使用<code>extends</code>时，默认来说教授类是拥有了superclass，也就是人类的属性。但是在此如果我想要创造一个constructor，并且可以在实例化的时候直接定义名字和教学领域时，<b
+        >我们需要使用<code>super</code>关键词来获得更高阶层的class的内容。</b
+      >
+    </p>
+    <p>
+      可以看到我们在后面还覆写了introduceSelf()函数，以及新增了一个mark()函数。现在我们就可以根据class来创建professor实例了
+    </p>
+    <pre>
+      const zhongli = new Professor('zhongli', 'history');
+      zhongli.introduceSelf();
+      zhongli.mark('my homework')
+    </pre>
+    <h2>Encapsulation</h2>
+    <p>
+      最后则是封装了，之前介绍过的例子是将学生的年级变成了private
+      variable，而在这里我们把prof的教学领域和改分method都改成私有（使用井号<code>#</code>)：
+    </p>
+    <pre>
+      class Professor extends Person {
+        #teaches;
+
+        constructor(name, teaches) {
+          super(name);
+          this.teaches = teaches;
+        }
+        introduceSelf() {
+          console.log(
+            `I'm ${this.name} and I will be your prof for this year's ${this.teaches}`
+          );
+        }
+
+        #mark(homework) {
+          const grade = Math.floor(Math.random() * 100 + 1);
+          console.log(grade);
+        }
+      }
+    </pre>
+    <p>
+      这个时候如果试图从函数外部获得professor的teaches，或运行mark()函数，那么会得到syntax
+      error。
+    </p>
+    <h3>关于super的补充</h3>
+    <p>
+      在对应的练习内，第二个问题需要我设置一个默认值给superclass内的property，这里不能使用this.name
+      =
+      name。因为name属性来源于上层，需要做的是将值通过<code>super</code>传递给上层的constructor，所以假设我有一个
+      shape的类，里面包含了name，sides和sidelength三个属性，而我想创造一个正方形类，里面包含的默认name,sides，而只需要定义sideLength，结果是只用写<code
+        >super('square', 4, sideLength)</code
+      >在constructor内即可，因为js会把这些值送到上层的constructor内
+    </p>
+    <pre>
+      class Shape{
+        name;
+        sides;
+        sideLength;
+        
+        constructor(name, sides, sideLength) {
+          this.name = name;
+          this.sides = sides;
+          this.sideLength = sideLength;
+        }
+      }
+
+      class Square extends Shape{
+        
+       constructor(sideLength){
+        super('square', 4, sideLength)
+       }
+      }
+    </pre>
+    <script>
+      class Person {
+        name;
+
+        constructor(name) {
+          this.name = name;
+        }
+
+        introduceSelf() {
+          console.log("Hi I'm ${this.name}");
+        }
+      }
+
+      const chalin = new Person("chalin");
+      chalin.introduceSelf();
+
+      class Char {
+        idle() {
+          console.log("I'm resting");
+        }
+      }
+
+      const noelle = new Char();
+      noelle.idle();
+
+      class Professor extends Person {
+        teaches;
+
+        constructor(name, teaches) {
+          super(name);
+          this.teaches = teaches;
+        }
+        introduceSelf() {
+          console.log(
+            `I'm ${this.name} and I will be your prof for this year's ${this.teaches}`
+          );
+        }
+
+        mark(homework) {
+          const grade = Math.floor(Math.random() * 100 + 1);
+          console.log(grade);
+        }
+      }
+    </script>
+  </body>
+</html>
