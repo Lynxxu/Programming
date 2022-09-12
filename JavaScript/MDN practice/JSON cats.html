@@ -37,17 +37,29 @@
       let male = 0;
 
       // Add your code here
-      const catObjs = JSON.parse(catString);
+      const catArray = JSON.parse(catString);
+      let femaleNum = 0;
+      let maleNum = 0;
 
-      for (i = 0; i === catObjs.length - 1; i++) {
-        if (i != catObjs.length) {
-          let name = catObjs.name;
-          motherInfo = `${motherInfo}, ${name}`;
+      for (i = 0; i <= catArray.length - 1; i++) {
+        if (i != catArray.length - 1) {
+          motherInfo += `${catArray[i].name}, `;
         } else {
-          let name = catObjs.name;
-          motherInfo = `${motherInfo} and ${name}`;
+          motherInfo += `and ${catArray[i].name}.`;
+        }
+
+        for (kitten of catArray[i].kittens) {
+          if (kitten.gender == "f") {
+            femaleNum++;
+          } else {
+            maleNum++;
+          }
         }
       }
+      kittenInfo = `
+      total number of kittens: ${
+        femaleNum + maleNum
+      }, in which ${femaleNum} are female and ${maleNum} are male`;
 
       // Don't edit the code below here!
 
