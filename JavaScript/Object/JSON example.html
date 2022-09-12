@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      html {
+        background-color: antiquewhite;
+      }
+      body {
+        margin: auto;
+        width: 90%;
+      }
+      section {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+      article {
+        background-color: rgba(0, 0, 0, 0.1);
+        padding: 5px;
+      }
+    </style>
+    <title>Document</title>
+  </head>
+  <body>
+    <header></header>
+
+    <section></section>
+
+    <script>
+      async function populate() {
+        const requestURL = "JSON.json";
+        const request = new Request(requestURL);
+        const response = await fetch(request);
+        const gacha = await response.json();
+
+        populateHeader(gacha);
+        populateData(gacha);
+      }
+
+      // enable this to see parse method
+      // async function populate() {
+      //   const requestURL = "JSON.json";
+      //   const request = new Request(requestURL);
+      //   const response = await fetch(request);
+      //   const gachaText = await response.text();
+
+      //   const gacha = JSON.parse(gachaText);
+      //   populateHeader(gacha);
+      //   populateData(gacha);
+      // }
+
+      function populateHeader(obj) {
+        const header = document.querySelector("header");
+        const myH1 = document.createElement("h1");
+        myH1.textContent = obj.uid;
+        header.appendChild(myH1);
+
+        const myPara = document.createElement("p");
+        myPara.textContent = `Language: ${obj.lang} // Formed: ${obj.export_time}`;
+        header.appendChild(myPara);
+      }
+
+      function populateData(obj) {
+        const section = document.querySelector("section");
+        const pulls = obj.list;
+
+        for (const pull of pulls) {
+          const myArticle = document.createElement("article");
+          const myH2 = document.createElement("h2");
+          const myPara1 = document.createElement("p");
+          const myPara2 = document.createElement("p");
+          const myList = document.createElement("ul");
+
+          myH2.textContent = pull.time;
+          myPara1.textContent = `id: ${pull.id}`;
+          myPara2.textContent = "item:";
+
+          const items = pull.item;
+          for (const item of items) {
+            const listItem = document.createElement("li");
+            listItem.textContent = item;
+            myList.appendChild(listItem);
+          }
+
+          myArticle.appendChild(myH2);
+          myArticle.appendChild(myPara1);
+          myArticle.appendChild(myPara2);
+          myArticle.appendChild(myList);
+
+          section.appendChild(myArticle);
+        }
+      }
+      populate();
+    </script>
+  </body>
+</html>

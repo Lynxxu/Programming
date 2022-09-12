@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Working with JSON</title>
+  </head>
+  <body>
+    <h1>JSON</h1>
+    <p>
+      JSON,也就是JavaScript Object
+      Notation，是一种定义JS对象的标准文本格式，一般用于在网页应用程序传输数据（比如将数据从服务端送到客户端网页）。
+      需要注意的是，即使叫做JSON，这种文件是可以独立于JS使用的，并且许多编程环境会特意注重JSON的读取，解析和生成
+    </p>
+    <p>
+      JSON是由字符串组成的，若我们需要把他变成JS的原生对象，则需要转换，但是问题不大，因为JS自身提供了转换方式。将JS
+      object变成JSON的过程被称为<b>serialization</b>，相反则是<b>deserialization</b>。一个JS文件类似如下：
+    </p>
+    <pre>
+      {
+        "info": {
+          "uid": "178461181",
+          "lang": "zh-cn",
+          "export_time": "2022-09-11 15:00:49",
+          "export_app": "genshin-wish-export",
+          "export_app_version": "0.8.7",
+          "uigf_version": "2.1"
+        },
+        "list": [
+          {
+            "gacha_type": "200",
+            "time": "2021-03-15 10:33:58",
+            "name": "黑缨枪",
+            "item_type": "武器",
+            "rank_type": "3",
+            "id": "1000000000000000001",
+            "uigf_gacha_type": "200"
+          },
+          {
+            "gacha_type": "200",
+            "time": "2021-03-15 10:33:58",
+            "name": "弹弓",
+            "item_type": "武器",
+            "rank_type": "3",
+            "id": "1000000000000000002",
+            "uigf_gacha_type": "200"
+          },
+          {
+            "gacha_type": "200",
+            "time": "2021-03-15 10:33:58",
+            "name": "飞天御剑",
+            "item_type": "武器",
+            "rank_type": "3",
+            "id": "1000000000000000003",
+            "uigf_gacha_type": "200"
+          }
+        ]
+      }
+    </pre>
+    <p>
+      假设我们把上面的JSON导入到JS文件内，并且把他称为<code>gachaData</code>，则我们可以使用正常的JS对象语法来获得里面的内容，比如<code>gachaData.uid</code>和<code
+        >gachaData['lang']</code
+      >
+    </p>
+    <p>
+      如果想要继续往下提取内容，那么依然是相同的语法，只不过使用的是bracket
+      notation，假设我想知道这个用户的第二抽是什么东西，那么需要使用<code
+        >gachaData['list'][1]['name']</code
+      >
+    </p>
+    <h3>Arrrays as JSON</h3>
+    <p>
+      JSON文本的结构很像JS的对象，但是我们也可以把他改成，或从JS内导出array，一个JSON文件如下，若将他载入JS后，只需要使用正常的数组语法就可以了，比如<code
+        >[0]['powers'][1]</code
+      >
+    </p>
+    <pre>
+    [
+      {
+        "name": "Molecule Man",
+        "age": 29,
+        "secretIdentity": "Dan Jukes",
+        "powers": [
+          "Radiation resistance",
+          "Turning tiny",
+          "Radiation blast"
+        ]
+      },
+      {
+        "name": "Madame Uppercut",
+        "age": 39,
+        "secretIdentity": "Jane Wilson",
+        "powers": [
+          "Million tonne punch",
+          "Damage resistance",
+          "Superhuman reflexes"
+        ]
+      }
+    ]
+    </pre>
+    <h3>Notes</h3>
+    <p>需要注意下面几个要点：</p>
+    <ul>
+      <li>
+        JSON是一个纯文本文件，包含特定的data
+        format，也就是说只有properties没有methods
+      </li>
+      <li>JSON需要双引号来定义字符串和属性名，单引号不行</li>
+      <li>
+        假设需要手动更改js文件，注意语法，如果写错了任意一个逗号或者分号都会导致整个JSON出错。
+        不过电脑生成的JS是不太会出错的，如果需要检查JSON文件的语法，可以使用类似<a
+          href="https://jsonlint.com/"
+          >JSONlint</a
+        >这样的validator
+      </li>
+      <li>
+        JSON可以是任何一种有效的数据类型，比如一个简单的string和数字也是JSON
+      </li>
+      <li>在JS内，object的properties不需要引号，但是JSON是需要的</li>
+    </ul>
+    <h2>Example</h2>
+    <p>
+      打开<a href="JSON example.html">例子</a
+      >，可以看到一个简易的抽卡界面，内含了uid，前几次抽卡信息等等。这个页面的html框架仅仅包含了一个header，一个section和一个script，所有的内容均由JSON和JS实现，下面是代码
+    </p>
+    <pre>
+      {
+        "uid": "178461181",
+        "lang": "zh-cn",
+        "export_time": "2022-09-11 15:00:49",
+        "export_app": "genshin-wish-export",
+        "export_app_version": "0.8.7",
+        "uigf_version": "2.1",
+        "list": [
+          {
+            "gacha_type": "200",
+            "time": "2021-03-15 10:33:58",
+            "id": "1000000000000000001",
+            "uigf_gacha_type": "200",
+            "item": ["黑缨枪", "武器", "3"]
+          },
+          {
+            "gacha_type": "200",
+            "time": "2021-03-15 10:33:58",
+            "id": "1000000000000000002",
+            "uigf_gacha_type": "200",
+            "item": ["弹弓", "武器", "3"]
+          },
+          {
+            "gacha_type": "200",
+            "time": "2021-03-15 10:33:58",
+            "id": "1000000000000000003",
+            "uigf_gacha_type": "200",
+            "item": ["飞天御剑", "武器", "3"]
+          }
+        ]
+      }
+    </pre>
+    <p>还有JS：</p>
+    <pre>
+      async function populate() {
+        const requestURL = "JSON.json";
+        const request = new Request(requestURL);
+        const response = await fetch(request);
+        const gacha = await response.json();
+
+        populateHeader(gacha);
+        populateData(gacha);
+      }
+
+      function populateHeader(obj) {
+        const header = document.querySelector("header");
+        const myH1 = document.createElement("h1");
+        myH1.textContent = obj.uid;
+        header.appendChild(myH1);
+
+        const myPara = document.createElement("p");
+        myPara.textContent = `Language: ${obj.lang} // Formed: ${obj.export_time}`;
+        header.appendChild(myPara);
+      }
+
+      function populateData(obj) {
+        const section = document.querySelector("section");
+        const pulls = obj.list;
+
+        for (const pull of pulls) {
+          const myArticle = document.createElement("article");
+          const myH2 = document.createElement("h2");
+          const myPara1 = document.createElement("p");
+          const myPara2 = document.createElement("p");
+          const myPara3 = document.createElement("p");
+          const myList = document.createElement("ul");
+
+          myH2.textContent = pull.time;
+          myPara1.textContent = `id: ${pull.id}`;
+          myPara3.textContent = "item:";
+
+          const items = pull.item;
+          for (const item of items) {
+            const listItem = document.createElement("li");
+            listItem.textContent = item;
+            myList.appendChild(listItem);
+          }
+
+          myArticle.appendChild(myH2);
+          myArticle.appendChild(myPara1);
+          myArticle.appendChild(myPara2);
+          myArticle.appendChild(myPara3);
+          myArticle.appendChild(myList);
+
+          section.appendChild(myArticle);
+        }
+      }
+      populate();
+    </pre>
+    <p>
+      让我们一点一点解析，首先最开始，这个JSON的结构比较简单，是一个嵌套的property和array，最前面的是抽卡用户信息，最后一个项是抽卡的结果且里面包含了嵌套array，也就是抽到的物品的信息。
+    </p>
+    <p>
+      首先第一件事，我们得把JSON转化成JS object，使用的是<code
+        ><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API"
+          >Fetch</a
+        ></code
+      >API，这个API可以让我们联网从服务器获取信息，也可以获得本地的文件
+    </p>
+    <pre>
+      async function populate() {
+        const requestURL = "JSON.json";
+        const request = new Request(requestURL);
+        const response = await fetch(request);
+        const gacha = await response.json();
+
+        populateHeader(gacha);
+        populateData(gacha);
+      }
+    </pre>
+    <p>
+      上面的代码首先开头为async，代表asynchronous函数，这里先按下不提，但是需要知道的是要在使用了<code
+        >fetch</code
+      >
+      API的函数前面加上一个<code>async</code>关键词，然后再使用asynchronous函数前面加上<code
+        >await</code
+      >
+    </p>
+    <p>
+      第二行代码，宣告了<code>requestURL</code>函数，用于储存我的JSON文件位置。第三行代码用刚刚的文件位置来初始化一个新的Request
+      object。然后使用<code>fetch()</code>函数，会返回一个Response
+      object，最后使用<code>Response</code> object的<code>json()</code>函数
+    </p>
+    <p>
+      到了最后，我们的gacha函数将会包含来源于JSON的JS
+      object，我们将会把刚刚的这个object带入两个函数，第一个填充header，第二个创建info
+      card并且放入section
+    </p>
+    <h3>Header</h3>
+    <p>
+      现在重点来了，前面使用fetch
+      api的函数块使用了两个<code>populate</code>函数，分别对应生成header和footer的内容。首先来看header的内容生成：
+    </p>
+    <pre>
+      function populateHeader(obj) {
+        const header = document.querySelector("header");
+        const myH1 = document.createElement("h1");
+        myH1.textContent = obj.uid;
+        header.appendChild(myH1);
+
+        const myPara = document.createElement("p");
+        myPara.textContent = `Language: ${obj.lang} // Formed: ${obj.export_time}`;
+        header.appendChild(myPara); 
+      }
+    </pre>
+    <p>
+      这里面我们首先使用queryselector来选择中header，然后继续使用document
+      api创建一个h1元素。现在把刚刚创造的h1元素的textContent改成用户的uid，也就是obj.uid（obj是函数的参数，为json文件的object）。
+      再把它加在header上。下面的就比较简单了，创造一个p元素，放在变量里面，把他的textContent改成用户的语言，服务器和生成时间，同样使用<code>appendChild()</code>加载在header
+    </p>
+    <h3>pull info - body</h3>
+    <p>
+      然后就是生成抽卡详情了，这里将会把他以card的形式展现出来。使用的代码如下：
+    </p>
+    <pre>
+      function populateData(obj) {
+        const section = document.querySelector("section");
+        const pulls = obj.list;
+
+        for (const pull of pulls) {
+          const myArticle = document.createElement("article");
+          const myH2 = document.createElement("h2");
+          const myPara1 = document.createElement("p");
+          const myPara2 = document.createElement("p");
+          const myList = document.createElement("ul");
+
+          myH2.textContent = pull.time;
+          myPara1.textContent = `id: ${pull.id}`;
+          myPara2.textContent = "item:";
+
+          const items = pull.item;
+          for (const item of items) {
+            const listItem = document.createElement("li");
+            listItem.textContent = item;
+            myList.appendChild(listItem);
+          }
+
+          myArticle.appendChild(myH2);
+          myArticle.appendChild(myPara1);
+          myArticle.appendChild(myPara2);
+          myArticle.appendChild(myList);
+
+          section.appendChild(myArticle);
+        }
+      }
+    </pre>
+    <p>
+      开头还是一样，首先是写函数的header，将section存在变量内，然后使用<code>pulls</code>来储存object的list属性（也就是一个array，包含着抽卡数据）
+    </p>
+    <p>
+      后面重点来了，写一个for-of循环，因为pulls是一个array，我们可以在array里面进行遍历，在每一次循环中：
+    </p>
+    <ol>
+      <li>
+        创造一个article元素，一个h2元素，两个p元素和一个ul元素，将他们分别命名储存在不同的变量下
+      </li>
+      <li>
+        将h2的内容定义成抽卡时间，把第一个p设置成抽卡的id，第2个p写<i>item:</i>，用于准备下面的详细抽取信息：
+      </li>
+      <li>
+        把item的详情，也就是object里面的<code>item</code>
+        array储存到变量内，在写一个for循环嵌套在内，里面把list的每一个信息加在循环内创建的li里面。然后把li加在之前生成的ul内
+      </li>
+      <li>
+        最后把这些元素全部加到<code>myArticle</code>内，得到一张单独的抽卡信息，把他加到section里面
+      </li>
+    </ol>
+    <p>
+      上面的一次循环就是生成了一个单独的抽卡信息卡片，放在section内，最后需要的就仅仅是运行完成了的函数，即<code
+        >populate()</code
+      >
+    </p>
+    <h2>convert object & text</h2>
+    <p>
+      在上面的例子来说，我们获得JS
+      object的办法比较简单，因为我们直接使用了<code>response.json()</code>来把本地的文件给转化成了JS
+      object，但是有的时候我们可能会接受一个未处理过的JSON字符串，而我们需要把其转化成object。这个时候就可以使用JS内置的两个转换函数了：
+    </p>
+    <ul>
+      <li>
+        <code
+          ><a
+            href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse"
+            >parse()</a
+          ></code
+        >，接受一个JSON string，将其转化成对应的JS object
+      </li>
+      <li>
+        <code
+          ><a
+            href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"
+            >stringify()</a
+          >相反，接受一个object，转化成JSON字符串</code
+        >
+      </li>
+    </ul>
+    <p>首先来看看parse():</p>
+    <pre>
+      async function populate() {
+        const requestURL = "JSON.json";
+        const request = new Request(requestURL);
+        const response = await fetch(request);
+        const gachaText = await response.text();
+
+        const gacha = JSON.parse(gachaText);
+        populateHeader(gacha);
+        populateData(gacha);
+      }
+    </pre>
+    <p>
+      可以看到基本的逻辑是一样的，首先确定提取的位置，储存在变量内，但是这里不同的是，我们提取的是文本形式的JSON，而不是JSON文件。因此我们多加了一行代码，把提取的文本转化成了object，存在变量内
+    </p>
+    <p>
+      然后就是相反的<code>stringify()</code>了，这个比较简单，随便写一个object，把他导入进函数后可以看出来得到的是一个字符串，而不是object。s
+    </p>
+    <pre>
+      let myObj = {name: 'chalin', age: '99'};
+      let myJsonString = JSON.stringify(myObj);
+      console.log(myJsonString);
+    </pre>
+  </body>
+</html>
