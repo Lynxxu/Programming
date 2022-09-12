@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object building practice</title>
+  </head>
+  <body>
+    <h1>object building practice</h1>
+    <p>在前面的几篇文章基本讲过了JS的OOP概念与实战，现在来看看几个例子</p>
+    <h2>Bouncing balls</h2>
+    <p>
+      在这个例子内我们会写一个网页的弹球，使用的是<code
+        ><a
+          href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Drawing_graphics"
+          >Canvas API</a
+        ></code
+      >来画出求，以及<code
+        ><a
+          href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame"
+          >requestAnimationFrame API</a
+        ></code
+      >来把整个画布动起来。
+    </p>
+    <p>
+      首先开头，我们的script选择了canvas元素，存在变量内，然后使用<code
+        >getContext()</code
+      >
+      method来给我们一个context，这个时候<code>ctx</code>，作为储存object的变量，也就变成了我们使用的画布。
+      最后我们定义了width和height两个变量，并且把它设为canvas的长宽和浏览器的viewport的长宽
+    </p>
+    <pre>
+      const canvas = document.querySelector('canvas');
+      const ctx = canvas.getContext('2d');
+
+      const width = canvas.width = window.innerWidth;
+      const height = canvas.height = window.innerHeight;
+    </pre>
+    <p>
+      然后我们创建两个函数，一个用于生成某范围内的随机数，另一个生成随机rgb颜色的字符串
+    </p>
+    <pre>
+      function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      
+      function randomRGB() {
+        return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
+      }
+    </pre>
+    <h2>Modelling a ball</h2>
+    <p>
+      现在画布已经设置好了，而两个helper函数也准备好了，我们就可以开始画和模拟球了。按照OOP的概念，首先我们写一个球的类：
+    </p>
+    <pre>
+      class Balls {
+        constructor(x, y, velX, velY, color, size) {
+          this.x = x;
+          this.y = y;
+          this.velX = velX;
+          this.velY = velY;
+          this.color = color;
+          this.size = size;
+        }
+      }
+    </pre>
+    <p>
+      可以看到这个类目前很简单，只是包含了一个constructor和几个初始的properties，其中<code>x</code>，<code>y</code>分别对应球的x,y位置，然后是<code>velX</code>和<code>velY</code>，分别对应x和y的速度，最后则是颜色和尺寸。这些初始设置完成后我们就可以开始写入method来生成球了
+    </p>
+    <h3>Draw the balls</h3>
+    <p>在上面的类里面，我们加入一个<code>draw()</code>函数用于把球画在屏幕上</p>
+    <pre>
+      draw() {
+        ctx.beginPath();
+        ctx.fillStyle = this.color;
+        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    </pre>
+    <p>在上面的函数内，我们使用的canvas API解析如下：</p>
+    <ul>
+      <li>使用<code>beginPath()</code>来告诉电脑我们想要创建新的图像</li>
+      <li>
+        使用<code>fillStyle</code>属性来定义我们想画的颜色，而我们在class内定义了，所以直接使用this.color即可
+      </li>
+      <li>
+        使用<code>arc()</code>来画出一个弧形，其接受的值分别对应：
+        <ul>
+          <li>弧心的x，y值，我们直接使用之前定义的x，y即可</li>
+          <li>弧的半径，也就是<code>size</code>属性</li>
+          <li>
+            最后两个属性定义的是弧开始和结束的角度，因为我们想要画的是圆形，所以直接定义0和360为开头结尾就是一个圆形了，注意这里用的是radian。
+          </li>
+        </ul>
+      </li>
+      <li>
+        最后使用<code>fill()</code>
+        method，基本意思是告诉电脑我们要开始画了，把刚刚使用<code>beginPath()</code>定义的path来使用<code>fillStyle</code>填充。
+      </li>
+    </ul>
+    <p>
+      到了现在我们就已经可以生成球了，只需要使用之前的constructor来创建一个球，然后使用<code
+        >draw()</code
+      >
+      method来完成绘画即可，比如下面的例子就是在(300,
+      400)处生成一个xy初始速度为5，半径为10的的古董白球
+    </p>
+    <pre>
+      const testBall = new Ball(300, 400, 5, 5, 'antiquewhite', 10)
+      testBall.draw()
+    </pre>
+    <h3>Update ball's data</h3>
+    <p>
+      我们上面写的球仅仅是一个静态的球，如果我们想要他动起来，则需要手动更改它的位置，比如写一个<code>update()</code>函数
+    </p>
+    <pre>
+ 
+      update() {
+        if (this.x + this.size >= width) {
+          this.velX = -this.velX;
+        }
+
+        if (this.x - this.size <= 0) {
+          this.velX = -this.velX;
+        }
+
+        if (this.y + this.size >= height) {
+          this.velY = -this.velY;
+        }
+
+        if (this.y - this.size <= 0) {
+          this.velY = -this.velY;
+        }
+        this.x += this.velX;
+        this.y += this.velY;
+      }
+    }
+    </pre>
+    <p>
+      上面的update
+      method内，前四个if判断用于检测球是不是已经碰到了边界，如果是的话就把他们的原速度给倒过来。而在最后两行代码则是根据速度来更新x和y的位置以保证每次使用method后球的位置改变了
+    </p>
+    <h2>Animating the ball</h2>
+    <p>
+      重点来了，现在来生成动效，让球真的动起来，首先我们得有一个储存我们的球的地方，然后把他填满球。在这里使用一个array来代表吧：
+    </p>
+    <pre>
+      const balls = [];
+      while (balls.length < 25) {
+        const size = random(5, 20);
+        const ball = new Ball(
+          random(0 + size, width - size),
+          random(0 + size, width - size),
+          random(-7, 7),
+          random(-7, 7),
+          randomRGB(),
+          size
+        );
+        balls.push(ball);
+      }
+    </pre>
+    <p>
+      其实这里的逻辑很简单，首先创建一个数组储存balls，然后再写一个while循环来生成随机的球，
+      将size作为随机数固定在一次iteration内，然后使用size来定义constructor内参数（rgb用之前写的函数来定义）。
+      最后使用<code>push()</code>来把一次循环生成的球塞入array底部
+    </p>
+    <p>下一步则是把这些生成的球画出来。这里依旧是写一个函数：</p>
+    <pre>
+      function loop() {
+        ctx.fillStyle = "rgba(0,0,0, 0.25)";
+        ctx.fillRect(0, 0, width, height);
+
+        for (const ball of balls) {
+          ball.draw();
+          ball.update();
+        }
+        requestAnimationFrame(loop);
+      }
+    </pre>
+    <p>
+      所有动效程序一般都会有一个animation
+      loop，用于在程序内更新信息并且渲染在屏幕上，这是很多网游和其他程序的根基。在这里写的<code>loop()</code>函数有以下作用：
+    </p>
+    <ul>
+      <li>
+        将canvas的fill
+        color设置成半透明黑色，然后画一个长方形盖住整个画布，用于把上一帧的内容隐藏起来，如果把这个长方形去掉的话，得到的就是一长串移动的轨迹了。因为我们这里实际上是在生成一帧一帧的画面，我们把纯黑的fill
+        color设置的是半透明，原因很简单，因为是一帧一帧的画，半透明就允许前几帧透出来，形成拖影的感觉，如果改成不透明纯黑就没有拖影了。
+      </li>
+      <li>
+        for循环遍历ball
+        array内的每一个ball，将其画出来且update，分别调用之前写的两个函数来生成和更新
+      </li>
+      <li>
+        使用<code>requestAnimationFrame()</code>
+        method来再次运行一次函数。这个method的作用是重复调用函数，当我把它写在了同名函数内，当该函数被调用时，它会将它所在的函数运行，类似一个死循环，因此就得到了一个很棒的动画效果
+      </li>
+    </ul>
+    <p>
+      最后只需要运行<code>loop()</code>便可以得到一个差不多已经完好的动画效果了
+    </p>
+    <h2>Add collision detect</h2>
+    <p>
+      现在基本的框架已经结束了，可以来做点复杂有趣的，比如探测球是否相撞了，如果是的话，做什么操作。
+    </p>
+    <pre></pre>
+  </body>
+</html>
+<!-- https://www.lynx1027.com/JavaScript/Object/bouncing%20ball.html -->
