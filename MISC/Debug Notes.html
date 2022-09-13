@@ -230,5 +230,37 @@
       还有另一个思路,当我将这段问题代码塞入codepen时,发现codepen并没有这个问题,且使用手机,ipad浏览器打开均无问题,
       这个问题基本上可以结论是由于chrome的某个bug
     </p>
+    <h3>嵌套内的const</h3>
+    <p>
+      在2022-09-12，我试图完成mdn的<a
+        href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Adding_bouncing_balls_features"
+        >练习</a
+      >,里面要求我写一个圈圈，碰到圈后球就消失，不过我写的代码怎么样都不能移动圈圈。源码如下
+    </p>
+    <pre>
+      function loop() {
+        ctx.fillStyle = "rgba(0,0,0, 0.25)";
+        ctx.fillRect(0, 0, width, height);
+
+        const evilCircle = new EvilCircle(random(0, width), random(0, height));
+        for (const ball of balls) {
+          if (ball.exists) {
+            ball.draw();
+            ball.update();
+            ball.collisionDetect();
+          }
+        }
+        evilCircle.draw();
+        evilCircle.checkBounds();
+        evilCircle.collisionDetect();
+
+        requestAnimationFrame(loop);
+      }
+    </pre>
+    <p>
+      这个函数为启动函数，使用一次后将会启动整个canvas，动效和evilcircle。由于balls是随机生成数量但evil
+      circle只需要一个，所以理论上来说只需要定义一次evilcircle。但是在这里我把他放进了函数的定义内。因为我使用了<code>requestAnimationFrame()</code>，所以这个函数会无限循环，意思是我的evil
+      circle也会无限循环生成，看起来就没有变化
+    </p>
   </body>
 </html>

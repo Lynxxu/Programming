@@ -204,7 +204,72 @@
     <p>
       现在基本的框架已经结束了，可以来做点复杂有趣的，比如探测球是否相撞了，如果是的话，做什么操作。
     </p>
-    <pre></pre>
+    <pre>
+      collisionDetect() {
+        for (const ball of balls) {
+          if (this !== ball) {
+            const dx = this.x - ball.x;
+            const dy = this.y - ball.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance <= this.size + ball.size) {
+              let bVelX = calcCollisionVelb(
+                this.size,
+                this.velX,
+                ball.size,
+                ball.velX
+              );
+
+              let bVelY = calcCollisionVelb(
+                this.size,
+                this.velY,
+                ball.size,
+                ball.velY
+              );
+
+              this.velX = calcCollisionVelt(this.velX, ball.velX, bVelX);
+              this.velY = calcCollisionVelt(this.velY, ball.velY, bVelY);
+              ball.velX = bVelX;
+              ball.velY = bVelY;
+            }
+          }
+        }
+      }
+    </pre>
+    <p>
+      还是一样，写一个函数在Ball类里面。首先得使用for循环来遍历ball
+      array内的全部ball，其中使用if函数来判断现在的ball是不是和遍历的ball相同，如果是的话就直接跳过去，因为不能自己撞自己。如果不是的话就可以运行某些代码了
+    </p>
+    <p>
+      在这里我做了与MDN不同的反应，MDN将会把产生了碰撞的球改色，但是我打算改成更加科学一点，也就是当球互相碰撞后，根据球的大小和速度来改变碰撞后的结果。不过首先得判断是不是相撞了，
+      在这里用的办法是将两个球的x，y坐标相减后平方相加取平方根，也就是得到了两个球的球心距离。然后用它和两个球的半径和相比，如果大于或等于就代表碰到了
+    </p>
+    <p>
+      若是使用MDN的变色方法，那么直接加一行就可以了<code
+        >ball.color = this.color = randomRGB()</code
+      >，不过我这里改进了一下。根据动能公式和elastic
+      collision的特性推出了两球相撞后的公式并且加到了开头处：
+    </p>
+    <pre>
+      function calcCollisionVelb(mt, vt, mb, vb) {
+        return (2 * mt * vt + mb * vb - mt * vb) / (mt + mb);
+      }
+      function calcCollisionVelt(vt, vb, b) {
+        return vb + b - vt;
+      }
+    </pre>
+    <p>
+      现在有了这两个helper函数，我们就可以把他写入到if后面，把碰撞后的球的速度覆写即可。注意完成了函数以后要加到启动函数的遍历内，以保证一直运行。在这个例子里面则是<code
+        >loop()</code
+      >
+    </p>
+    <p>
+      虽然我写出了原生手段，但是我们可以引用其他的library来实现，比如<a
+        href="https://wellcaffeinated.net/PhysicsJS/"
+        >PhysicsJS</a
+      >, <a href="https://brm.io/matter-js/">matter.js</a>,
+      <a href="https://phaser.io/">phaser</a>
+    </p>
   </body>
 </html>
 <!-- https://www.lynx1027.com/JavaScript/Object/bouncing%20ball.html -->
