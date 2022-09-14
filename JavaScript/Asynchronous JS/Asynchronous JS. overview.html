@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asynchronoous JS</title>
+  </head>
+  <body>
+    <h1>Asynchronoous JS</h1>
+    <p>
+      asynchronous
+      JS，也就是异步编程，是一种允许程序在运行长任务同时也可以响应其他指令。
+      如果不使用异步编程，假设我触发了某个奇长的任务，则在这个任务进行的期间其他的所有元素都无法响应
+    </p>
+    <p>
+      很多浏览器的自带函数，特别是比较有用好玩的那些，很可能会花很长时间，所以他们默认就是异步的。也就是说即使我不打算自己写异步函数，至少也得学习怎么使用他们。比如：
+    </p>
+    <ul>
+      <li>使用<code>fetch()</code>进行HTTP请求</li>
+      <li>使用<code>getUserMedia()</code>来得到用户的麦克风或摄像头权限</li>
+      <li>让用户选择文件<code>showOpenFilePicker()</code></li>
+    </ul>
+    <h2>Synchronous Programming</h2>
+    <p>来看一小段代码：</p>
+    <pre>
+      const name = 'Chalin';
+      const greeting = `Hello, my name is ${this.name}!`
+      console.log(greeting);
+    </pre>
+    <p>
+      在这一段简单的代码内，我们定义了<code>name</code>，然后定义了<code>greeting</code>，其中使用了<code>name</code>。然后将greeting输出到了JS
+      console内。在这一系列步骤内，浏览器是从上往下执行的，在每一行代码内，浏览器将会等待执行完成后才会继续执行下面的代码。有的时候浏览器必须这样做，因为一般来说下面的代码会基于上面的代码。而这就是<b
+        >synchronous Program</b
+      >，即使我们把他写成函数，然后执行函数，依旧也是同步程序
+    </p>
+    <pre>
+      function makeGreeting(name){
+        return `hello, I am ${this.name}`;
+      }
+
+      const name = 'jim';
+      const greeting = makeGreeting(name);
+      console.log(greeting);
+    </pre>
+    <p>
+      在上面，<code>makeGreeting()</code>是一个<b>synchronous function</b
+      >，因为调用者必须等待函数结束运作且返回一个值才能继续。
+    </p>
+    <p>
+      这里来一个例子，假设我写一个非常低效非常冗长的程序，比如下面这个生成一定数量的质数的程序，假设我多生成几个，那么浏览器将会在一段时间内无响应。
+    </p>
+    <label for="quota">Number of primes:</label>
+    <input type="text" id="quota" name="quota" value="1000000" />
+
+    <button id="generate">Generate primes</button>
+    <button id="reload">Reload</button>
+    <textarea id="user-input" rows="5" cols="62">
+Try typing in here immediately after pressing "Generate primes"
+    </textarea>
+    <div id="output"></div>
+
+    <p>而这就是同步编程的弊端，我们需要的程序应该做到以下：</p>
+    <ol>
+      <li>使用函数来启动一个比较长的进程</li>
+      <li>
+        将函数启动进程，然后迅速返回一个值，这样我们的程序就可以继续响应其他events
+      </li>
+      <li>当进程结束后，告诉我们结果</li>
+    </ol>
+    <p>而这几点使用异步编程就可以完美解决了</p>
+    <h2>Event handler</h2>
+    <p>
+      上面的这些概念，仔细一想，是不是其实和event
+      handler比较类似。实际上来说，event
+      handler就是一种异步的概念，我们提供一个会被启动的函数（也就是event
+      handler），然后当这个event
+      hanlder被启动后，附上的函数被执行完成后，event就会被用来提示我们结果了
+    </p>
+    <p>
+      一些早期的异步API就是使用的这个逻辑，比如<code>XMLHttpRequest</code>
+      API允许我们用JS向服务器进行HTTP请求。因为这个操作也许需要一段时间，所以其是异步API，我们只需要向一个<code
+        >XMLHttpRequest</code
+      >
+      Object附上event listener即可得到结果
+    </p>
+    <p>
+      下面就是一个使用了该API的例子，该例子内我们可以点击按钮，此时我们就发送了一个请求，然后一个<code>XMLHttpRequest</code>就生成了，我们将会关注它的<code
+        >loadend</code
+      >
+      event。这其实和之前我们使用过的event
+      handler是一个逻辑的，只不过之前我们的eventlistener是用于探测用户行为，而这里是用来探测object的变化
+    </p>
+    <button id="xhr">Click to start request</button>
+    <button id="reload2">Reload</button>
+
+    <pre readonly class="event-log"></pre>
+    <h2>Callback</h2>
+    <p>
+      callback是一种被用作其他函数参数的特殊函数。它会在某个指定的时间执行。其实event
+      handler就是一种特殊的callback函数。
+    </p>
+    <p>
+      但是，基于callback的函数有的时候会变得很难理解，因为很多时候我们会把某个任务分成许多个异步步骤，比如：
+    </p>
+    <pre>
+      function doStep1(init) {
+        return init + 1;
+      }
+      
+      function doStep2(init) {
+        return init + 2;
+      }
+      
+      function doStep3(init) {
+        return init + 3;
+      }
+      
+      function doOperation() {
+        let result = 0;
+        result = doStep1(result);
+        result = doStep2(result);
+        result = doStep3(result);
+        console.log(`result: ${result}`);
+      }
+      
+      doOperation();      
+    </pre>
+    <p>
+      上面是一个同步函数，仔细一看逻辑很简单，就是把输入的值+1+2+3即可。但是如果我们把他改成使用callback的异步的话，代码如下：
+    </p>
+    <pre>
+      function doStep1(init, callback) {
+        const result = init + 1;
+        callback(result);
+      }
+      
+      function doStep2(init, callback) {
+        const result = init + 2;
+        callback(result);
+      }
+      
+      function doStep3(init, callback) {
+        const result = init + 3;
+        callback(result);
+      }
+      
+      function doOperation() {
+        doStep1(0, (result1) => {
+          doStep2(result1, (result2) => {
+            doStep3(result2, (result3) => {
+              console.log(`result: ${result3}`);
+            });
+          });
+        });
+      }
+      
+      doOperation();      
+    </pre>
+    <p>
+      可以看到代码一下就变成了一个嵌套的屎山，可读性超差且不容易维护，假设某个步骤出了问题，我们可能要每一层排查。也就是因为这些因素，绝大多数现代的异步API不会使用callback。现代异步JS的根基是<code
+        >Promise</code
+      >
+    </p>
+    <script>
+      const MAX_PRIME = 1000000;
+
+      function isPrime(n) {
+        for (let i = 2; i <= Math.sqrt(n); i++) {
+          if (n % i === 0) {
+            return false;
+          }
+        }
+        return n > 1;
+      }
+
+      const random = (max) => Math.floor(Math.random() * max);
+
+      function generatePrimes(quota) {
+        const primes = [];
+        while (primes.length < quota) {
+          const candidate = random(MAX_PRIME);
+          if (isPrime(candidate)) {
+            primes.push(candidate);
+          }
+        }
+        return primes;
+      }
+
+      const quota = document.querySelector("#quota");
+      const output = document.querySelector("#output");
+
+      document.querySelector("#generate").addEventListener("click", () => {
+        const primes = generatePrimes(quota.value);
+        output.textContent = `Finished generating ${quota.value} primes!`;
+      });
+
+      document.querySelector("#reload").addEventListener("click", () => {
+        document.location.reload();
+      });
+
+      const log = document.querySelector(".event-log");
+
+      document.querySelector("#xhr").addEventListener("click", () => {
+        log.textContent = "";
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("loadend", () => {
+          log.textContent = `${log.textContent}Finished with status: ${xhr.status}`;
+        });
+
+        xhr.open(
+          "GET",
+          "https://raw.githubusercontent.com/mdn/content/main/files/en-us/_wikihistory.json"
+        );
+        xhr.send();
+        log.textContent = `${log.textContent}Started XHR request\n`;
+      });
+
+      document.querySelector("#reload2").addEventListener("click", () => {
+        log.textContent = "";
+        document.location.reload();
+      });
+    </script>
+  </body>
+</html>
