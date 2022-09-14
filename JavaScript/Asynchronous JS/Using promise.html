@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promises</title>
+  </head>
+  <body>
+    <h1>How to use promise</h1>
+    <p>
+      <b>Promise</b
+      >是现代异步JS的基础。Promise为异步函数返回的object，内含了进程的现状。当promise返回时，很多时候进程是未完成的，但是promise
+      object提供了methods来处理进程的最终结果，不论成功或失败
+    </p>
+    <p>
+      和callback不同，基于promise的API内，异步函数开启一个进程，然后立刻返回一个<code
+        >Promise</code
+      >
+      object，我们可以向他加上handler，然后这些handlers会在operation结束时执行
+    </p>
+    <h2>fetch() API</h2>
+    <p>
+      在之前的弹球例子内我们就已经见过了<code>fetch()</code>
+      API。在这里我们详细讲一个例子，提取mdn的某个JSON文件。
+    </p>
+    <p>
+      要做到这点，首先我们需要向服务器发送一个HTTP请求，在一个HTTP请求内，我们向服务器发送请求，然后他返回一个response。
+    </p>
+    <pre>
+      const fetchPromise = fetch(
+        "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+      );
+      console.log(fetchPromise);
+
+      fetchPromise.then((response) => {
+        console.log(`Received response ${response.status}`);
+      });
+      console.log("started request");
+    </pre>
+    <p>
+      在这一段代码内，我们使用了<code>fetch()</code>
+      API并且将返回的结果存入<code>fetchPromise</code>变量内，然后立刻log出<code>fetchPromise</code>变量，得到的返回是：<code
+        >Promise { &lt;state&gt;: "pending" }</code
+      >，告诉我们有一个Promise对象，而其含有一个<code>state</code>，值为<code>pending</code>，意思是fetch
+      operation还未完成。然后对promise的变量使用<code>then()</code>
+      method来传入handler function，当这个fetch operation成功后，promise将会call
+      handler，将其带入<code>Response</code>对象（里面含有服务器的response）
+    </p>
+    <p>
+      打开console就看得到结果了，需要注意的是，即使我们还没得到response时，fetch()就得到输出的log。当fetch进行时，程序继续正常运作，而当request结束后返回了一个<code>200</code>，代表成功请求
+    </p>
+    <h2>Linking promises</h2>
+    <p>
+      使用<code>fetch()</code>
+      API的时候，假设我们得到了一个Response，则我们需要使用别的函数来获得response的内容。在这个情况我们需要得到一个JSON文件，所以我们会对object使用<code
+        >json()</code
+      >
+      method。而<code>json()</code>
+      method也是异步，所以这个情况下我们需要连续启动两个异步函数，可以用下面的语法：
+    </p>
+    <pre>
+      const fetchPromise = fetch(
+        "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+      );
+      console.log(fetchPromise);
+
+      fetchPromise.then((response) => {
+        const jsonPromise = response.json();
+        jsonPromise.then((data) => {
+          console.log(data[0].name);
+        })
+      });
+      console.log("started request");
+    </pre>
+    <p>
+      在我们更改后，我们多定义了一个变量，且加了一个<code>then()</code>
+      handler。但是仔细一看，这个结构和之前的callback其实是一样的？的确是一样的，但是<code>then()</code>本身也会返回一个promise，且该promise完成时，会将promise内的函数结果返回，也就是说我们可以把代码重构成下面：
+    </p>
+    <pre>
+      const fetchPromise = fetch(
+        "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+      );
+      console.log(fetchPromise);
+      fetchPromise
+        .then((response) => response.json())
+        .then((data) => console.log(data.uid));
+      console.log("started request");
+    </pre>
+    <p>
+      这个代码看起来就简洁多了，逻辑是第一个then将会返回<code>response.json()</code>，然后第二个then将会以第一个then返回的内容为根基继续。这被称为<b
+        >promise chaining</b
+      >，用这种方式写的代码可读性好很多。在继续之前我们加上一小段if代码，判断出问题后弹出提示：
+    </p>
+    <pre>
+      const fetchPromise = fetch(
+        "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+      );
+      console.log(fetchPromise);
+      fetchPromise
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+        return response.json();
+      })
+        .then((data) => console.log(data.uid));
+      console.log("started request");
+    </pre>
+    <h2>Catching errors</h2>
+    <p>
+      这下问题基本上就结束了，不过还有几个比较重要的点需要考虑，比如报错该怎么办。<code
+        >fetch()</code
+      >
+      API可能会因为许多原因报错，比如没网，URL错误等等，此时我们就需要某种办法来得到问题的来源，而Promise
+      object就提供了<code>catch()</code>
+      method，它的逻辑很像<code>then()</code>：我们使用它且向他放入handler函数。但是区别为，then是当程序成功时启动，但是catch是失败是启动。
+    </p>
+    <p>
+      如果我们把<code>catch()</code>放在promise
+      chain的结尾，那么它将会在任何其中一个异步函数失败的时候被启动，因此可以用一个catch来处理一整圈异步函数的异常，下面是一个故意写错了URL的例子，
+    </p>
+    <pre>
+      const fetchPromise = fetch(
+        "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+      );
+      console.log(fetchPromise);
+      fetchPromise
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => console.log(data.uid))
+        .catch((error) => {
+          console.error(`Can't get product :${error}`)
+        })
+      console.log("started request");
+     </pre
+    >
+    <h2>Promise terminology</h2>
+    <p>更详细的promise之前，先来了解一下promise的术语：</p>
+    <ul>
+      <li>
+        <b>pending</b>:
+        promise已经被创建了，且相关的异步函数还未结束，request依旧在过程中。
+      </li>
+      <li>
+        <b>fulfilled</b>:
+        异步函数已经成功了，当一个promise为fulfilled，则<code>then()</code>handler将会启动。
+      </li>
+      <li>
+        <b>rejected</b
+        >：异步函数已经失败了，当一个promise被reject时，<code>catch()</code>会启动
+      </li>
+      <p>
+        需要注意的是，这里的成功和失败是基于API来决定的，比如<code>fetch()</code>会将<i
+          >404 Not Found</i
+        >视为成功，但是把网络错误带来的失败结果视为失败。有的时候我们将<b>fulfilled</b>和<b>rejected</b>均称为<code>settled</code>。而一个promise，如果被settled或'完成了'，那么则是<b>resolved</b>且
+      </p>
+    </ul>
+    <h2>Combining multiple promises</h2>
+    <p>
+      promise
+      chain是许多个异步函数组成的，不过如果只是需要达到这个目的的话，还有很多别的办法，<code
+        >Promise</code
+      >
+      API提供了一些帮助
+    </p>
+    <p>
+      有的时候，我们需要全部的promise都变成fulfilled，但是他们不一定是互相嵌套这的，如果是这个情况的话，我们可以一次性生成一堆promise，然后等他们全部fulfill后再得到提醒。我们需要的是<code>Promise.all()</code>，里面需要一长串的promise在array内，然后返回一个promise。而<code>Promise.all()</code>返回的promise有以下特点：
+    </p>
+    <ul>
+      <li>
+        如果array内的全部promise均fulfilled，那么<code>then()</code>
+        handler将会启动，且带着一个array，内含所有的，按照promise顺序来的response
+      </li>
+      <li>
+        如果任何其中一个promise被rejected了，则<code>catch()</code>
+        handler将会生成，带着全部的error
+      </li>
+    </ul>
+    <p>比如我想要一次性请求多个HTTP，则可以使用下面的代码：</p>
+    <pre>
+      const fetchPromise = fetch(
+        "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+      );
+
+      const fetchPromise2 = fetch(
+        "https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/not-found"
+      );
+
+      const fetchPromise3 = fetch(
+        "https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json"
+      );
+
+      Promise.all([fetchPromise, fetchPromise2, fetchPromise3])
+        .then((responses) => {
+          for (const response of responses) {
+            consloe.log(`${response.url}: ${response.status}`);
+          }
+        })
+        .catch((error) => {
+          console.error(`Failed to fetch: ${error}`);
+        });
+    </pre>
+    <p>
+      在上面的代码里，我们生成了三个fetch请求到三个不同的URL。然后使用了<code>Promise.all()</code>来一次性执行全部的promise，如果全部成功了，那么我们会把每一个response的url和status给log出来。若fail了，则报错出来。
+    </p>
+    <p>
+      按照上面的三个URL，全部的promise都会fulfill，但是其中的一个链接会返回一个404，这是因为file不存在。但是如果我们把其中一个链接写错掉，则<code>catch()</code>会启动，得到<code
+        >Failed to fetch: TypeError: Failed to fetch</code
+      >
+    </p>
+    <p>
+      也有的时候，我们只需要一系列promise其中的一个fulfill，而不在意是哪一个。如果是这个情况我们就可以使用<code>Promise.any()</code>，这个method和promise是一样的，
+      只不过判断方式不同，如果有其中一个promise
+      fulfill了，则直接fulfill，而得全部的promise reject才会reject
+    </p>
+
+    <h2>Async and await</h2>
+    <p>
+      <code>async</code
+      >关键词给我们更简单的异步promise代码，如果我们在一个函数前加上async，则函数将会变成一个异步函数
+    </p>
+    <pre>
+      async function someFunction(){
+        //that's the async function
+      }
+    </pre>
+    <p>
+      在一个异步函数内，我们可以使用<code>await</code>关键词来让代码‘停一下’直到函数的promise完成（不论什么结果）：
+    </p>
+    <pre>
+      async function fetchProducts() {
+        try {
+          //这行代码完成后将会等到await的fetch结束才会继续
+          const response = await fetch(
+            "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+          }
+          //相同道理，这行代码结束后会等一个response.json()结果（要么解析成JS object，要么报错）
+          const data = await response.json();
+          console.log(data.lang);
+        } catch (error) {
+          console.error(`Could not get products : ${error}`);
+        }
+      }
+      fetchProducts();
+    </pre>
+    <p>
+      在这个异步函数内，我们使用的<code>await fetch()</code>得到的是一个Response
+      object，而不是Promise，因为await让fetch()结束了后才继续执行。
+    </p>
+    <p>
+      不过需要注意的是，异步函数返回的是promise，因此我们不能写类似这样的内容：
+    </p>
+    <pre>
+      const promise = fetchProducts();
+      console.log(promise.uid)
+      // 这不会有效，因为这个异步函数返回的是一个promise，而不是object
+    </pre>
+    <p>
+      而想要得到指定的效果，只需要按照promise的方式写一个then和handler即可：
+    </p>
+    <pre>
+       const promise = fetchProducts();
+       promise.then((data) => console.log(data.uid))
+    </pre>
+    <p>
+      需要记住的还有一点，就像是promise
+      chain一样，await强制异步函数串联完成，这种功能在部分情况，比如下一个程序需要上一个程序的结果时会比较有用，但是其他情况的话，<code>Promise.all()</code>效率更高
+    </p>
+    <script>
+      const fetchPromise = fetch(
+        "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+      );
+      console.log(fetchPromise);
+      fetchPromise
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => console.log(data.uid));
+      console.log("started request");
+
+      const fetchPromise2 = fetch(
+        "https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/not-found"
+      );
+
+      const fetchPromise3 = fetch(
+        "https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json"
+      );
+
+      Promise.all([fetchPromise, fetchPromise2, fetchPromise3])
+        .then((responses) => {
+          for (const response of responses) {
+            console.log(`${response.url}: ${response.status}`);
+          }
+        })
+        .catch((error) => {
+          console.error(`Failed to fetch: ${error}`);
+        });
+
+      const fetchPromise4 = fetch("dsjadsfafjosenfaesi");
+
+      Promise.any([fetchPromise, fetchPromise2, fetchPromise4])
+        .then((response) => {
+          console.log(`FINISHED: ${response.url}: ${response.status}`);
+        })
+        .catch((error) => {
+          console.log(`Failed: ${error}`);
+        });
+
+      async function fetchProducts() {
+        try {
+          const response = await fetch(
+            "https://www.lynx1027.com/JavaScript/Object/JSON.json"
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data.lang);
+        } catch (error) {
+          console.error(`Could not get products : ${error}`);
+        }
+      }
+      fetchProducts();
+    </script>
+  </body>
+</html>
