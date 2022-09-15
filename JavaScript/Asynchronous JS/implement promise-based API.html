@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Implement promise based API</title>
+  </head>
+  <body>
+    <h1>implement promise based API</h1>
+    <p>
+      虽然这个可能没有那么常用，但是很多时候我们会自己创造返回promise的API，一般来说我们会写一个异步程序，
+      其中可能包含events，callbacks和其他内容，然后我们将使用一个<code>Promise</code>object来处理程序的结果
+    </p>
+    <h2>Implement alarm() API</h2>
+    <p>
+      在这个例子内我们来创建一个叫做<code>alarm()</code>的API，简单来说就是让用户输入一个时间和名字，然后我们在这个时间后提醒用户起床
+    </p>
+    <h3>setTimeout()</h3>
+    <p>
+      我们会使用<code>setTimeout()</code>
+      API来实现alarm函数，这个API是接受一个callback函数和delay时间，假设<code>setTimeout()</code>启动后，它将会设置一个指定时间的计时器，时间到了后启动指定方程
+    </p>
+    <button id="set-alarm">Set alarm</button>
+    <div id="output"></div>
+    <p>
+      上面的按钮就是一个简单的例子，使用下面的代码实现，不过基本来说就是一个简单的程序，内含一个setTimeout(函数，时间)：
+    </p>
+    <pre>
+      const output = document.querySelector("#output");
+      const button = document.querySelector("#set-alarm");
+
+      function setAlarm() {
+        setTimeout(() => {
+          output.textContent = "wake up!";
+        }, 2000);
+      }
+
+      button.addEventListener("click", setAlarm);
+    </pre>
+    <h3>Promise() constructor</h3>
+    <p>
+      我们的<code>alarm()</code>函数将会返回一个<code>Promise</code>，这个promise将会等到计时器停止后，传送一个起床的信息给<code
+        >then()</code
+      >
+      handler，如果接受的是一个负数的delay则直接reject promise
+    </p>
+    <p>
+      而这里最关键的部分就是<code>Promise()</code>
+      constructor了，它接受一个函数作为argument，我们将称这个函数为<code>executor</code>。executor函数本身接受两个argument，
+      一般称为<code>resolved</code>和<code>rejected</code>，在写executor函数时，我们启动内含的异步函数，如果异步函数成功了，
+      则启动<code>resolved</code>，如果failed，则我们启动<code>reject</code>，如果executor函数报错，则自动启动<code>reject</code>。
+    </p>
+    <h2>Use the alarm() API</h2>
+    <p>
+      现在就比较简单了，我们可以使用alarm()，然后在返回的promise上使用<code>then()</code>和<code>catch()</code>即可分情况返回结果了。也就是说加上下面的一段代码就算完成了
+    </p>
+    <pre>
+      button.addEventListener('click', () => {
+        alarm(name.value, delay.value)
+          .then((message) => output.textContent = message)
+          .catch((error) => output.textContent = `Couldn't set alarm: ${error}`);
+      });
+    </pre>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" size="4" value="Chalin" />
+    <label for="delay">Delay</label>
+    <input type="text" name="delay" id="delay" size="4" value="2000" />
+    <button id="set-alarm-real">Set alarm</button>
+    <div id="output2"></div>
+    <p>
+      因为现在alarm()是一个异步函数，我们可以使用<code>await</code>和<code>async</code>来简化代码了，可以把then改成以下：
+    </p>
+    <pre>
+      button2.addEventListener("click", () => {
+        alarm(name.value, delay.value)
+          .then((message) => (output2.textContent = message))
+          .catch(
+            (error) => (output2.textContent = `can't set alarm: ${error}`)
+          );
+      });
+    </pre>
+    <script>
+      const output = document.querySelector("#output");
+      const button = document.querySelector("#set-alarm");
+
+      function setAlarm() {
+        setTimeout(() => {
+          output.textContent = "wake up!";
+        }, 2000);
+      }
+
+      button.addEventListener("click", setAlarm);
+
+      const name = document.querySelector("#name");
+      const delay = document.querySelector("#delay");
+      const button2 = document.querySelector("#set-alarm-real");
+      const output2 = document.querySelector("#output2");
+
+      function alarm(person, delay) {
+        return new Promise((resolve, reject) => {
+          if (delay < 0) {
+            throw new Error("alarm delay must not be negative");
+          }
+          setTimeout(() => {
+            resolve(`wake up, ${person}!`);
+          }, delay);
+        });
+      }
+
+      button2.addEventListener("click", () => {
+        alarm(name.value, delay.value)
+          .then((message) => (output2.textContent = message))
+          .catch(
+            (error) => (output2.textContent = `can't set alarm: ${error}`)
+          );
+      });
+
+      // This is equivalent of above
+      // button2.addEventListener("click", async () => {
+      //   try {
+      //     const message = await alarm(name.value, delay.value);
+      //     output2.textContent = message;
+      //   } catch (error) {
+      //     output2.textContent = `can't set alarm: ${error}`;
+      //   }
+      // });
+    </script>
+  </body>
+</html>
