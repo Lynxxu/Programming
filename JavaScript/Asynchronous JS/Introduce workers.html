@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workers</title>
+  </head>
+  <body>
+    <h1>Introducing Workers</h1>
+    <p>
+      在最开始学习异步函数的时候，我们知道了很长的同步函数会让整个窗口变得无响应，其实最根本的原因是线程。
+      线程是一个程序的运作过程，若程序是单线程的，则它只能在一段时间内做一件事。所以假设它在等待我们的同步函数结果，则这段时间它什么都做不了。
+    </p>
+    <p>
+      而这个时候workers就有用了，workers让我们可以在不同的进程做某些任务。不过这并不一定是好事，对于多线程代码，我们不知道其中的哪个线程先结束，
+      所以如果两个线程对一个变量都有权限，那么你不一定知道该变量的状态，这可能导致bug且不容易debug
+    </p>
+    <p>
+      为了避免这样的问题，我们的主代码块和worker代码的变量应该是分开的，我们不应让worker对DOM进行操作，最多让worker发送结果/信息
+    </p>
+    <h2>Using workers</h2>
+    <p>首先，workers有三种：</p>
+    <ul>
+      <li>dedicated workers</li>
+      <li>shared workers</li>
+      <li>service workers</li>
+    </ul>
+    <p>
+      在最开始的时候，我们写了一个生成质数的程序，在这里我们让他用worker来运行它，这样网页便会保持响应，例子如下:
+    </p>
+    <label for="quota">Number of primes:</label>
+    <input type="text" name="quota" id="quota" value="100000000" />
+    <button id="generate">Generate primes</button>
+    <button id="reload">reload</button>
+    <textarea id="user-input" cols="60" rows="6">try typing in here</textarea>
+    <div id="output"></div>
+    <p>
+      代码解析一下，首先我们得把worker和主代码分开，最好的办法是直接把worker写在另外一个JS文件内。
+      首先来看下主要的代码：
+    </p>
+    <pre>
+      const worker = new Worker("generate.js");
+      document.querySelector("#generate").addEventListener("click", () => {
+        const quota = document.querySelector("#quota").value;
+        worker.postMessage({ command: "generate", quota });
+      });
+
+      worker.addEventListener("message", (message) => {
+        document.querySelector(
+          "#output"
+        ).textContent = `Finished generating ${message.data} primes!`;
+      });
+
+      document.querySelector("#reload").addEventListener("click", () => {
+        document.querySelector(("#user-input".value = "try typing in here"));
+        document.location.reload();
+      });
+    </pre>
+    <p>逐个分析：</p>
+    <ul>
+      <li>
+        首先我们使用<code>Worker()</code>
+        constructor来创建一个新的worker，直接将URL指向worker的script。一旦worker被创建了，则worker的script会启动
+      </li>
+      <li>
+        向button内附上一个click event
+        handler，如果被点击了就用<code>worker.postMessage()</code>函数来向worker发送消息，这个消息可以是一个argument，在这里我们传送的是一个JSON
+        object，内含了<code>command</code>和<code>quota</code>两个特性，分别对应我们需要worker做的事情和需要生成的数量
+      </li>
+      <li>
+        然后，我们向worker添加一个<code>message</code> event
+        handler，这样worker就可以完成任务的时候向我们发送消息了，我们的handler会接受message的<code>data</code>属性内的内容，然后把他写在output元素内
+      </li>
+      <li>最后我们把reload的button给完成，这一部分不需要改动</li>
+    </ul>
+    <p>然后是worker部分的代码，注意这一块是在不同的js文件内的：</p>
+    <pre>
+      addEventListener("message", (message) => {
+        if (message.data.command === "generate") {
+          generatePrimes(message.data.quota);
+        }
+      });
+      
+      
+      function generatePrimes(quota) {
+        function isPrime(n) {
+          for (let c = 2; c <= Math.sqrt(n); ++c) {
+            if (n % c === 0) {
+              return false;
+            }
+            return true;
+          }
+        }
+      
+        const primes = [];
+      
+        for (let i = 1; primes.length < quota; i++) {
+          if (isPrime(i)) {
+            primes.push(i);
+          }
+        }
+        postMessage(primes.length);
+      }
+      
+    </pre>
+    <p>继续单独分析：</p>
+    <ul>
+      <li>
+        在worker内，第一件事一般都是使用<code>addEventListener()</code>来听主代码的message，
+        在worker内，它是一个global function，而在message event
+        handler内，里面的<code>data</code>属性保存的是主代码发来的argument。在这个例子内则是<code>message.data.quota</code>用来得到quota的数据
+      </li>
+      <li>generatePrimes()函数的主题部分和普通的版本一样</li>
+      <li>
+        注意最后一行代码，我们使用了postMessage()函数来向主代码发送指定内容
+      </li>
+    </ul>
+    <h2>Other workers</h2>
+    <p>
+      我们刚刚使用的例子是<code>dedicated worker</code
+      >，意思是它被单独的一个script实例使用，而还有其他的worker类型：
+    </p>
+    <ul>
+      <li><code>Shared worker</code>可以在不同的script和窗孔共享</li>
+      <li>
+        <code>Service workers</code>类似proxy
+        servers，用于缓存内容，以让程序下次可以离线使用内容。
+      </li>
+    </ul>
+    <script>
+      const worker = new Worker("generate.js");
+
+      document.querySelector("#generate").addEventListener("click", () => {
+        const quota = document.querySelector("#quota").value;
+        worker.postMessage({ command: "generate", quota });
+      });
+
+      worker.addEventListener("message", (message) => {
+        document.querySelector(
+          "#output"
+        ).textContent = `Finished generating ${message.data} primes!`;
+      });
+
+      document.querySelector("#reload").addEventListener("click", () => {
+        document.querySelector(("#user-input".value = "try typing in here"));
+        document.location.reload();
+      });
+    </script>
+  </body>
+</html>

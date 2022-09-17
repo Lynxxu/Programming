@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+  </head>
+  <body>
+    <textarea name="testText" id="txt" cols="30" rows="10">
+some examples to be responded</textarea
+    >
+    <button id="btn1">generate 4s out</button>
+    <button id="btn2">generate 2s out by promise</button>
+    <button id="reload">reload</button>
+    <button id="btn3">just some reload</button>
+    <ul id="output"></ul>
+    <script>
+      const btn1 = document.querySelector("#btn1");
+      let output = document.querySelector("#output");
+      const btn2 = document.querySelector("#btn2");
+      const btnrld = document.querySelector("#reload");
+      const btn3 = document.querySelector("#btn3");
+
+      btn1.addEventListener("click", () => {
+        let li = document.createElement("li");
+        setTimeout(() => {
+          li.textContent = "timed out after 4s";
+        }, 4000);
+        li.textContent = "started 4s time out";
+        output.appendChild(li);
+      });
+
+      btn2.addEventListener("click", () => {
+        let li = document.createElement("li");
+
+        let promise = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            li.textContent = "timed out for 2s";
+          }, 2000);
+          resolve();
+        });
+        li.textContent = "started 2s reload now";
+        output.appendChild(li);
+        promise.then(console.log("great"));
+      });
+
+      btn3.addEventListener("click", () => {
+        setTimeout(() => {
+          console.log(999);
+        }, 4000);
+      });
+
+      btnrld.addEventListener("click", () => location.reload());
+    </script>
+  </body>
+</html>
