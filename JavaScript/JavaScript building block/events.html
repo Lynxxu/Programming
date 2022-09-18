@@ -628,12 +628,14 @@
       container.addEventListener("click", handleClick);
       // const button = document.querySelector("#button");
       // button.addEventListener("click", handleClick);
-      function random(number) {
+      function generateRandom(number) {
         return Math.floor(Math.random() * number);
       }
 
-      function bgChange() {
-        const rndCol = `rgb(${random(255)}, ${random(255)}, ${random(255)})`;
+      function bgChangeChunk() {
+        const rndCol = `rgb(${generateRandom(255)}, ${generateRandom(
+          255
+        )}, ${generateRandom(255)})`;
         return rndCol;
       }
 
@@ -641,7 +643,7 @@
 
       Chunk.addEventListener(
         "click",
-        (event) => (event.target.style.backgroundColor = bgChange())
+        (event) => (event.target.style.backgroundColor = bgChangeChunk())
       );
     </script>
   </body>
