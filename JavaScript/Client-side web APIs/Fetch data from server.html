@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fetch data from server</title>
+  </head>
+  <body>
+    <h1>Fetching data from server</h1>
+    <p>
+      另外一个在现代网页常见的任务是将网页的某些小部分动态更新，而不用更新整个网页。这种小细节对用户体验和性能提升都很大。
+    </p>
+    <h2>What's the problem</h2>
+    <p>
+      一个网页一般会有很多个部分，比如html，stylesheet，script，图片等资源，一个最基本的网页将会使用浏览器向服务器发送多个http请求，
+      得到需要的文件。如果我开一个新的网页，则浏览器会发送新的申请，一样的原理。
+    </p>
+    <p>
+      这种模型对于很多网站都没问题，但是对于某些非常‘data-driven‘的网站，比如library和database来说就不太行了。假设我想要搜索一本书，
+      那么网页的header，footer和很多部分都不会有变化，只会有搜索结果的改变。而使用传统的model的话，我们需要把整个网页全部重新加载一次，即使我只要一小部分的更新
+    </p>
+    <p>
+      因为类似上面的原因，许多网站转向了JS
+      API来请求数据，更改一小部分的页面。这样就可以调整指定部分了。
+      而能做到这种操作的主要就是Fetch
+      API了。它可以让JS向服务器发送一个HTTP请求获得某些特定资源。当服务器返回了内容，JS则可以动态更改页面，比如使用DOM
+      API。一般来说请求的数据会是JSON格式。
+    </p>
+    <p>
+      对于很多知名网页，比如油管亚马逊等，使用这种操作可以让网页更新更快，变得更加responsive，且省去了很多不必要的资源，节省带宽。这种技术被称为<b>Ajax</b>,
+      asychonorous javascript and
+      XML，因为在早期的时候一般我们会请求xml数据，但是现在我们用的JSON更多。不过Ajax这个词汇依旧是描述异步JS动态更新的概念
+    </p>
+    <p>
+      而还有更加厉害的办法，有的网站会在用户第一次下载数据的时候存放在电脑内，以后用户访问网页便可以直接使用本地数据，加载速度更快s
+    </p>
+    <h2>Fetch API</h2>
+    <p>来仔细讲讲fetch api</p>
+    <h3>Fetch text</h3>
+    <p>
+      首先来点简单的例子，假设我有一个数据库，数据库里面有很多文本，那么我们可以使用fetch来请求添加这些文本
+    </p>
+    <select name="dropdown" id="select">
+      <option value="choose">choose an option to display</option>
+      <option value="https://www.lynx1027.com/JavaScript/Resources/text1.txt">
+        text1
+      </option>
+      <option value="https://www.lynx1027.com/JavaScript/Resources/text2.txt">
+        text2
+      </option>
+      <option value="text3.txt">text3</option>
+    </select>
+    <p id="output"></p>
+    <p>
+      看上面的例子，当选择了dropdown
+      menu内的某个选项时，我们可以得到对应的输出。而这个逻辑其实比较简单，代码如下：
+    </p>
+    <pre>
+      const dropdown = document.querySelector("#select");
+      const output = document.querySelector("#output");
+
+      dropdown.addEventListener("change", () => {
+        const url = dropdown.value;
+        updateOutput(url);
+      });
+
+      function updateOutput(url) {
+        if (url != "choose") {
+          fetch(url)
+            .then((response) => {
+              return response.text();
+            })
+            .then((txt) => {
+              output.textContent = txt;
+            })
+            .catch(
+              (error) =>
+                (output.textContent = `can't retreive content: ${error}`)
+            );
+        } else {
+          output.textContent = "Please select an option";
+        }
+      }
+    </pre>
+    <p>
+      首先，我们使用的是html的自带选择项，也就是<code>select</code>，把他和输出的p存在变量内。
+      然后重点来了，我们向刚刚的选择项附上event
+      handler，关注<code>change</code>，也就是选项变化，变化后运行<code>updateOutput()</code>函数
+    </p>
+    <p>
+      而这个updateOutput函数逻辑也很简单，我们的select内的每一个选项的value都是他们对应的URL，
+      那么我们就可以对他们的value使用fetch来获得URL。后面就是经典的promise
+      chain了，把output对应一下就可以了。
+      这里有一个需要注意的事情，假设我直接使用option1作为默认的选项，那么用户选择第一个option的话是无效的，因为我们的
+      handler检测的是change。因此可以使用一个最开始的不含意义的默认option
+    </p>
+    <h2>XMLHttpRequest API</h2>
+    <p>
+      有的时候在老代码内我们可以看见<code>XMLHttpRequest</code>
+      API（缩写XHR），这个API比fetch要早，且基本上可以说是第一个在AJAX上广泛使用的API了。
+      但是在现在我们更推荐使用Fetch，因为它更简单也有更多功能。这边就不详细讲XHR了
+    </p>
+    <script>
+      const dropdown = document.querySelector("#select");
+      const output = document.querySelector("#output");
+
+      dropdown.addEventListener("change", () => {
+        const url = dropdown.value;
+        updateOutput(url);
+      });
+
+      function updateOutput(url) {
+        if (url != "choose") {
+          fetch(url)
+            .then((response) => {
+              return response.text();
+            })
+            .then((txt) => {
+              output.textContent = txt;
+            })
+            .catch(
+              (error) =>
+                (output.textContent = `can't retreive content: ${error}`)
+            );
+        } else {
+          output.textContent = "Please select an option";
+        }
+      }
+    </script>
+  </body>
+</html>
