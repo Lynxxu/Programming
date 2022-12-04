@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3rd party APIs</title>
+  </head>
+  <body>
+    <h1>Third Party APIs</h1>
+    <p>
+      到了现在学过的API基本上都是内置在浏览器内的，
+      但并不是所有的API都是内置的。许多大型的网页/服务， 比如google
+      map，twitter，FB等，会提供API给开发者来使用功能，比如展示tweet，登录fb等等。
+    </p>
+    <h2>Usually on third-party servers</h2>
+    <p>
+      一般来说浏览器的API是内置在浏览器内的，不需要额外操作就可以直接运行。比如最开始学过的web
+      audio api就可以使用原生的<code>AudioContext</code> object来调用
+    </p>
+    <p>
+      而第三方APIs就一般在第三方网站上了，想要使用这些api的话得首先将其加入网页内。一般来说是使用<code>&lt;script&gt;</code>元素来添加在某个服务器上的库。
+    </p>
+    <p>来看一下<a href="Mapquest/index.html">MapQuest</a>的例子：</p>
+    <pre>
+&lt;script
+  src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"
+  defer&gt;&lt;/script&gt;
+&lt;link
+  rel="stylesheet"
+  href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" /&gt;
+
+  const map = L.mapquest.map('map', {
+    center: [53.480759, -2.242631],
+    layers: L.mapquest.tileLayer('map'),
+    zoom: 12
+  });
+    </pre>
+    <p>
+      在以上代码内，我们把mapquest的库链接上了，然后直接使用mapquest内提供的object自定义了一个叫做map的实例，使用的是库内的<code
+        >mapquest.map()</code
+      >
+      method, 里面填上需要添加map的div元素和一个非必须的用于设置map属性的object
+    </p>
+    <h2>Usually requires API keys</h2>
+    <p>
+      一般来说，浏览器内置的API会有弹窗提示以进行安全确认，不过第三方的APIs就不太一样了，他们一般使用一个开发者密钥。
+    </p>
+    <p>
+      在MapQuest的网页上，
+      创建账号后能在里面找到用户专属的key，一般来说开发者是必须使用密钥才能使用API的服务。这样API服务商便可以确认他们的API是用在了正确的地方。
+    </p>
+    <h2>More on Mapquest</h2>
+    <p>
+      API的用法一般很灵活，具体可以见官方的documentation。对于mapquest来说：
+    </p>
+    <pre>
+      const map = L.mapquest.map("map", {
+        center: [53.480759, -2.242631],
+        // 1. change 'map' to 'hybrid', try other type of map
+        layers: L.mapquest.tileLayer("map"),
+        zoom: 12,
+      });
+    </pre>
+    <p>
+      <code>layers: L.mapquest.tileLayer("map")</code>可以改成<code
+        >ayers: L.mapquest.tileLayer("hybrid")</code
+      >，satilite等多个地图类型。
+    </p>
+    <p>
+      然后也可以在刚刚创建的map实例内添加上控制按键。默认来说是只有一个缩放键。
+    </p>
+    <pre>
+      map.addControl(L.mapquest.control({position:'bottomright'}));
+    </pre>
+    <p>
+      这样就往刚刚的地图上加了一套控制按钮，并且把这个按钮的位置移动到了右下角，当然，肯定不止有这几个控制按键；详见mapquest官网
+    </p>
+    <p>
+      这个API还提供了pin的功能，使用<code>L.marker()</code>
+      method即可加入一个pin，具体如下
+    </p>
+    <pre>
+      L.marker([53.480759, -2.242631], {
+        icon: L.mapquest.icons.marker({
+          primaryColor: '#22407F',
+          secondaryColor: '#3B5998',
+          shadow: true,
+          size: 'md',
+          symbol: 'A'
+        })
+      })
+      .bindPopup('This is Manchester!')
+      .addTo(map);      
+    </pre>
+    <p>
+      上面的一个marker也很简单，接受一个含有一对xy坐标的array和一个非必须的图标object。内含一些图标的定义，比如颜色，尺寸等等，且在结束后使用了两个method来分别添加点击时的弹窗信息，并且把marker加进地图。
+    </p>
+    <p>
+      最后，在我的map例子内，我把默认的coordinate改成了一个随机的坐标，每次刷新便会随机投放到某个位置
+    </p>
+    <h2>RESTful API - NYtimes</h2>
+  </body>
+</html>
