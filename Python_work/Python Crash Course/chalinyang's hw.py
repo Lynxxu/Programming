@@ -85,3 +85,15 @@ def simp_sum(f,a,b,n):
 print(simp_sum(f,1,3,100))  # should be 0.34134474609542953
 
 # %%
+tol=1e-8
+next_term=1  # why do we need this?
+sum=0
+i=1
+while next_term>=tol:
+    sum+=next_term
+    i+=1
+    next_term=1/i**2
+
+print(sum)
+
+# %%
