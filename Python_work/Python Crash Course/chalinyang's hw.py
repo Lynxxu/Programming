@@ -82,7 +82,7 @@ def simp_sum(f,a,b,n):
   sum = sum * steps/3
   return sum
   
-print(simp_sum(f,1,3,100))  # should be 0.34134474609542953
+print(simp_sum(f,1,3,100))  # should be 0.34134474609542953cover
 
 # %%
 tol=1e-8
@@ -96,4 +96,15 @@ while next_term>=tol:
 
 print(sum)
 
+# %%
+lst = [5,3,54, -9, 34,198382, -999, 1.2, 3,56, -1, 44, 45]
+
+def getMax(n:list):
+  temp = n[0]
+  for number in range(0, len(n)-1):
+    if abs(temp) <= abs(n[number+1]):
+      temp = n[number+1]
+  return temp
+
+print(getMax(lst))
 # %%
