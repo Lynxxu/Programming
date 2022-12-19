@@ -1,10 +1,22 @@
-function changeNav() {
-  const bodyElement = document.querySelector("body");
+window.addEventListener("scroll", () => {
   const navElement = document.querySelector("nav");
-  const navList = document.getElementById("#nav-links");
-  this.scrollY > 500
-    ? navElement.classList.add("bg-dark")
-    : navElement.classList.remove("bg-dark");
-}
+  const navLinks = document.querySelectorAll(".nav-link, .navbar-brand");
+  // The queryselectorAll would collect the nodes before generated so a defer was required in the script tag
+  if (document.documentElement.scrollTop > window.innerHeight) {
+    navElement.classList.add("bg-white");
+    navLinks.forEach((e) => {
+      e.classList.remove("text-white");
+      e.classList.add("text-black");
+    });
+  } else {
+    navElement.classList.remove("bg-white");
+    navLinks.forEach((e) => {
+      e.classList.remove("text-black");
+      e.classList.add("text-white");
+    });
+  }
+});
 
-window.addEventListener("scroll", changeNav, true);
+document.addEventListener("click", () => {
+  const sideLinks = document.querySelector(".listgroup");
+});
