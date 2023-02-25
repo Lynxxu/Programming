@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>main UI</title>
+    <script src="../../Bootstrap/bootstrap-5.2.3-dist/js/bootstrap.bundle.js"></script>
+    <link
+      rel="stylesheet"
+      href="../../Bootstrap/bootstrap-5.2.3-dist/css/bootstrap.css"
+    />
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: whitesmoke;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container text-center border">
+      <div class="row align-items-center">
+        <div class="col-sm-2 m-0 p-0 border border-end-0">
+          <img
+            src="../IconBlack.png"
+            alt="StarTool Icon"
+            width="72"
+            class="p-2"
+          />
+          <div
+            class="btn-group-vertical w-100"
+            role="group"
+            aria-label="Vertical button group"
+          >
+            <button type="button" class="btn p-2 py-4 bg-white">
+              课程信息
+            </button>
+            <button type="button" class="btn p-2 py-4">进度查看</button>
+            <button type="button" class="btn p-2 py-4">下载程序</button>
+            <button type="button" class="btn p-2 py-4">关于程序</button>
+          </div>
+        </div>
+        <div class="col-sm-10 bg-white">
+          <div class="container">
+            <div class="dropdown d-block m-2 text-start">
+              目录：
+              <button
+                class="btn btn-secondary dropdown-toggle w-25"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                根目录
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#">Some Directories</a>
+                </li>
+              </ul>
+            </div>
+            <div class="dropdown d-block m-2 text-start">
+              课程：
+              <button
+                class="btn btn-secondary dropdown-toggle w-25"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                默认课程
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item">量子化学</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Describing the UI</title>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script type="text/babel" data-type="module" src="components.js"></script>
+    <style>
+      img {
+        width: 30%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Describing the UI</h1>
+    <p>
+      React
+      为一个JS库，专门用于渲染UI。React可以将许多小的units，比如buttons，images，texts加在一起，变成reusable
+      nestable <b>components</b>。我将在这个页面学习react
+      component的创建，定义和显示等操作。
+    </p>
+    <h2>First component</h2>
+    <p>
+      React applications are built from small isoalted pieces of UI called
+      <b>components</b>. A react component is a JS function which can be
+      changed, it can be small as a buttonm and large as an webpage.
+    </p>
+    <p>
+      Using HTMl, markup structures like a ordered list can be created, combined
+      with css and JS. React would combine all the css, js and HTML into custom
+      components that are resulable UI elements. Some open source communitites
+      already have thousnads of components to be used like
+      <a href="https://mui.com/core/">MUI</a>
+    </p>
+    <h2>Define a component</h2>
+    <p>
+      Traditionally, web devs would write html, markup and add interaction via
+      JS. It is now cumbersome and difficult if it were to be repeated thousands
+      of times. React makes them reusable, but at the end of day,
+      <b>a React component is a JS funciton that you can sprinkle wiht markup</b
+      >. A block of code like below would generate
+    </p>
+    <pre>
+        export default function Profile() {
+          return (
+            &lt;img
+              src="My waifu"
+              alt="Noelle"
+            /&gt;
+          )
+        }        
+      </pre
+    >
+
+    <h3>Step 1: Export the component</h3>
+    <p>
+      <code>export defautl</code> is a standard JS syntax that allows the
+      funciton to be exported to other fiels to be used. See later sections
+    </p>
+    <h3>Step 2: define function</h3>
+    <p>
+      Using <code>function Profile() {}</code>, this defines a JS function with
+      name Profile. Note that a React component must start with
+      <b>CAPITALIZED</b> letter, unlike regular functions
+    </p>
+    <h3>Step 3: Add markup</h3>
+    <p>
+      as written, this component would return an <code>img</code> tag with
+      <code>scr</code> and <code>alt</code> attribute. It is like a html bnut
+      it's acutally JS. This syntax is called JSX, which enables markup inside
+      JS.
+    </p>
+    <p>the return statement can also be writte with one line.Like:</p>
+    <pre>return &lt;img src='source.jpg' alt ='some alt text'/&gt;</pre>
+    <p>
+      However, if the markup spans over multiple lines, it must be included in a
+      pair of parentheses:
+    </p>
+    <pre>
+      return (
+        &lt;div&gt;
+          &lt;img src = 'sth' alt='sth'&gt;
+        &lt;/div&gt;
+      )
+    </pre>
+    <p>
+      At here, a component was finished, with fist line, enabling export of the
+      component to other files. Defined using
+      <code>function Profile(){}</code> like a noraml JS function but
+      capitalized. Which is then implemented with a markup that can return a img
+      with specified attributes
+    </p>
+    <h2>Using a component</h2>
+    <p>
+      Now we defined a <code>Profile component</code>. It can be added to a html
+      as if it's a part of it. However, there are several things to do before
+      adding it:
+    </p>
+    <ul>
+      <li>
+        Remeber to import react script tags like
+        <code>react.development.js</code> or via a importmap
+      </li>
+      <li>
+        Import Babel as complier so that browser can read JSX and React syntax
+      </li>
+      <li>Note in the react js file <code> type="text/babel"</code></li>
+    </ul>
+    <p>
+      Then, we can nest the React functions inside one other. The
+      <code>Profile</code> function is finished and can be nested like below:
+    </p>
+    <pre>
+      export default function Gallery(){
+        &lt;section&gt;
+          &lt;h1&gt;Amazing Fuhua&gt;
+          &lt;Profile/&gt;
+          &lt;Profile/&gt;
+          &lt;Profile/&gt;
+        &lt;section&gt;
+      }
+    </pre>
+    <p>and we would have the following effect:</p>
+    <div id="root"></div>
+    <p>
+      In browser, this process is quite straightforward. &lt;section&gt; is
+      lowercase so it's a HTML tag, but &lt;Profile&gt; is capitalized so we are
+      calling a component called <code>Profile</code>. Therefore, in browser,
+      they are equivalent to the codes below
+    </p>
+    <pre>
+    &lt;section&gt;
+      &lt;h1&gt;Amazing Fuhua&gt;
+      &lt;img src="../../../../Imgs/83181495_p0.jpg" alt="Fuhua/&gt;
+      &lt;img src="../../../../Imgs/83181495_p0.jpg" alt="Fuhua/&gt;
+      &lt;img src="../../../../Imgs/83181495_p0.jpg" alt="Fuhua/&gt;
+    &lt;section&gt;
+    </pre>
+    <p>
+      Another thing to be mentioned is that, to nest components, a component
+      should <b>NOT</b> be defined in another component. It should be
+      separatedly declared
+    </p>
+  </body>
+</html>
