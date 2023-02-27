@@ -151,5 +151,92 @@
       should <b>NOT</b> be defined in another component. It should be
       separatedly declared
     </p>
+
+    <h2>Importing and exporting components</h2>
+    <p>
+      As mentioned in the previous part, we made a component named
+      <code>Profile</code> that can be exported and saved in
+      <code>component.js</code>. For reasons like resuability, we can write the
+      module in separate files for management. To do this we can use the import
+      and export functions
+    </p>
+    <p>
+      For example, we can create a <code>Gallery</code> js file, which includes
+      both the <code>Profile</code> and <code>Gallery</code> method. Remeber to
+      include <code>export defualt</code> for the intend export file
+    </p>
+    <p>
+      Then, in another separate js file, we can write the following code to
+      import the method:
+    </p>
+    <pre>
+    import Gallery from './Gallery.js'
+
+    export default function App(){
+      return (
+        &lt;Gallery /&gt;
+      );
+    }
+  </pre
+    >
+    <p>
+      The logic in here is that <code>Gallery.js</code> defines the
+      <code>Profile</code> component to be used internally in Gallery (not
+      exported). Then exports the <code>Gallery</code> component as default
+      export. In <code>App.js</code>, the <code>Gallery</code> is imported as a
+      default import from <code>Gallery.js</code>, while the root
+      <code>App</code> component is exported default
+    </p>
+    <h2>Export and import in the same file from multiple files</h2>
+    <p>
+      What if I wish to import both the <code>Gallery</code> and
+      <code>Profile</code> method in one file. This can be done using a mix of
+      default export and named export. It is important to note that there is
+      <b>only one</b> default export per file. Therefore, The rest of the method
+      needs to be named export. In the export statement, they simply remove the
+      <code>default</code> keyword. In the import statement, they add a pair of
+      curly braces in the name of the imported component.
+    </p>
+    <p>So, in <code>Gallery.js</code>, the code will be updated as:</p>
+    <pre>
+    export funciton Profile(){
+      return (
+        &lt;img
+          src = "some directories"
+          alt = "alt tetxt"
+        /&gt;
+      );
+    }
+
+    export default function Gallery (){
+      return(
+        &lt;section&gt;
+          &lt;h1&gt;Amazing fuhuas &lt;/h1&gt;
+          &lt;Profile /&gt;
+          &lt;Profile /&gt;
+          &lt;Profile /&gt;
+        &lt;/section&gt;
+      );
+    }
+  </pre
+    >
+    <p>in the App.js file, where both components are being imported:</p>
+    <pre>
+      import Gallery from './Gallery.js'
+      import { Profile } from './Gallery.js'
+
+      export default function App(){
+        return(
+          &lt;Profile /&gt;
+        );
+      }
+    </pre>
+    <p>
+      The relation between files are simply yet intertwined. The
+      <code>Gallery.js</code> exports both component, one with default one with
+      name. In <code>App.js</code>, the <code>Gallery</code> component is
+      imported as default, <code>Profile</code> is imported as name component
+      with curly braces. Later, it exports App.
+    </p>
   </body>
 </html>
