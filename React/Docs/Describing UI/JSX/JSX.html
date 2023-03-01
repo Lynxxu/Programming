@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Writing with JSX</title>
+  </head>
+  <body>
+    <h1>Writing markup with JSX</h1>
+    <p>
+      <b>JSX</b> is a syntax extension for JS, which enables HTML-like mark-up
+      in a JS file. Modern webs are made of CSS, JS and HTML, they are often
+      kept in separate files. Howevere, when webs are more interactive, JS
+      becomes in charge of the HTML.
+    </p>
+    <p>
+      A React component is essentially a JS function that may also contain
+      markup to be renderd. In this case, JSX is the markup, it is similar to
+      HTML but stricter and more dynamic
+    </p>
+    <h2>Convert HTML to JSX</h2>
+    <p>Although looks very similar, JSX have some rules to be remembered:</p>
+    <h3>1. Return a single root element</h3>
+    <p>
+      If we wish to return multiple elements from a component, wrap it in a
+      single parent tag like <code>&lt;div&gt;</code>. This is based on the fact
+      that we are using a JS function in form of React component. Even the JSX
+      markup looks like HTML, it is still transfomred into JS objects. Therefore
+      making it impossible to return two or more objects without a wrapper like
+      a array.
+    </p>
+    <pre>
+      let App = function Gallery() {
+        return (
+          &lt;section&gt;
+            &lt;h1&gt;Amazing fuhua&lt;/h1&gt;
+            &lt;Profile /&gt;
+            &lt;Profile /&gt;
+            &lt;Profile /&gt;
+          &lt;/section&gt;
+        );
+      };
+    </pre>
+    <p>
+      The elements can also be wrapped using a pair of empty tags:
+      <code>&lt;&gt;</code> and <code>&lt;/&gt;</code>. To be more specific,
+      they are called <b>Fragment</b>, enable grouping things with no traces on
+      HTML file
+    </p>
+    <h3>Close all tags</h3>
+    <p>
+      JSX requires tags to be closed: self closing tags must be closed within,
+      wrappings also must be closed. This is less of a concern because linter
+      could help.
+    </p>
+    <h3>camelCase</h3>
+    <p>
+      Since JSX would turn to JS, attributes in JSX becomes keys of JS. In the
+      components, many attributes should be read as variables in JS. Therefore,
+      as JS is unable to read dash and built in reserved naems, camelCase all
+      attributes and use their corresponding DOM properties. Two exception are
+      <code>aria-</code> and <code>data-</code> for historic reasons.
+    </p>
+  </body>
+</html>
