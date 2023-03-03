@@ -4,6 +4,25 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script type="text/babel" data-type="module" src="JSX.js"></script>
+    <style>
+      .gallery {
+        display: flex;
+        margin: 1em;
+        padding: 5px;
+        align-items: center;
+        justify-content: space-evenly;
+      }
+    </style>
     <title>Writing with JSX</title>
   </head>
   <body>
@@ -61,6 +80,281 @@
       as JS is unable to read dash and built in reserved naems, camelCase all
       attributes and use their corresponding DOM properties. Two exception are
       <code>aria-</code> and <code>data-</code> for historic reasons.
+    </p>
+    <h2>JSX with curly braces (JS in JSX)</h2>
+    <p>
+      HTML are usually written and marked with css and javascript. HTML
+      attributes can be set with quotes like the <code>Profile</code> function
+    </p>
+    <pre>
+      function Profile() {
+        return &lt;img src="../../../../Imgs/83181495_p0.jpg" alt="Fuhua" /&gt;;
+      }
+    </pre>
+    <p>
+      Here, the attributes are being passed as strings by quotes. However, they
+      can also be passed with javascript variables, but they need to be wrapped
+      with curly braces
+    </p>
+    <pre>
+      export default function Profile(){
+        const image = '../../../../Imgs/83181495_p0.jpg';
+        const description = 'Fuhua';
+        return{-
+          src = {image}
+          alt = {description}
+        }
+      }
+    </pre>
+
+    <h3>Mixing HTML and JS in JSX</h3>
+    <p>
+      Along with passing variables in JSX, Javascript variable, functions and
+      objects can be directly used in JSX;s html markup.
+    </p>
+    <pre>
+      export default function someFunc(){
+        const name = 'Chalin yang'
+        return(
+          &lt;h1&gt; {name}'s func &lt;/h1&gt;
+        )
+      }
+    </pre>
+    <p>
+      This way, the markup snippet can be changed dynamically via JS variables.
+      The same applies to functions that they need to be enclosed by curly
+      braces. For objects that already requires a set of curly braces around it,
+      they are wrapped with double braces. For example, a html element's style
+      can be adjusted by CSS in JSX as a form of object.
+    </p>
+    <pre>
+      export default function someFunc(){
+        return(
+          &lt;ul style = {{backgroundColor: 'black', color: 'pink'}}&gt; 
+            &lt;li&gt;some text&lt;/&gt;
+            &lt;/ul&gt;
+        )
+      }
+    </pre>
+    <h3>Notes on curly braces</h3>
+    <p>In JSX, we use curly braces only at:</p>
+    <ul>
+      <li>
+        As text in JSX tag, like
+        <code>&lt;h1&gt; {name}'s func &lt;/h1&gt;</code>
+      </li>
+      <li>
+        As an attribute immediately after equal sign <code>=</code> Like
+        <code>src = {image}</code>
+      </li>
+    </ul>
+    <h3>Putting everything together</h3>
+    <p>
+      It is possible to move many expressions into one big objects in JS, then
+      passing that object into JSX with curly braces. An overall example is
+      below
+    </p>
+    <pre>
+      const person = {
+        name = 'Chalin Yang',
+        descriptionTheme = {
+          backgroundColor = 'black',
+          color: 'pink'
+        }
+      }
+
+      export default function description(){
+        return(
+          &lt;div style={person.descriptionTheme}&gt;
+            &lt;h1&gt; {person.name}'s description&lt;/h1&gt;
+            &lt;img
+              className = 'someCSS'
+              src = 'source path'
+              alt = 'alt text'
+            /&gt;
+            &lt;ul&gt; 
+            &lt;li&gt;some text&lt;/&gt;
+            &lt;/ul&gt;
+          &lt;/div&gt;
+            );
+      }
+    </pre>
+    <p>
+      Just a sidenote, the inline <code>style</code> properties are written in
+      camelCase instead of conventional css attributes for reasons discussed
+      earlier.
+    </p>
+    <h2>Passing Props to a component</h2>
+    <p>
+      React component use props to communicate with each other. All parent
+      component can send some information into child components via
+      <b>props</b> in form of any JS value.
+    </p>
+    <p>
+      at the above example, we've already used some props such as
+      <code>className</code>, <code>src</code>, <code>alt</code>. They are
+      predefined by HTML standard. However, we can define our own component that
+      accepts any other props
+    </p>
+    <h3>Step 1. Passing props to child component</h3>
+    <p>
+      Again using our <code>Profile</code> example, lets build a child component
+      called <code>Avatar</code> and pass some props to it
+    </p>
+    <pre>
+      export default function Profile(){
+        return(
+          &lt;Avatar
+            person = {{name:'Chalin Yang', imageID :'chalin'}}
+            size = {100}
+          /&gt;
+        )
+      }
+    </pre>
+    <p>
+      In this case, the props are <code>person</code>, which is a object with
+      two key value pairs, <code>size</code>, which is a value in form of JS
+      expression since it's quoted by curly braces
+    </p>
+    <h3>Read props in child component</h3>
+    <p>
+      The props that were passed down(<code>person, size</code>) can be accessed
+      in the child component like a function parameter but quoted with curly
+      braces.
+    </p>
+    <pre>
+      function Avatar({ person, size }){
+        //some codes
+      }
+    </pre>
+    <p>
+      Now, we can add some codes in the component, where the props can be used
+      in rendering.
+    </p>
+    <pre>
+      function Avatar({ CodeName, size }) {
+        return (
+          &lt;img
+            className="avatar"
+            src={getPersonInfo(CodeName).imgURL}
+            alt={getPersonInfo(CodeName)}
+            width={size}
+            height={size}
+          /&gt;
+        );
+      }
+      
+      export default function Profile() {
+        return (
+          &lt;div&gt;
+            &lt;Avatar size={100} CodeName={"Eclipse"} /&gt;
+            &lt;Avatar size={80} CodeName={"WhiteNight"} /&gt;
+            &lt;Avatar size={60} CodeName={"Xunyu"} /&gt;
+          &lt;/div&gt;
+        );
+      }
+    </pre>
+    <p>
+      In the above code snippet, the Avatar receive props from its parent
+      function <code>Profile</code>. In this case, the props are defined from a
+      library, which is later dynamically set in the parent component. By
+      altering these props, child components can be modified. The above code
+      would generate the following markup
+    </p>
+    <div id="root"></div>
+    <p>
+      To be more specific, the props being passed to child are like arguments
+      for functions. They are the only argument in a React component in form of
+      a object. For example, one can use the full version of props as object:
+    </p>
+    <pre>
+      function Avatar(props) {
+        let person = props.person;
+        let size = props.size;
+        // ...
+      }
+    </pre>
+    <p>
+      However, this is equivalent to
+      <code>function Avatar({person, size})</code>. The curly braces
+      <b>deconstructs</b> the props object down into single parameters
+    </p>
+    <h3>Default value for props</h3>
+    <p>
+      simlar to functions, a prop can also be predefined to a value. Simply add
+      the value in the deconstruing syntax like
+      <code>function Avatar({ person, size = 100}){//...}</code>.
+    </p>
+    <p>
+      If the component <code>&lt;Avatar person = {...}/&gt;</code> is rendered
+      with no size props, it will be <code>100</code>. If an value was specified
+      , it will not be used.
+    </p>
+    <h2>Forward prop with JSX syntax</h2>
+    <p>
+      sometimes, there are many props to be passed. They can be specified using
+      the deconstruting syntax but it might be repetitive. The
+      <code>spread</code> syntax of JSX can help.
+    </p>
+    <pre>
+      function Profile(props){
+        return (
+          &lt;div className = 'card'&gt;
+            &lt;Avatar {...props}/&gt;
+          &lt;/div&gt;
+        );
+      }
+    </pre>
+    <p>
+      In this case, all of <code>Profile</code>'s props are passed to child
+      <code>Avatar</code> without being listed every time because of the
+      <code>...</code> spread syntax.
+    </p>
+    <h3>Passing JSX as children</h3>
+    <p>It is very common to see webs use nested tags like</p>
+    <pre>
+      &lt;div&gt;
+        &lt;img/&gt;
+      &lt;/div&gt;
+    </pre>
+    <p>
+      To create the same effect in a component via JSX tag. The parent component
+      will receive a <code>children</code> prop as the content being nested.
+    </p>
+    <pre>
+      
+    function Gallery({ children }) {
+      return &lt;div className="gallery"&gt;{children}&lt;/div&gt;;
+    }
+
+    function ProfileFlex() {
+      return (
+        &lt;Gallery&gt;
+          &lt;Avatar size={100} CodeName={"Eclipse"} /&gt;
+          &lt;Avatar size={80} CodeName={"WhiteNight"} /&gt;
+          &lt;Avatar size={60} CodeName={"Xunyu"} /&gt;
+        &lt;/Gallery&gt;
+      );
+    </pre>
+    <p>
+      The code above defines a new component called <code>Gallery</code>, which
+      takes a prop called children. This <code>children</code> prop are filled
+      with the <code>Avatar</code> components when the
+      <code>Gallery</code> component wraps them. They create the following
+      effect
+    </p>
+    <div id="gallery2"></div>
+    <h2>Props over time</h2>
+    <p>
+      In fact, props are <b>NOT</b> static. They can change due time, which
+      helps being interactive. They reflect a component's data at any point of
+      time.
+    </p>
+    <p>
+      However, props are immutable, if a component needs to change its props
+      like new data or interaction. They have to be passed a different prop
+      (different object). Props cannot be changed, if interactivity is needed,
+      we would need to set state.
     </p>
   </body>
 </html>
