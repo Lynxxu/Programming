@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script type="text/babel" data-type="module" src="Rendering.js"></script>
     <title>Rendering elements</title>
   </head>
   <body>
@@ -15,9 +25,148 @@
     </p>
     <p>
       Then, create the root element using <code>ReactDOM.createRoot()</code> or
-      <code>createRoot()</code>, both equivalent. Then, the created root element
-      was created
+      <code>createRoot()</code>, both equivalent. Then, the created root(DOM)
+      element was created and the React element can be rendered using
+      <code>root.render(element)</code>
     </p>
-    <p>1 3 8 24 35 42 43 18</p>
+    <h2>Conditional Rendering</h2>
+    <p>
+      It is worth mentioning that components being displayed could vary due
+      situations. Therefore, there is a need for rendering elements based on
+      certain conditions.
+    </p>
+    <h2>Conditional returning JSX</h2>
+    <p>
+      Say we have a component that checks the luggage of a perons, return if
+      it's packed or not, rendering some <code>items</code> that can be marked
+      as packed or not
+    </p>
+    <pre>
+      function Item({name, isPacked}){
+        return &lt;li className = 'item'&gt; {name} &lt;/li&gt;
+      }
+
+      export default function PackingList(){
+        return (
+          &lt;section&gt;
+            &lt;h1&gt;Jim's luggage list&lt;/h1&gt;
+            &lt;ul&gt;
+            &lt;Item
+                  isPacked = {true}
+                  name = 'Lube'
+            /&gt;
+            &lt;Item
+                  isPacked = {true}
+                  name = 'tissue paper'
+            /&gt;
+            &lt;Item
+                  isPacked = {false}
+                  name = 'Javalin'
+            /&gt;
+            &lt;/ul&gt;
+          &lt;/section&gt;
+        )
+      }
+    </pre>
+    <p>
+      Now it can be seen that, the corresponding item have a prop called
+      <code>isPacked</code> which contains info on whether it's packed or not.
+      We can add a checkmark beside it to indicate it's packed.
+    </p>
+    <pre>
+      function Item({ name, isPacked }){
+        if (isPacked){
+          return &lt;li className = 'item'&gt; {name} √ &lt;/li&gt;
+        }
+        return return &lt;li className = 'item'&gt; {name} &lt;/li&gt;
+      }
+    </pre>
+    <p>The generated code would have the following effect:</p>
+    <div id="root"></div>
+    <h2>Conditional (ternary) operator</h2>
+    <p>
+      as the above code is valid and ok, but it is repetitive. It's better to
+      avoid repetition. So a JS syntax called ternary operator can help. Rewrite
+      the code to:
+    </p>
+    <pre>
+      return(
+        &lt;li className = 'item'&gt;
+          {isPacked ? name + ‘√' : name }
+        &lt;li&gt;
+      );
+    </pre>
+    <p>
+      This simply means that, if <code>isPacked</code> is true, then
+      <code>?</code> render <code>name + '√'</code>, else <code>:</code> render
+      <code>name</code>
+    </p>
+    <p>
+      This syntax can be further expanded. For example, say I want to cross out
+      the items that are packed by using <code>&lt;del&gt;</code>. Then simply
+      expand the tenary syntax:
+    </p>
+    <pre>
+      return(
+        &lt;li className = 'item'&gt;
+          {isPacked ? (
+            &lt;del&gt;
+            name + ‘√' 
+            &lt;/del&gt;
+             ): 
+             (name) 
+            }
+        &lt;li&gt;
+      );
+    </pre>
+    <p>It would have the following effect</p>
+    <div id="crossed"></div>
+    <h3>AND operator</h3>
+    <p>
+      JS logical AND <code>&&</code> operator is another useful one. Again using
+      the checkmark example, without the AND operator, we would have to write if
+      statement. However, we can write using AND as below:
+    </p>
+    <pre>
+      return (
+        &lt;li&gt;
+          {name} {isPacked && '√'};
+      )
+     </pre
+    >
+    <p>
+      This code basically says
+      <i
+        >if <code>isPacked</code>, then (<code>&&</code>) render the
+        <code>√</code></i
+      >. The logcial AND operator would return the value of its right side
+      <b>IF </b>the left side (condition) is true. This works based on
+      evaluation of left side as a bollean. Therefore implicating that
+      non-bollean type like numbers may raise a issue when putting on the left
+      side(could be rendered )
+    </p>
+    <h3>Conditionally assigning JSX to var</h3>
+    <p>
+      Except the above two ways, there is also another method, which defines JSX
+      based on variables. It is verbose but flexible. Using the checkmarked
+      luggage list again:
+    </p>
+    <pre>
+      function Item ({ name, isPacked}){
+        let itemContent = name;
+        if (isPacked){
+          itemContent = name + '√'
+        }
+        return(
+          &lt;li className = 'item'&gt;
+            {itemContent}
+          &lt;/li&gt;
+        )
+      }
+    </pre>
+    <p>
+      Keeping the parent component the same, we have updated the Item function
+      so that it could generate different JSX by assignment of varibles.
+    </p>
   </body>
 </html>
