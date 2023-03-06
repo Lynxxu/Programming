@@ -168,5 +168,174 @@
       Keeping the parent component the same, we have updated the Item function
       so that it could generate different JSX by assignment of varibles.
     </p>
+    <h2>Rendering lists</h2>
+    <p>
+      Sometimes it is necessary to display a collection of data. In this case,
+      JS array method to manipulate an array of data. Using
+      <code>filter()</code>, <code>map()</code> methods, an array of data can be
+      transformed into an array of component.
+    </p>
+    <h3>rendering data from array</h3>
+    <p>Here's a list of content</p>
+    <pre>
+      &lt;ul&gt;
+        &lt;li&gt;Jim: Biochemistry&lt;/li&gt;
+        &lt;li&gt;Will: Chemistry&lt;/li&gt;
+        &lt;li&gt;Chalin: Math & Stat&lt;/li&gt;
+        &lt;li&gt;Oscar: Cognitive science&lt;/li&gt;
+      &lt;/ul&gt;
+    </pre>
+    <p>
+      In this list, it is very obvious to see that there is only difference in
+      content between all list items. In this case, we can store the content
+      into a JS array, then use <code>map()</code> and <code>filter()</code> to
+      render list of component from them
+    </p>
+    <p>Firstly, move the data into an array</p>
+    <pre>
+      const people = {
+        'Jim: Biochemistry',
+        'WIll: Chemistry',
+        'Chalin: Math and Stats'
+        'Oscar: cog science'
+      }
+    </pre>
+    <p>
+      Then, simply map the <code>people</code> members into a new array of JSX
+      nodes called <code>listItems</code> by
+      <code
+        >const listItem = people.map(person =>
+        <li>{person}</li>
+        )</code
+      >. Now it can be returned from the component:
+      <code
+        >return
+        <ul>
+          {listItems}
+        </ul></code
+      >
+    </p>
+    <p>The full code is as follows:</p>
+    <pre>
+      
+      function List1(){
+        const listItem = people.map(person =&gt; {
+          &lt;li&gt;{person}&lt;/li&gt;
+        })
+        return &lt;ul&gt;{listItem}&lt;/ul&gt;
+      }
+    </pre>
+    <p>This would generate the following block of code:</p>
+    <div id="list1"></div>
+    <h3>Filtering array of items</h3>
+    <p>The data can be even more structurally complex:</p>
+    <pre>
+      const people2 = [
+      {
+        id: 0,
+        name: "Jim",
+        major: "BioChem",
+      },
+      {
+        id: 1,
+        name: "Will",
+        major: "Chem",
+      },
+      {
+        id: 2,
+        name: "Chalin",
+        major: "math and stats",
+      },
+      {
+        name: "Oscar",
+        major: "cog sci",
+      },
+      {
+        name: "KK",
+        major: "Chem",
+      },
+    ];
+    </pre>
+    <p>
+      This is a more structured array of objects. If for some reason I only want
+      to display a student majoring in chemistry, the JS
+      <code>filter()</code> method can be used. It takes an array of items,
+      passing it through a test which returns a bollean, returning a new array
+      with all items that are successfully passed
+    </p>
+    <p>
+      In this case, an easy test function can be
+      <code>(person) => person.major ==='Chem'</code>, which the complete code
+      would be:
+    </p>
+    <pre>
+      const chemists = people2.filter((person) =&gt; person.major === "Chem");
+
+      function List2() {
+        const listItem2 = chemists.map((person) =&gt; &lt;li&gt;Name: {person.name}&lt;/li&gt;);
+        return (
+          &lt;&gt;
+            &lt;h3&gt;List of Chem major students&lt;/h3&gt;
+            &lt;ul&gt;{listItem2}&lt;/ul&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <p>The code would have the following effect</p>
+    <div id="list2"></div>
+    <p>
+      It must be noted that, in a arrow function. If the function is enclosed by
+      curly braces, then a <code>return</code> statement must be written. If
+      not, return is implicitly done.
+    </p>
+    <h3>Using <code>key</code> to keep list in order</h3>
+    <p>
+      if U open dev tools, u can see warnings for both examples above, which
+      says that each child in a list should have a unique 'key' prop. This means
+      that it is necessary to give each array item a <code>key</code>, which is
+      a unique identifier for it in a array.
+    </p>
+    <p>
+      To do this, it is suggested to include a key in the data array. Then pass
+      it down in the list item as a prop, simply edit the
+      <code>&lt;li&gt;</code> tag into <code>&lt;li key = {person.id}&gt;</code>
+    </p>
+    <h3>More on keys</h3>
+    <p>
+      Source of keys: They can be gathered from data in a database, most of the
+      time database keys are unique by nature. Or it can be logically generated
+      data, which applies to locally stored data, then packages can be used.
+    </p>
+    <p>
+      Keys must be unique in a array, but can be repeated in different arrays.
+      They should not be changed at all.
+    </p>
+    <p>
+      Keys in React are very much required because it gives React an idea of
+      which data belongs to which, they are like file names in a folder of
+      files, serving as unique identifiers for React. Even with postition
+      changes, React would be able to identify that component using its ID and
+      operate it.
+    </p>
+    <p>Some important things to be noted:</p>
+    <ul>
+      <li>
+        <code>key</code> cannot be replaced by indexing. The position of a item
+        in an array could be changed by interactions and JS dynamics, leading to
+        bugs
+      </li>
+      <li>
+        Simliary, do not geenrate IDs on the page. Have a stable
+        <code>key</code> for each item. Re-generating each time would lead to
+        poor performance and losing all user input on the item, since re-render
+        would generate a new one.
+      </li>
+      <li>
+        The <code>key</code> is only a hint for React, components won't receive
+        the <code>key</code> as a prop. if necessary, pass it into a separate
+        prop a id that will be used. Like
+        <code>&lt;Profile key ={id} userId = {id}/&gt;</code>
+      </li>
+    </ul>
   </body>
 </html>
