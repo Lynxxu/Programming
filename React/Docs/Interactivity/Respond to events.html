@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Respond to event.js"
+    ></script>
+    <style>
+      .BubbleBtnBG {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1em;
+        background-color: gray;
+      }
+    </style>
+    <title>Responding to event</title>
+  </head>
+  <body>
+    <h1>Responding to event</h1>
+    <p>
+      React enables adding event handler to JSX. They are functions that will be
+      triggered in response to certain interactions, exactly like JS.
+    </p>
+    <h2>Adding event handler</h2>
+    <p>
+      To add a event handler, simply define a function and pass it as a prop to
+      the corresponding JSX. For example, a button which sends a message can be
+      implemented with the following code.
+    </p>
+    <pre>
+      function Button(){
+        function handleClick(){
+          alert('Some message')
+        }
+
+        return(
+          &lt;button onClick = {handleClick}&gt;Click&gt;/button&gt;
+        )
+      }
+    </pre>
+    <p>
+      This would generate the button below. It works simply by passing the
+      handler function <code>handleClick</code> into the button.
+    </p>
+    <p>
+      Usually, a event handler function is usually defined inside the component
+      and have name that strats with <code>handle</code>. Some examples include
+      <code>onClick= {handleClick}</code> and
+      <code>onMouseEnter={handlerMouseEnter}</code>
+    </p>
+    <div id="btnTest"></div>
+    <p>Of course, it is also possible to use event handler inline in JSX.</p>
+    <ul>
+      <li>
+        &lt;button onClick = {function handleClick(){alert('some message')}}&gt;
+      </li>
+      <li>&lt;button onClick = {()=&gt;{alert('Some message')}}&gt;</li>
+    </ul>
+    <p>
+      However, it must be noted that, functions must be passed as event
+      handlers, not called. For example,
+      <code>&lt;button onClick = {handleClick}&gt;</code> is correct while
+      <code>&lt;button onClick = {handleClick()}&gt;</code> would render the
+      function immediately. Because JavaScript in JSX that are wrapped in curly
+      braces would be executed right away.
+    </p>
+    <p>
+      This is exactly the same for inline method of passing event handler.
+      <code>&lt;button onClick = {() =&gt; alert{'...'}}</code> is correct while
+      <code>&lt;button onClick = alert{'...'}</code> would execute everytime the
+      componenet is rendered.
+    </p>
+    <h3>Reading props in event handlers</h3>
+    <p>
+      Since event handler functions are defined in a component, they can access
+      the props of the component, Like below code:
+    </p>
+    <pre>
+      function AlertButton({ message, children }) {
+        return &lt;button onClick={() =&gt; alert(message)}&gt;{children}&lt;/button&gt;;
+      }
+      
+      function BtnList() {
+        return (
+          &lt;&gt;
+            &lt;AlertButton message="btnOne"&gt;Button one&lt;/AlertButton&gt;
+            &lt;AlertButton message="btnTwo"&gt;Button two&lt;/AlertButton&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <div id="btnList"></div>
+    <h3>Passing event handlers as props</h3>
+    <p>
+      Sometimes, we would wish for a parent component to specify child's event
+      handler. For example, a <code>Button</code> component would be a parent to
+      all buttons. by passing a event handler as a prop in the parent component
+      to child parent, we can create different buttons that performs differently
+    </p>
+    <pre>
+      function ButtonGeneral({ onClick, children }) {
+        return &lt;button onClick={onClick}&gt;{children}&lt;/button&gt;;
+      }
+      
+      function PlayButton({ musicName }) {
+        function handlePlayClick() {
+          alert(`playing ${musicName}`);
+        }
+        return (
+          &lt;ButtonGeneral onClick={handlePlayClick}&gt;Play {musicName}&lt;/ButtonGeneral&gt;
+        );
+      }
+      
+      function UploadButton() {
+        return (
+          &lt;ButtonGeneral onClick={() =&gt; alert("uploading")}&gt;
+            Upload image
+          &lt;/ButtonGeneral&gt;
+        );
+      }
+      
+      function BtnBar() {
+        return (
+          &lt;&gt;
+            &lt;PlayButton musicName="六等星の夜" /&gt;
+            &lt;UploadButton /&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <p>
+      This is a fairly straightforward code that generates the following two
+      buttons. In this example, <code>PlayButton</code> passes
+      <code>handlePlayClick</code> as a <code>onClick</code> prop in
+      <code>ButtonGeneral</code> comopnent. <code>UploadButton</code> passes an
+      arrow function that alerts uploading as a prop of <code>onClick</code> in
+      <code>Button</code>
+    </p>
+    <div id="btnBar"></div>
+    <p>
+      At the end, the <code>Button component</code> accepts the
+      <code>onClick</code> prop, which is then passed into browers'
+      <code>&lt;button&gt;</code>. In many design system, components like
+      buttons only contain styling, then the actual behaviour will be passed by
+      specific components like <code>PlayButton</code>
+    </p>
+    <h3>Naming event handler props</h3>
+    <p>
+      built-in components like <code>button</code> and <code>div</code> only
+      accepts browser event name like <code>onClick</code>. However, if custom
+      components are made, the event handler props can be named in any way. By
+      convention, they should start with <code>on</code>, followed by a
+      capitalized letter.
+    </p>
+    <p>
+      For example, the previous music button can be rewritten using a different
+      event handler name:
+    </p>
+    <pre>
+      function ButtonGeneral({ onHit, children}){
+       return(
+        &lt;button onClick = {onHit}&gt;
+        {children}
+        &lt;/button&gt;
+        )
+      }
+      function FunBtn(){
+        return (
+          &lt;&gt;
+          &lt;ButtonGeneral onHit = {()=&gt; alert('playing')}&gt;Play Sth&lt;/ButtonGeneral&gt;
+          &lt;ButtonGeneral onHit = {()=&gt; alert('Uploading')}&gt;Upload&lt;/ButtonGeneral&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <h3>Event propagation</h3>
+    <p>
+      Event propagation is a must-know concept in JS. In React JSX, event
+      handlers would also catch events from any children of component. It starts
+      from the event and propagates up the tree. Take the following bar as an
+      example.
+    </p>
+    <div id="bubbleBar"></div>
+    <p>
+      It is a farily easy code block, the <code>button</code>'s
+      <code>onClick</code> would run first, then the parent
+      <code>&lt;div&gt;</code>'s <code>onClick</code>.
+    </p>
+    <pre>
+      function BubbleBtn() {
+        return (
+          &lt;div
+            className="BubbleBtnBG"
+            onClick={() =&gt; {
+              alert("u clicked the background");
+            }}
+          &gt;
+            &lt;button
+              onClick={() =&gt; {
+                alert("Playing");
+              }}
+            &gt;
+              Play Music
+            &lt;/button&gt;
+            &lt;button
+              onClick={() =&gt; {
+                alert("Uploading");
+              }}
+            &gt;
+              Upload img
+            &lt;/button&gt;
+          &lt;/div&gt;
+        );
+      }
+    </pre>
+    <h3>Stopping propagation</h3>
+    <p>
+      Event handlers would receive an event object as only argument. It's
+      usually called <code>e</code>, which contains info about the event, and
+      enables stopping of propagation to the parent component. Simply call
+      <code>e.stopPropagation()</code> at the wanted component.
+    </p>
+    <p>
+      In the case of the above code, it is useful to create another large
+      <code>Button</code> component that will stop propagating, replacing all
+      native <code>buttons</code>
+    </p>
+    <pre>
+      function Button({onClick, children}){
+        return(
+          &lt;button onClick={e =&gt; {e.stopPropagation(); onClick;}}&gt;{children}&lt;/button&gt;
+        )
+      }
+
+      function BubbleBtn() {
+        return (
+          &lt;div
+            className="BubbleBtnBG"
+            onClick={() =&gt; {
+              alert("u clicked the background");
+            }}
+          &gt;
+            &lt;Button
+              onClick={() =&gt; {
+                alert("Playing");
+              }}
+            &gt;
+              Play Music
+            &lt;/Button&gt;
+            &lt;Button
+              onClick={() =&gt; {
+                alert("Uploading");
+              }}
+            &gt;
+              Upload img
+            &lt;/Button&gt;
+          &lt;/div&gt;
+        );
+      }
+    </pre>
+    <p>In this case, when a button is clicked, the following occurs:</p>
+    <ul>
+      <li>React calls <code>onClick</code> handler in <code>button</code></li>
+      <li>
+        The handler defined in <code>Button</code> would call
+        <code>e.stopPropagation()</code> and call <code>onClick</code> function,
+        which is a prop passed from the other component
+      </li>
+      <li>
+        That function (<code>onClick</code>) in the component would display the
+        alert
+      </li>
+      <li>propagation is stopped as it's called</li>
+    </ul>
+    <p>
+      note that in this button event handler,
+      <code>onClick={e =&gt; {e.stopPropagation(); onClick();}}</code>, the
+      function would run both lines, that's stop propagation and execute the
+      passed <code>onClick()</code> function. Based on this idea, we can add
+      more code in the event handler, which provides an alternative way than
+      propagation
+    </p>
+    <h3>Preventing default behaviour</h3>
+    <p>
+      Some browers events have default behaviours associated with it. Like
+      <code>&lt;form&gt;</code> would refresh the page when it's submitted:
+    </p>
+    <div id="form"></div>
+    <p>
+      similar to prevent propagation, again using <code>e</code>,
+      <code>e.preventDefault()</code> would stop default behaviour like the code
+      and effect below:
+    </p>
+    <pre>
+      function FormTest1() {
+        return (
+          &lt;form
+            onSubmit={(e) =&gt; {
+              e.preventDefault();
+              alert("submission success");
+            }}
+          &gt;
+            &lt;input /&gt;
+            &lt;button&gt;send, default prevented&lt;/button&gt;
+          &lt;/form&gt;
+        );
+      }
+    </pre>
+    <div id="form1"></div>
+    <p>
+      <code>e.stopPropagation()</code> and <code>e.preventDefault()</code> are
+      two different functions with no relation, do not mix them. One prevents
+      propagation while the other prevent default behaviour
+    </p>
+  </body>
+</html>

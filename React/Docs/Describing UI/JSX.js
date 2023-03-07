@@ -4,13 +4,13 @@ import { createRoot } from "react-dom/client";
 let lib = {
   Eclipse: {
     name: "Fuhua: Eclipse",
-    imgURL: "../../../Resources/img/Eclipse.jpg",
+    imgURL: "../../Resources/img/Eclipse.jpg",
   },
   WhiteNight: {
     name: "Fuhua: Baiye",
-    imgURL: "../../../Resources/img/WhiteNight.jpg",
+    imgURL: "../../Resources/img/WhiteNight.jpg",
   },
-  Xunyu: { name: "Fuhua: Xunyu", imgURL: "../../../Resources/img/xunyu.jpg" },
+  Xunyu: { name: "Fuhua: Xunyu", imgURL: "../../Resources/img/xunyu.jpg" },
 };
 
 function getPersonInfo(CodeName) {
