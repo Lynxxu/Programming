@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=-, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script type="text/babel" data-type="module" src="state.js"></script>
+    <style>
+      .listStyle {
+        border: 1px;
+        border-radius: 5%;
+        background-color: aliceblue;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        width: 90%;
+        box-shadow: inset 0 0 0 10px white; /* use padding as a color separation*/
+      }
+      .fuHuaPic {
+        width: 80%;
+        margin: 1em;
+      }
+      .flexComp {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    </style>
+    <title>State</title>
+  </head>
+  <body>
+    <h1>State</h1>
+    <p>
+      Components often needs change due interaction. For example, clicking a
+      button should update the component for the button's purpose. To enable
+      this, components need to 'remember' things as specific <code>state</code>
+    </p>
+    <div id="fuHuaDisplay"></div>
+    <p>The above introduction is created with the code below:</p>
+    <pre>
+      function FuHuaStack() {
+        const [index, setIndex] = useState(0);
+        let fuHua = FuHuaList[index];
+        return (
+          &lt;div className="listStyle"&gt;
+            &lt;h2&gt;{fuHua.name}&lt;/h2&gt;
+            &lt;button onClick={() =&gt; setIndex(index + 1)}&gt;Next&lt;/button&gt;
+            &lt;img src={fuHua.img} className="fuHuaPic"&gt;&lt;/img&gt;
+            &lt;p&gt;{fuHua.description}&lt;/p&gt;
+          &lt;/div&gt;
+        );
+      }
+    </pre>
+    <p>
+      It's very obvious to see that, the line
+      <code>const [index, setIndex] = useState(0);</code> and the
+      <code>set-index</code> in the button enables change of state. Without a
+      change of state, even the index is updated, React component won't be
+      affected. This is because React would have to re-render once an update is
+      needed, however, changes to Local variable won't trigger that.
+    </p>
+    <p>
+      In this case, the <code>useState</code> Hook provides a state variable to
+      retain data between renders, and a state setter function to be updated and
+      trigger React for re-rendering.
+    </p>
+    <p>
+      To be specific, in <code>const [index, setIndex]=useState</code> ,
+      <code>index</code> is a state varibale while <code>setIndex</code> is the
+      setter function. The <code>[]</code> is the array destructing syntax. It
+      allows reading values from an array. Also, <code>useState</code> always
+      return a array of two items. The handler function would then change the
+      index, that is in the anonymous function of button,
+      <code>()=&gt; setIndex(index +1)</code>
+    </p>
+    <h2>Hook</h2>
+    <p>
+      The use of state by <code>useState</code> is a example of Hook. In React,
+      functions that start with <code>use</code> is a Hook. Put simply, they are
+      special functions that are only avaliable when React is rendering. They
+      could 'hook into' various React features
+    </p>
+    <p>
+      It is important to note that, Hooks are to be used in the top level of
+      component. It cannot be called in loops, conditions and nested functions.
+      Hooks are functions but they act like a 'import' at the top of file
+    </p>
+    <h2><code>useState</code> specifics</h2>
+    <p>
+      When calling <code>useState</code>, essentially you are telling React to
+      remember something. in the case of
+      <code>const [index, setIdenx] = useState(0)</code>, React is remembering
+      <code>index</code>
+    </p>
+    <p>
+      There is only one argument in <code>useState</code>, that's the initial
+      value of the variable, in this case, <code>index</code>'s value is 0, set
+      by <code>useState(0)</code>
+    </p>
+    <p>
+      Each time the component renders, <code>useState</code> would give an array
+      of two values as mentioned earlier (state variable <code>index</code> and
+      state setter function <code>setIndex</code>). The process is as follows:
+    </p>
+    <ul>
+      <li>
+        The component renders first time as <code>useState(0)</code>, so it
+        would return <code>[0, setIndex]</code> and React remebers 0 as last
+        value
+      </li>
+      <li>
+        The state is updated using
+        <code> setIndex(index +1)</code> as the event handler function. Now
+        react remebers <code>index</code> is 1, triggering re-render/code
+      </li>
+      <li>
+        The comoponent renders the second time, React would still see
+        <code>useState(0)</code> but it remebers that <code>index</code> was set
+        to 1, so returning <code>[1, setIndex]</code>
+      </li>
+    </ul>
+    <h2>Multiple states in one component</h2>
+    <p>
+      It is possible and very common to add multiple states in one component.
+      For example, we can add a button to collapse the description in the
+      example earlier. This can be done by adding a new state variable that is
+      boolean
+    </p>
+    <pre>
+      function FuHuaStackCollapsable() {
+        const [index, setIndex] = useState(0);
+        const [showMore, setShowMore] = useState(false);
+        let fuHua = FuHuaList[index];
+        return (
+          &lt;div className="listStyle"&gt;
+            &lt;h2&gt;{fuHua.name}&lt;/h2&gt;
+            &lt;button
+              onClick={() =&gt; {
+                setIndex(index + 1);
+              }}
+            &gt;
+              Next
+            &lt;/button&gt;
+            &lt;img src={fuHua.img} className="fuHuaPic"&gt;&lt;/img&gt;
+            &lt;button
+              onClick={() =&gt; {
+                setShowMore(!showMore);
+              }}
+            &gt;
+              {showMore ? "Hide" : "Show"} description
+            &lt;/button&gt;
+            {showMore && &lt;p&gt;{fuHua.description}&lt;/p&gt;}
+            &lt;p&gt;{index + 1}&lt;/p&gt;
+          &lt;/div&gt;
+        );
+      }  
+    </pre>
+    <div id="fuHuaDisplayCollapsable"></div>
+    <
+    <p>
+      It is quite the same logic with the <code>index</code> state. Put simply,
+      we made a <code>showMore</code> variable, set to false at initial using
+      <code>useState(false)</code>. It is later updated using the button with
+      <code>setShowMore</code> setter function.
+    </p>
+    <p>
+      In React, <code>useState</code> don't receive the information on which the
+      variable is updated. It knows the variable by order. Put simply, Hooks are
+      almost always called in order at the top module (not in loops, etc so no
+      chaotic sequence). React would hold an array of state paris for each
+      component. It also maintains the current pair index. Everytime
+      <code>useState</code> was called, React would increment the index and
+      store in the pair.
+    </p>
+    <h3>State is private and isolated</h3>
+    <p>
+      State is local to a component instance on screen. That implies even if two
+      identical ccomponents are rendered, changing one will not affect the
+      other. Like the following example
+    </p>
+    <div id="dualcomponent"></div>
+    <p>
+      It is enabled by the following simply code. Even if the two identical
+      component are rendered in the same parent component, the parent component
+      have no information on it. State is fully private and local to the
+      component delcaring it and parent compnent can't change it. When it is
+      rendered in the screen, state is local to the particular place of screen.
+    </p>
+    <pre>
+      function DualComponent() {
+        return (
+          &lt;div className="flexComp"&gt;
+            &lt;FuHuaStackCollapsable /&gt;
+            &lt;FuHuaStackCollapsable /&gt;
+          &lt;/div&gt;
+        );
+      }
+    </pre>
+  </body>
+</html>
