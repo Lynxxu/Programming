@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Render and commit</title>
+  </head>
+  <body>
+    <h1>Render and commit: concepts in React</h1>
+    <p>
+      Components must be rendered by React before being displayed on screen. The
+      process of render and commit in React is explained in this article.
+    </p>
+    <p>
+      Using React documentation's analogy, React, components and rendered UI are
+      like a restaurant. Components are in the kitchen preparing the tasty UIs,
+      React is the waiter who give and take orders from customer to kitchen.
+      There are 3 steps in the process:
+    </p>
+    <ul>
+      <li>Triggering render: (delivering order to kitchen)</li>
+      <li>Rendering the component: (preparing order in kitchen)</li>
+      <li>Committing to DOM: (serving the order to table)</li>
+    </ul>
+    <h2>Step 1: trigger render</h2>
+    <p>
+      A component can be rendered either as it is the initial render or state
+      update (the component or it's ancestor)
+    </p>
+    <p>
+      For the first scenario, when the app starts, initial render needs to be
+      triggered. It's done by calling <code>createRoot</code> with the target
+      DOM node(position of your rendered component in HTML), then calling
+      <code>render</code> with component.
+    </p>
+    <pre>
+      
+      const finalStack = createRoot(document.getElementById("finalStack"));
+      finalStack.render(&lt;FinalStack /&gt;);
+    </pre>
+    <p>
+      Or, the component could also be rendered when the state updates. To do
+      this, we update the state using <code>set</code> functions. It's like the
+      guest in restaurant would like re-order or change an order
+    </p>
+    <h2>React renders the component</h2>
+    <p>
+      After triggering a render, React would call the components to compute what
+      to display on screen. 'Rendering' is essentially React calling the
+      components. Initial render would be calling root component, subsequent
+      reredner would be calling function components that has a state update
+      triggering the render. This is a recursive process, so react would render
+      the returned component, if the comoponent returns another component, then
+      it would keep rendering what's being returned untill nothing left.
+    </p>
+    <h2>Step 3: commit changes to DOM</h2>
+    <p>After React renders the component, it will modify the DOM.</p>
+    <ul>
+      <li>
+        For initial render, React would use <code>appendChild()</code> DOM API
+        to add the DOM node being created
+      </li>
+      <li>
+        For re-renders, React would calculate and apply minimal operations
+        needed and modify the DOM.
+      </li>
+    </ul>
+    <p>
+      React would only change DOM node if renders are different. For example, a
+      clock would constantly be changing, causing React to constantly re-render.
+      But an separate node in the same module won't re-render as it's not
+      affected.
+    </p>
+    <p>
+      Lastly, when React has updated the DOM and finished rendering, browers
+      would repaint the screen. This is called 'browser rendering', but to avoid
+      confusion, it's mostly called browser painting in Reacts
+    </p>
+  </body>
+</html>

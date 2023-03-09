@@ -208,5 +208,58 @@
         );
       }
     </pre>
+    <p>
+      However, it is obvious that there are still some problems with this code.
+      For exmaple, it does not support going back to the previous slide, and
+      once all slides are run out, pressing next would crash it. To fix this
+      problem, we can add a previous button and disable buttons at the first and
+      last page.
+    </p>
+    <p>
+      The code below is an example, which is fairly straigtforward. The use of
+      AND operator <code>&&</code> enables the conditional rendering, so the
+      button would disappear when reaching the last or first page
+    </p>
+    <pre>
+      function FinalStack() {
+        const [index, setIndex] = useState(0);
+        const [showMore, setShowMore] = useState(false);
+        let fuHua = FuHuaList[index];
+        return (
+          &lt;div className="listStyle"&gt;
+            &lt;h2&gt;{fuHua.name}&lt;/h2&gt;
+            {index &lt; 2 && (
+              &lt;button
+                onClick={() =&gt; {
+                  setIndex(index + 1);
+                }}
+              &gt;
+                Next
+              &lt;/button&gt;
+            )}
+            {index &gt; 0 && (
+              &lt;button
+                onClick={() =&gt; {
+                  setIndex(index - 1);
+                }}
+              &gt;
+                Previous
+              &lt;/button&gt;
+            )}
+            &lt;img src={fuHua.img} className="fuHuaPic"&gt;&lt;/img&gt;
+            &lt;button
+              onClick={() =&gt; {
+                setShowMore(!showMore);
+              }}
+            &gt;
+              {showMore ? "Hide" : "Show"} description
+            &lt;/button&gt;
+            {showMore && &lt;p&gt;{fuHua.description}&lt;/p&gt;}
+            &lt;p&gt;{index + 1}&lt;/p&gt;
+          &lt;/div&gt;
+        );
+      }
+    </pre>
+    <div id="finalStack"></div>
   </body>
 </html>

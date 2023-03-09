@@ -88,3 +88,45 @@ function DualComponent() {
 
 const dualcomponent = createRoot(document.getElementById("dualcomponent"));
 dualcomponent.render(<DualComponent />);
+
+function FinalStack() {
+  const [index, setIndex] = useState(0);
+  const [showMore, setShowMore] = useState(false);
+  let fuHua = FuHuaList[index];
+  return (
+    <div className="listStyle">
+      <h2>{fuHua.name}</h2>
+      {index < 2 && (
+        <button
+          onClick={() => {
+            setIndex(index + 1);
+          }}
+        >
+          Next
+        </button>
+      )}
+      {index > 0 && (
+        <button
+          onClick={() => {
+            setIndex(index - 1);
+          }}
+        >
+          Previous
+        </button>
+      )}
+      <img src={fuHua.img} className="fuHuaPic"></img>
+      <button
+        onClick={() => {
+          setShowMore(!showMore);
+        }}
+      >
+        {showMore ? "Hide" : "Show"} description
+      </button>
+      {showMore && <p>{fuHua.description}</p>}
+      <p>{index + 1}</p>
+    </div>
+  );
+}
+
+const finalStack = createRoot(document.getElementById("finalStack"));
+finalStack.render(<FinalStack />);
