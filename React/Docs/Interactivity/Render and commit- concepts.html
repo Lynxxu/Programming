@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Render and commit.js"
+    ></script>
     <title>Render and commit</title>
   </head>
   <body>
@@ -77,5 +91,134 @@
       would repaint the screen. This is called 'browser rendering', but to avoid
       confusion, it's mostly called browser painting in Reacts
     </p>
+    <h2>State as a snapshot</h2>
+    <p>
+      State variables looks like regular JS variables that can be read and
+      updated. However, they are more of a snapshot, updating it won't affect
+      the state variable, but rather triggers a re-render
+    </p>
+    <p>
+      Like mentioned before, to update a component due user interaction, it is
+      necessary to update the state. For example.
+    </p>
+    <div id="testForm"></div>
+    <p>This form is enabled by this code below:</p>
+    <pre>
+      function Form() {
+        const [isSent, setIsSend] = useState(false);
+        const [message, setMessage] = useState("Hi!");
+      
+        if (isSent) {
+          return &lt;h1&gt;Your msg is on the way&lt;/h1&gt;;
+        }
+      
+        return (
+          &lt;&gt;
+            &lt;form
+              onSubmit={(e) =&gt; {
+                e.preventDefault();
+                setIsSend(true);
+              }}
+            &gt;
+              &lt;textarea
+                placeholder="Message"
+                value={message}
+                onChange={(e) =&gt; setMessage(e.target.value)}
+              /&gt;
+              &lt;button type="submit"&gt;send&lt;/button&gt;
+            &lt;/form&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <p>
+      When the button is clicked, the <code>onSubmit</code> event handler would
+      execute, which calls <code>setIsSent(true)</code>, setting
+      <code>isSent</code> true, and triggers new render. React would then, based
+      on the new <code>isSent</code> value, re-render the comopnent.
+    </p>
+    <h3>Rendering and time</h3>
+    <p>
+      Rendering means that React calls the compoonent, which is essentially
+      functions. JSX that are returned from function are like the snapshot of
+      the UI. All of its props, event handlers and local variables are
+      calculated at the state of the time.
+    </p>
+    <p>
+      When React re-renders a component, it would call the function again, the
+      function then returns a new JSX snapshot. React would update the screen to
+      match the snapshot being returned earlier.
+    </p>
+    <p>
+      State, as a component's memory, is not like a regular variable that
+      disappear after the function returns. They sort of live in React outside
+      the function. When React calls component, it gives a snapshot of the state
+      of the particular render. The component then returns a snapshot of UI with
+      new set of props and event handlers, calculated using the state of render.
+    </p>
+    <p>
+      This seems to be a little abstract, so lets demonstrate using a little
+      experiment.
+    </p>
+    <p>
+      The button below would update the status of the value. It is written by
+      updating the number three times in one render.
+    </p>
+    <div id="counter1"></div>
+    <pre>
+      function Counter() {
+        const [number, setNumber] = useState(0);
+      
+        return (
+          &lt;&gt;
+            &lt;h1&gt;{number}&lt;/h1&gt;
+            &lt;button onClick={() =&gt; {
+              setNumber(number + 1);
+              setNumber(number + 1);
+              setNumber(number + 1);
+            }}&gt;+3&lt;/button&gt;
+          &lt;/&gt;
+        )
+      }
+    </pre>
+    <p>
+      From looking at the code, if thinking from a traditional JS perspective,
+      the outcome number should be updated 3 times, since it's 0 + 1 + 1 + 1.
+      However, in React, the rendered component is based on the snapshot of the
+      state. In this case, React prepares to change the number from 0 to 1 three
+      times, so the state is still 1 after re-render. It is easier to think of
+      this process as repeating <code>setNumber(0+1)</code> three times.
+    </p>
+    <p>
+      Using the same sense, the below code would geneate an alert of the current
+      state variable.
+    </p>
+    <pre>
+      function CounterTwo() {
+        const [number, setNumber] = useState(0);
+        return (
+          &lt;&gt;
+            &lt;h1&gt;{number}&lt;/h1&gt;
+            &lt;button
+              onClick={() =&gt; {
+                setNumber(number + 3);
+                setTimeout(() =&gt; {
+                  alert(number);
+                }, 3000);
+              }}
+            &gt;
+              +3
+            &lt;/button&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <p>
+      Even we set a timeout on the alert until the re-render was completed,
+      React would still render the alert using the <b>snapshot</b> of state at
+      the point of triggering by user.
+    </p>
+
+    <div id="counter2"></div>
   </body>
 </html>
