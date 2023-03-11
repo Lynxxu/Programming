@@ -66,6 +66,24 @@ function CounterTwo() {
   );
 }
 
+function CounterThree() {
+  const [number, setNumber] = useState(0);
+  return (
+    <>
+      <h1>{number}</h1>
+      <button
+        onClick={() => {
+          setNumber((n) => n + 1);
+          setNumber((n) => n + 1);
+          setNumber((n) => n + 1);
+        }}
+      >
+        +3
+      </button>
+    </>
+  );
+}
+
 const CounteTwo = createRoot(document.getElementById("counter2"));
 CounteTwo.render(<CounterTwo />);
 
@@ -74,3 +92,6 @@ CounteOne.render(<CounterOne />);
 
 const testForm = createRoot(document.getElementById("testForm"));
 testForm.render(<Form />);
+
+const CounteThree = createRoot(document.getElementById("counter3"));
+CounteThree.render(<CounteThree />);

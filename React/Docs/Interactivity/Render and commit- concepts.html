@@ -218,7 +218,129 @@
       React would still render the alert using the <b>snapshot</b> of state at
       the point of triggering by user.
     </p>
-
-    <div id="counter2"></div>
+    <h2>Queueing series of state update</h2>
+    <p>
+      as mentioned earlier, React would take a snapshot of the state to render,
+      this causes the phenonmenon where calling
+      <code>setNumber(n+1)</code> three times would only lead to one increment
+      as discussed earlier.
+    </p>
+    <p>
+      Another factor to consider in the process is that, React would wait until
+      all codes in the event handlers are run before processing the state
+      update. This explains why re-render only happens after all
+      <code>setNumber()</code> calls. Using the restaurant analogy again, this
+      is like a waiter take the order from customer. He would not pass one order
+      to kitchen as soon as one dish is requested. He will wait until the
+      customer to have ALL the dishes requested, changed and finished before
+      passing it to kitchen. This enables multiple state variable update, even
+      from different components, to update within very small number of
+      re-renders. However, this also means that the UI won't be updated until
+      after all event handlers and code are finished. This process is known as
+      <b>batching</b>, allowing React to run faster and avoid paritally updated
+      variables in a render. React does this in a reasonable way, for example,
+      each click is treated as a single batch. React would not batch intentional
+      events to avoid problems.
+    </p>
+    <h3>Update the same state before render</h3>
+    <p>
+      Although uncommon, it is possible ot update the same state variable before
+      the next render. Remember that React recognizes
+      <code>setNumber(number+1)</code> as add the state by 1 in the
+      <i>next</i> render, simply pass a function in the setter function like
+      <code>setNumebr(n =&gt; n+1)</code>. React would, based on the previous
+      state, calculate the next state. This is essentially telling React to do
+      sth with the state value.
+    </p>
+    <pre>
+      function CounterThree() {
+        const [number, setNumber] = useState(0);
+        return (
+          &lt;&gt;
+            &lt;h1&gt;{number}&lt;/h1&gt;
+            &lt;button
+              onClick={() =&gt; {
+                setNumber((n) =&gt; n + 1);
+                setNumber((n) =&gt; n + 1);
+                setNumber((n) =&gt; n + 1);
+              }}
+            &gt;
+              +3
+            &lt;/button&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <div id="counter3"></div>
+    <p>
+      The updated button should now increment by 3 in one render. In this
+      example, <code>n=&gt;n + 1</code>
+    </p>
+    is called an updater function. When it's passed to a state setter:
+    <ul>
+      <li>
+        React queue the function to be processed after all codes in event
+        handler has run
+      </li>
+      <li>
+        during the next render, React runs the queue and gives the final updated
+        state
+      </li>
+      <li>
+        In the example above, React recognizes all three event handlers as
+        updater function, they are all queued.
+      </li>
+    </ul>
+    <p>
+      Now, during the next render, React goes through the queue and process the
+      functions. n was 0 in the beginning, updated to be 1, 2, 3 in three
+      functions of the queue. It then stores 3 as the final result and return it
+      from <code>useState</code>.
+    </p>
+    <h3>Sequence in state update</h3>
+    <pre>
+      &lt;button onClick={() =&gt; {
+        setNumber(number + 5);
+        setNumber(n =&gt; n + 1);
+      }}&gt;
+    </pre>
+    <p>
+      The above code updates the state after the updater function. React would
+      queue the tasks as the Sequence goes. The first task is
+      <code>setNumber(number+5)</code>, which is essentially replace
+      <code>number</code> with 5, since n is 0. The second task would be
+      preceived as a function, <code>n=&gt;n+1</code>, queued in the second.
+      This means the final result would be 5+1 = 6.
+    </p>
+    <p>
+      Now what if we do it in the reverse way like the code below. Again React
+      starts a queue of update, the first one is replacing n with 5, second one
+      is a function, <code>n =&gt; n + 1</code> and the third one is replacing n
+      with 42. Therefore it would generate 42
+    </p>
+    <pre>
+      &lt;button onClick={() =&gt; {
+        setNumber(number + 5);
+        setNumber(n =&gt; n + 1);
+        setNumber(42);
+      }}&gt;
+    </pre>
+    <p>
+      When the event handlers are completed, React would trigger a re-render,
+      the queued updates will be conducted and updater functions will be run.
+      This means that it is best to make updater functions pure to avoid
+      unintended errors.
+    </p>
+    <p>
+      It is conventional to name the updater function argument by the first
+      letter of corresponding state variable like below. It is also common to
+      just repeat the state variable name like
+      <code>setEnabled(enabled =&gt; !enabled)</code>
+    </p>
+    <pre>
+      setEnabled(e =&gt; !e);
+      setLastName(ln =&gt; ln.reverse())
+      setFriendCount(fc =&gt; fc *2)
+    </pre>
   </body>
 </html>
