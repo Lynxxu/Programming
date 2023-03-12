@@ -342,5 +342,90 @@
       setLastName(ln =&gt; ln.reverse())
       setFriendCount(fc =&gt; fc *2)
     </pre>
+    <p>
+      Here's a troubleshooting exmaple from
+      <a
+        href="https://beta.reactjs.org/learn/queueing-a-series-of-state-updates"
+        >React tutorial</a
+      >. Pressing the button would misbehave.
+    </p>
+    <div id="requestTracker"></div>
+    <pre>
+      export default function RequestTracker() {
+        const [pending, setPending] = useState(0);
+        const [completed, setCompleted] = useState(0);
+
+        async function handleClick() {
+          setPending(pending + 1);
+          await delay(3000);
+          setPending(pending - 1);
+          setCompleted(completed + 1);
+        }
+
+        return (
+          &lt;&gt;
+            &lt;h3&gt;
+              Pending: {pending}
+            &lt;/h3&gt;
+            &lt;h3&gt;
+              Completed: {completed}
+            &lt;/h3&gt;
+            &lt;button onClick={handleClick}&gt;
+              Buy     
+            &lt;/button&gt;
+          &lt;/&gt;
+        );
+      }
+
+      function delay(ms) {
+        return new Promise(resolve =&gt; {
+          setTimeout(resolve, ms);
+        });
+      }
+    </pre>
+    <p>
+      It is fairly straightforward, in the first render, both the
+      <code>pending</code> and <code>completed</code> are 0. Since they are not
+      updater functions, they will be queued and performed using that current
+      snapshot of state of 0. This means that we are essentially writing only
+      <code>setPending(pending + 1)</code> and
+      <code>setCompleted(completed+1)</code>. Since it's a async function, the
+      component would for a brief moment show 1 for pending, but will be updated
+      to -1 once timer goes. In the second render, pending = -1 and completed =
+      1, third render, pending = -2, completed = -2 and this goes on.
+    </p>
+    <p>
+      To correct this error, simply change all of them into updater functions.
+      Then the functions will be done with respect to the latest variable from
+      last function instead of the 'snapshot' state variable.
+    </p>
+    <p>Here's a piece of code that simulates the React algorithm:</p>
+    <pre>
+      export function getFinalState(baseState, queue) {
+        let finalState = baseState;
+      
+        for (let update of queue) {
+          if (typeof update === 'function') {
+            finalState = update(finalState)
+          } else {
+            finalState = update
+          }
+        }
+      
+        return finalState;
+      }
+    </pre>
+    <p>
+      In here, base state is the snapshot of state in render. queue is a array
+      of numbers and updater functions. React would perform a loop in the queue,
+      if it's a function then it is immediately performed to the state. If it's
+      a number, then it is going to be replaced by that number. Take
+      <code>[5, n =&gt; n+1, 42]</code> as a example, React would loop three
+      times, first time setting <code>finalState</code> to 5, then
+      <code>finalState = (finalState +1)</code> and finally
+      <code>finalState = 42</code>. Note that this is all done in a loop,
+      nothing is returned until all calculations are done. Therefore, since we
+      redefined <code>finalState</code> to 42 in the last run, React returns 42
+    </p>
   </body>
 </html>
