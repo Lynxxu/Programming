@@ -193,6 +193,7 @@
       Using the same sense, the below code would geneate an alert of the current
       state variable.
     </p>
+    <div id="counter2"></div>
     <pre>
       function CounterTwo() {
         const [number, setNumber] = useState(0);
@@ -399,6 +400,7 @@
       Then the functions will be done with respect to the latest variable from
       last function instead of the 'snapshot' state variable.
     </p>
+    <div id="requestTracker2"></div>
     <p>Here's a piece of code that simulates the React algorithm:</p>
     <pre>
       export function getFinalState(baseState, queue) {

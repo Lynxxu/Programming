@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="update object in state.js"
+    ></script>
+    <title>Updating object in state</title>
+  </head>
+  <body>
+    <h1>Updating objects in state</h1>
+    <p>
+      As shown earlier in our <a href="state.html">state</a> article, state can
+      hold numbers and booleans. In fact, they can hold any kind of JS value,
+      including objects. However, the object should not be changed in the state
+      directly, but rather subsituted for a new one.
+    </p>
+    <h2>mutation</h2>
+    <p>
+      Shown in our previous example, with
+      <code>const [x, setX] = useState(0);</code>, we are storing a number in
+      the state. Numbers, strings and booleans are JS values that are
+      <b>immutable</b>, meaning they cannot be changed. When we use
+      <code>setX(5)</code>, we are actually replacing the value and triggering a
+      re-render. In this case, the <code>x</code> state changed from 0 to 5, but
+      the number <code>0</code> is not changed. This also applies for Strings,
+      booleans and numbers
+    </p>
+    <p>
+      However, an object in state is mutable, for example,
+      <code>const [position, setPosition] = useState ({ x:0, y:0})</code> can be
+      updated with <code>position.x = 5</code>. However, this is not
+      recommended. We should treat any JS objects that are in the state as
+      <b>read-only</b>
+    </p>
+    <p>The below code is an example that tracts the mouse pointer.</p>
+    <div id="movingDot"></div>
+    <p>This example is made possible by this line of code:</p>
+    <pre>
+      onPointerMove={e =&gt; {
+        setPosition({
+          x: e.clientX,
+          y: e.clientY
+        });
+      }}
+    </pre>
+    <p>
+      In here, we pass on a new object value to the event handler function. So
+      every mouse pointer move would pass a new state, triggering a new render.
+      If we simply change the value in the state object like:
+    </p>
+    <pre>
+      onPointerMove={e =&gt; {
+        position.x = e.clientX;
+        position.y = e.clientY;
+      }}
+    </pre>
+    <p>
+      Then it only updates the exisiting <code>position</code> object in the
+      state. In this case, no state setter function is used and React would not
+      know the object is updated so it is not valid.
+    </p>
+    <p>
+      In this sense, mutation is only a problem when <b>exisitng obejcts</b> are
+      updated. It is fine to mutate a object that was just created, as there are
+      no other codes referencing it. This is called local mutation.
+    </p>
+    <h2>copying object with spread</h2>
+    <p>
+      In the previous example, the <code>position</code> object is always newly
+      created from cursor position. However, in many cases, we would wish to
+      include exisiting data as a part of new object. For example, updating a
+      part of a form while keeping everything else the same.
+    </p>
+  </body>
+</html>

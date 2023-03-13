@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 
 function Form() {
@@ -84,6 +83,52 @@ function CounterThree() {
   );
 }
 
+function RequestTracker() {
+  const [pending, setPending] = useState(0);
+  const [completed, setCompleted] = useState(0);
+
+  async function handleClick() {
+    setPending(pending + 1);
+    await delay(3000);
+    setPending(pending - 1);
+    setCompleted(completed + 1);
+  }
+
+  return (
+    <>
+      <h3>Pending: {pending}</h3>
+      <h3>Completed: {completed}</h3>
+      <button onClick={handleClick}>Buy</button>
+    </>
+  );
+}
+
+function delay(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function RequestTracker2() {
+  const [pending, setPending] = useState(0);
+  const [completed, setCompleted] = useState(0);
+
+  async function handleClick() {
+    setPending((pending) => pending + 1);
+    await delay(3000);
+    setPending((pending) => pending - 1);
+    setCompleted((completed) => completed + 1);
+  }
+
+  return (
+    <>
+      <h3>Pending: {pending}</h3>
+      <h3>Completed: {completed}</h3>
+      <button onClick={handleClick}>Buy</button>
+    </>
+  );
+}
+
 const CounteTwo = createRoot(document.getElementById("counter2"));
 CounteTwo.render(<CounterTwo />);
 
@@ -94,4 +139,10 @@ const testForm = createRoot(document.getElementById("testForm"));
 testForm.render(<Form />);
 
 const CounteThree = createRoot(document.getElementById("counter3"));
-CounteThree.render(<CounteThree />);
+CounteThree.render(<CounterThree />);
+
+const requestTracker = createRoot(document.getElementById("requestTracker"));
+requestTracker.render(<RequestTracker />);
+
+const requestTracker2 = createRoot(document.getElementById("requestTracker2"));
+requestTracker2.render(<RequestTracker2 />);
