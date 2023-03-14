@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
-import { useImmer } from "use-immer";
+import { useImmer } from "../../../node_modules/use-immer/dist/index.d.ts";
 
 function MovingDot() {
   const [position, setPosition] = useState({
