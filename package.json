@@ -1,5 +1,12 @@
 {
   "dependencies": {
-    "use-immer": "^0.8.1"
+    "esbuild": "0.17.11",
+    "react-dom": "^18.2.0",
+    "use-immer": "^0.8.1",
+    "vite": "^4.1.4"
+  },
+  "peerDependencies": {
+    "immer": ">=2.0.0",
+    "react": "^18.2.0"
   }
 }
