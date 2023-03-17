@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="updatin arrays.jsx"
+    ></script>
+    <title>Updating arrays in States</title>
+  </head>
+  <body>
+    <h1>Updating arrays in state</h1>
+    <p>
+      Arrays are mutable in JS, but again, in JS, it should be treated as
+      immutable. Similar to objects, a new one is needed for replacing the older
+      ones if an update is needed.
+    </p>
+    <h2>Updating arrays without mutation</h2>
+    <p>
+      In JS, arrays is simply another type of object. It should be treated as
+      read-only like the objects in React, meaning re-assignment like
+      <code>arr[0]= 'reassigned stuff'</code> should not be done. Methods like
+      <code>push()</code> and <code>pop()</code> leading to mutation should also
+      be forbiddened.
+    </p>
+    <h2>Adding to array</h2>
+    <p>
+      To update a array, we can create a new array that contains all the
+      information from previous array and add a new item at the end. Again, we
+      can use the <code>spread</code> syntax <code>...</code>
+    </p>
+    <pre>
+      setPeople{
+        [
+          ...People,
+          {id: Id++, name:zhuolin}
+        ]
+      }
+    </pre>
+    <p></p>
+    <div id="listAppend"></div>
+  </body>
+</html>
