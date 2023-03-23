@@ -51,5 +51,50 @@
     </pre>
     <p></p>
     <div id="listAppend"></div>
+    <h2>Remove from array</h2>
+    <p>
+      We can remove a item from an array using the <code>filter</code> method to
+      create a new list without the item
+    </p>
+    <div id="listRemove"></div>
+    <pre>
+      function ListRemove() {
+        let initialStudent = [
+          { id: 0, name: "chalin" },
+          { id: 1, name: "WILL" },
+          { id: 2, name: "jim" },
+        ];
+        const [students, setStudents] = useState(initialStudent);
+        return (
+          &lt;&gt;
+            &lt;h3&gt;Inspiring students: &lt;/h3&gt;
+            &lt;ul&gt;
+              {students.map((student) =&gt; (
+                &lt;li key={student.id}&gt;
+                  {student.name + " "}
+                  &lt;button
+                    onClick={() =&gt; {
+                      setStudents(students.filter((e) =&gt; e.id !== student.id));
+                    }}
+                  &gt;
+                    delete
+                  &lt;/button&gt;
+                &lt;/li&gt;
+              ))}
+            &lt;/ul&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <p>
+      This is a relatively simple task, we can use map to create the list and
+      button while deploying the event handler. The
+      <code>setStudent(student.filter(e => e.id !== student.id))</code> here
+      means creating an new arraoy that consists of those students ID that are
+      different from the clicked one. As it's passed as a inline function, it
+      will be rendered immediately once done
+    </p>
+    <h3>Transforming an array</h3>
+    <p>*</p>
   </body>
 </html>
