@@ -61,3 +61,49 @@ function ListRemove() {
 
 const listRemove = createRoot(document.getElementById("listRemove"));
 listRemove.render(<ListRemove />);
+
+let initialShapes = [
+  { id: 0, type: "circle", x: 50, y: 1350 },
+  { id: 1, type: "square", x: 150, y: 1350 },
+  { id: 2, type: "circle", x: 250, y: 1350 },
+];
+
+function ShapeEditor() {
+  const [shapes, setShape] = useState(initialShapes);
+
+  function handleClick() {
+    const nextShapes = shapes.map((shape) => {
+      if (shape.type === "square") {
+        return shape;
+      } else {
+        return {
+          ...shape,
+          y: shape.y + 50,
+        };
+      }
+    });
+    setShape(nextShapes);
+  }
+  return (
+    <>
+      <button onClick={handleClick}>Move circles down</button>
+      {shapes.map((shape) => (
+        <div
+          key={shape.id}
+          style={{
+            background: "black",
+            position: "absolute",
+            left: shape.x,
+            top: shape.y,
+            borderRadius: shape.type === "circle" ? "50%" : "",
+            width: 20,
+            height: 20,
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
+const moveCircle = createRoot(document.getElementById("moveCircle"));
+moveCircle.render(<ShapeEditor />);
