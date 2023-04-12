@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Reacting to input.jsx"
+    ></script>
+    <title>Reacting to input with states</title>
+  </head>
+  <body>
+    <h1>Reacting to input with states</h1>
+    <p>
+      React manipulates the UI with a declarative way, meaning we describe the
+      state of components can be, and change the states in response to user
+      input instead of maniputing the UI pieces directly
+    </p>
+    <h2>Declarative vs. Imperative UI</h2>
+    <p>
+      When UI changes in response to actions. For example, a form would have the
+      following changes:
+    </p>
+    <ul>
+      <li>After typing something, the "submit" button becomes enabled</li>
+      <li>
+        When pressing 'Submit', both form and button are disabled, and a spinner
+        appears
+      </li>
+      <li>
+        if the network request succeeds, the form gets hidden and a 'Thank You'
+        message appears
+      </li>
+      <li>
+        If network fails, an error message appears, the form become enabled
+        again
+      </li>
+    </ul>
+    <p>
+      In imperative programming, these above actions directly corresponds to the
+      implementation of interaction. The exact instructions to mainpulate the UI
+      interaction is needed, this is like telling a chef to add how much
+      ingredient at what time in what way. They do not know what dish is made,
+      but rather following the commands. This is called
+      <b>imperative</b> because we need to command each elements, telling the
+      computer how to update UI.
+    </p>
+    <pre>
+      async function handleFormSubmit(e) {
+        e.preventDefault();
+        disable(textarea);
+        disable(button);
+        show(loadingMessage);
+        hide(errorMessage);
+        try {
+          await submitForm(textarea.value);
+          show(successMessage);
+          hide(form);
+        } catch (err) {
+          show(errorMessage);
+          errorMessage.textContent = err.message;
+        } finally {
+          hide(loadingMessage);
+          enable(textarea);
+          enable(button);
+        }
+      }
+      
+      function handleTextareaChange() {
+        if (textarea.value.length === 0) {
+          disable(button);
+        } else {
+          enable(button);
+        }
+      }
+      
+      function hide(el) {
+        el.style.display = 'none';
+      }
+      
+      function show(el) {
+        el.style.display = '';
+      }
+      
+      function enable(el) {
+        el.disabled = false;
+      }
+      
+      function disable(el) {
+        el.disabled = true;
+      }
+      
+      function submitForm(answer) {
+        // Pretend it's hitting the network.
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (answer.toLowerCase() == 'istanbul') {
+              resolve();
+            } else {
+              reject(new Error('Good guess but a wrong answer. Try again!'));
+            }
+          }, 1500);
+        });
+      }
+      
+      let form = document.getElementById('form');
+      let textarea = document.getElementById('textarea');
+      let button = document.getElementById('button');
+      let loadingMessage = document.getElementById('loading');
+      let errorMessage = document.getElementById('error');
+      let successMessage = document.getElementById('success');
+      form.onsubmit = handleFormSubmit;
+      textarea.oninput = handleTextareaChange;
+      
+     </pre
+    >
+    <p>
+      The above code is a quiz form that only uses DOM and JS for implementation
+      of imperative programming. The code works fine, but is extremely to be
+      managed in a complex system. A bug would easily arise due conflicts of
+      interactions.
+    </p>
+    <p>
+      React on the other hand, is declarative. We delcare what is needed, and
+      React would update the UI. This is like telling the chef what dish I would
+      like rather than telling them a detailed recipe, the chef would know the
+      ways to cook your wanted dish and may even have some better flavours that
+      we don't know
+    </p>
+    <h2>Thinking declaratively</h2>
+    <p>To imperatively implement a UI, think in a React way.</p>
+    <ol>
+      <li>identify the compnents different visual states</li>
+      <li>determine what triggers the state changes</li>
+      <li>represent the state in memory using <code>useState</code></li>
+      <li>remove any non-essential state variables</li>
+      <li>connect event handlers to set state</li>
+    </ol>
+    <h2>Step 1: identify visual states</h2>
+    <p>
+      The concept of a 'state machine' is a very useful designer idea, it is
+      like a machine that can switch between states. React is between designer
+      and computer science. So we must visualize all different states of UI that
+      can be seen.
+    </p>
+    <ul>
+      <li>Empty: disabled submit button</li>
+      <li>Typing: enabled submit button</li>
+      <li>Submitting: form is completely disabled, spinner shown</li>
+      <li>Success: 'Thank you' message is displayed instead of form</li>
+      <li>Error: same as typing but with extra error message</li>
+    </ul>
+    <p>
+      Exactly like a designer, we would need to create 'mock' states for visual
+      parts of the form. It can be done in the following code:
+    </p>
+    <pre>
+      function Form(status = "empty") {
+        if (state === "success") {
+          return &lt;h1&gt;Thats correct&lt;/h1&gt;;
+        }
+        return (
+          &lt;&gt;
+            &lt;h2&gt;Genshin pop quiz&lt;/h2&gt;
+            &lt;p&gt;What is the surname of Xianglin?&lt;/p&gt;
+            &lt;form&gt;
+              &lt;textarea&gt;
+                &lt;hr /&gt;
+                &lt;button&gt;Submit&lt;/button&gt;
+              &lt;/textarea&gt;
+            &lt;/form&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <div id="form1"></div>
+    <p>Now, the visual is done, but we need to add the status/state.</p>
+    <pre>
+      Form({
+        // Try 'submitting', 'error', 'success':
+        status = 'empty'
+      }) {
+        if (status === 'success') {
+          return &lt;h1&gt;That's right!&lt;/h1&gt;
+        }
+        return (
+          &lt;&gt;
+            &lt;h2&gt;City quiz&lt;/h2&gt;
+            &lt;p&gt;
+              In which city is there a billboard that turns air into drinkable water?
+            &lt;/p&gt;
+            &lt;form&gt;
+              &lt;textarea disabled={
+                status === 'submitting'
+              } /&gt;
+              &lt;br /&gt;
+              &lt;button disabled={
+                status === 'empty' ||
+                status === 'submitting'
+              }&gt;
+                Submit
+              &lt;/button&gt;
+              {status === 'error' &&
+                &lt;p className="Error"&gt;
+                  Good guess but a wrong answer. Try again!
+                &lt;/p&gt;
+              }
+            &lt;/form&gt;
+            &lt;/&gt;
+        );
+      }      
+    </pre>
+    <p>
+      In this above code, it can be seen that the button, text area and a
+      message displayed can be disabled based on the status. The text area is
+      disabled with submitting status, button is disabled with empty and
+      submitting staturs, the message is only enabled with Error status
+    </p>
+    <p>
+      To visualize all states, we can use the <code>map</code> to show them.
+    </p>
+    <pre>
+      let statuses = [
+      'empty',
+      'typing',
+      'submitting',
+      'success',
+      'error',
+    ];
+
+    export default function App() {
+      return (
+        &lt;&gt;
+          {statuses.map(status =&gt; (
+            &lt;section key={status}&gt;
+              &lt;h4&gt;Form ({status}):&lt;/h4&gt;
+              &lt;Form status={status} /&gt;
+            &lt;/section&gt;
+          ))}
+        &lt;/&gt;
+      );
+    }
+    </pre>
+    <p>
+      This way of showing all states is known as a storybook. A example page is
+      like <a href="storybook.html">this</a>
+    </p>
+    <h2>Step 2: determing the trigger</h2>
+    <p>Two inputs can be considered in triggering status update:</p>
+    <ul>
+      <li>
+        Human inputs, like clicking a button, typing a field, navigating a link
+      </li>
+      <li>Computer inputs, like network response, image loading</li>
+    </ul>
+    <p>
+      In both cases, a state variable is needed to update the UI. For the form
+      example, we need to change state.
+    </p>
+    <ul>
+      <li>
+        Changing the text input should switch between <i>Empty</i> and
+        <i>Typing</i> state. Depending on if the textbox is empty
+      </li>
+      <li>
+        Clicking the submit button should switch to <i>submitting</i> state
+      </li>
+      <li>
+        Successful network response(computer) should switch to
+        <i>success</i> state
+      </li>
+      <li>
+        Failed network response (computer) should switch to <i>Error</i> state
+        with matching error msg
+      </li>
+    </ul>
+    <p>
+      Usually, the event handlers are required for human inputs. Visualization
+      of states can be helped with.
+    </p>
+    <h2>Step 3: Representing state in memory with <code>useState</code></h2>
+    <p>
+      Once we have all the mock states and triggers, we can implement the design
+      with <code>useState</code>. We want as simple as possible, fewer moving
+      pieces as possible. Starting with the state that is absolutely necessary.
+      For example, we need <code>answer</code> state for input, and a
+      <code>error</code> state for storing the error
+    </p>
+    <pre>
+      const [answer, setAnswer] = useState('');
+      const [error, setError] = useState(null)
+    </pre>
+    <p>
+      Then, add the states of each visual states that are designed. There are
+      more than one ways of representing the state, always create enough states
+      so that all possible visual states are covered.
+    </p>
+    <pre>
+      const [isEmpty, setIsEmpty] = useState(true);
+      const [isTyping, setIsTyping] = useState(false);
+      const [isSubmitting, setIsSubmitting] = useState(false);
+      const [isSuccess, setIsSuccess] = useState(false);
+      const [isError, setIsError] = useState(false);
+    </pre>
+    <h2>Remove non-essentially state variables</h2>
+    <p>
+      You want to avoid duplication in the state content. The goal is to prevent
+      the cases where state in memory creates unwanted UI pieces or malfunction.
+      Some questions to consider are:
+    </p>
+    <ol>
+      <li>
+        Does it create paradox? for example, <code>isTyping</code> can't be true
+        while <code>isSubmitting</code> is true. For two boolean
+        <code>isTyping</code> and <code>isSubmitting</code>, we can have TT, FF,
+        TF and FT, howver, TT is not true. We can therefore combine both states
+        into a single state called <code>status</code>, which can either be
+        <code>typing</code>, <code>submitting</code> and <code>success</code>
+      </li>
+      <li>
+        Is the same info avaliable in another state variable?
+        <code>isTyping</code> can't be true with <code>isEmpty</code>, we can
+        just remove <code>isEmpty</code> by checking
+        <code>answer.length ===0</code> instead
+      </li>
+      <li>
+        Can you get it from inverse of another variable? We can remove
+        <code>isError</code> by checking <code>error !== null</code>
+      </li>
+    </ol>
+    <p>
+      Based on the above logic, we can narrow done the states into three
+      essential state variabels
+    </p>
+    <pre>
+      const [answer, setAnswer] = useState('');
+      const [error, setError] = useState(null);
+      const [status, setStatus] = useState('typing')
+    </pre>
+  </body>
+</html>
