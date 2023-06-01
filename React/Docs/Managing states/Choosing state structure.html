@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script type="text/babel" data-type="module" src="choosing state structure.jsx"></script>
+
+<body>
+    <h1>Principles for structuring states</h1>
+    <p>
+        Structuring a component properly would help in modifying and debugging, Some principles of designing/structuring
+        states are:
+    </p>
+    <ol>
+        <li>Group related states: if there are two or more state variables that are always updated together, it would be
+            a good idea to merge them together into a single variable.</li>
+        <li>Avoid contradictions in states: If states are structured such that they may conflict with other states, it
+            is a potential source of mistake that needs to be avoided.</li>
+        <li>Avoid redundant states: if some of the information can be calculated from the props or the existing states,
+            don't create a new state for them</li>
+        <li>Avoid duplication in states: When same data are duplicated betwee nstate or nested objects, they may be
+            difficulte to be kept in sync. Reduce duplication</li>
+        <li>Avoid deeply nested states: Deeply nested (hierarchial) states are very hard to update. Flat way are
+            preferred.</li>
+    </ol>
+    <h2>Group related states</h2>
+    <p>
+        To properly choose between single or multiple states, the best way is to check if the variables are always
+        changed together. Using the cursor track example, we would rather prefer using the second example below.
+    </p>
+    <pre>
+        const [x, setX] = useState(0);
+        const [y, setY] = useState(0);
+    </pre>
+    <p>or</p>
+    <pre>
+        const [position, setPosition] = useState({x:0,y:0});
+    </pre>
+    <p>
+        However, if a state variable is an object, they should be updated together instaed of setting one alone. For
+        example, if setting <code>x</code> alone while not changing <code>y</code>, then only x will be defined and y
+        won't even exist. A good way to setX(100)
+    </p>
+    <h2>Avoid contradictions in state</h2>
+    <div id="form1"></div>
+    <p>
+        As seen above is a example of a form that returns a thank you message once the reply is sent. This works by
+        defining three state variables that determines the state of the component like below:
+    </p>
+    <pre>
+        const [text, setText] = useState('');
+        const [isSending, setIsSending] = useState(false);
+        const [isSent, setIsSent] = useState(false);
+      
+        async function handleSubmit(e) {
+          e.preventDefault();
+          setIsSending(true);
+          await sendMessage(text);
+          setIsSending(false);
+          setIsSent(true);
+        }
+    </pre>
+    <p>
+        In this case, the code works but it generates a impossible state, where the state <code>isSending</code> and
+        <code>isSent</code> could be true at the same time, which is not possible. This may lead to bugs in complex
+        components.
+    </p>
+    <p>
+        To avoid this problem, we can replace <code>isSending</code> and <code>isSent</code> with a single variable
+        called <code>status</code> that can take one of three different states such as <code>typing</code>,
+        <code>sending</code> and <code>sent</code>.
+    </p>
+    <pre>
+        const [text, setText] = useState('');
+        const [status, setStatus] = useState('typing');
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            setStatus('sending');
+            await sendMessage(text);
+            setStatus('sent');
+        }
+
+        const isSending = status === 'sending';
+        const isSent = status === 'sent';
+    </pre>
+    <p>
+        In the above example, the status is declared as a state variable, and it can also be used to define status such
+        as sending or sent by simple boolean expressions. To
+    </p>
+    <h2>Avoid redudant state</h2>
+    <p>
+        For information that can be calculated from other states, they should not be separately stored into states. An
+        example could be:
+    </p>
+    <pre>
+        const [firstName, setFirstName] = useState('Will')
+        const [lastName, setLastName] = useState('Chalin')
+        const [fullName, setFullName] = useState(Will Chalin')
+
+        function handleFirstNameChange(e) {
+            setFirstName(e.target.value);
+            setFullName(e.target.value + ' ' + lastName);
+          }
+        
+          function handleLastNameChange(e) {
+            setLastName(e.target.value);
+            setFullName(firstName + ' ' + e.target.value);
+          }
+    </pre>
+    <p>
+        The above exmaple used a state called fullName, which can be directly calculated from <code>firstName</code> and
+        <code>lastName</code> anytime during render. It should be removed for simplicity
+    </p>
+    <pre>
+        const [firstName, setFirstName] = useState('Will')
+        const [lastName, setLastName] = useState('Chalin')
+        const fullName = firstName + ' ' + lastName
+
+        function handleFirstNameChange(e) {
+            setFirstName(e.target.value);
+          }
+        
+          function handleLastNameChange(e) {
+            setLastName(e.target.value);
+          }
+    </pre>
+    <h2>Avoid state duplication</h2>
+    <p>
+        The example below is a list that allows you to choose your team. However, the input update does not relfect the
+        edit simultaneously.
+    </p>
+    <div id="form2"></div>
+    <p>
+        The source code explains the reason
+    </p>
+    <pre>
+        const initialTeam = [
+        { name: "Hoshino", id: 0 },
+        { name: "Serika", id: 1 },
+        { name: "Ayane", id: 2 },
+        { name: "Shiroko", id: 3 },
+        ];
+
+        function Team() {
+        const [team, setTeam] = useState(initialTeam);
+        const [selectedMember, setSelectedMember] = useState(team[0]);
+
+        function handleTeamChange(id, e) {
+        setTeam(
+            team.map((member) =&gt; {
+            if (member.id === id) {
+                return { ...member, name: e.target.value };
+            } else {
+                return member;
+            }
+            })
+        );
+        }
+
+        return (
+        &lt;&gt;
+            &lt;h2&gt;What's the members of your team?&lt;/h2&gt;
+            &lt;ul&gt;
+            {team.map((member) =&gt; (
+                &lt;li key={member.id}&gt;
+                &lt;input
+                    value={member.name}
+                    onChange={(e) =&gt; {
+                    handleTeamChange(member.id, e);
+                    }}
+                /&gt;{" "}
+                &lt;button
+                    onClick={() =&gt; {
+                    setSelectedMember(member);
+                    }}
+                &gt;
+                    choose
+                &lt;/button&gt;
+                &lt;/li&gt;
+            ))}
+            &lt;/ul&gt;
+            &lt;p&gt;U picked {selectedMember.name}&lt;/p&gt;
+        &lt;/&gt;
+        );
+        }
+    </pre>
+    <p>
+        In this code snippet, we have created a function that handles the change in team. It works by storing the
+        updated member value in <code>selectedMember</code>. This means that objects in <code>team</code> is the same
+        object in <code>selectedMember</code>. Therefore, the information is <b>duplicated</b> while
+        <code>selectedMember</code> is not updated.
+    </p>
+    <p>
+        One solution to this problem is storing the id of the selected member in a new state called
+        <code>selectedId</code>. Then create <code>selectedMemeber</code> state from searching the id in the array.
+        Therefore the member is re-rendered once updated since there is no duplication that needs more update.
+    </p>
+    <div id="form3"></div>
+    <h2>Avoid deeply nested state</h2>
+    <div id="form4"></div>
+    <p>
+        see the list above, it is made from the object below. It can be considered as a very nested list that is hard to
+        maintain and update. For example, if I would like to delete a student from a particular academy, I would need to
+        update all of the parent nodes, which is very inconvenient.
+    </p>
+    <pre>
+        const studentList = {
+            id: 0,
+            title: "Kivotos",
+            childAcademies: [
+              {
+                id: 1,
+                title: "Abydos",
+                childStudents: [
+                  {
+                    id: 2,
+                    name: "Shiroko",
+                  },
+                  {
+                    id: 3,
+                    name: "Serika",
+                  },
+                  {
+                    id: 4,
+                    name: "Hoshino",
+                  },
+                ],
+              },
+            }
+    </pre>
+    <p>
+        To solve this problem, we can simply use a <b>flat</b> state, which uses id to indicate parent-children relation
+        between objects. It is not nested, so operations can be done relatively easily
+    </p>
+    <div id="form5"></div>
+    <p>
+        The above student attendence list can now be completed by pressing the button. The easy state update is done by
+        the flat dataset below. The flat data enables filtering of ID through the parent level. Thus only two states,
+        <code>parentId</code> and <code>ChildId</code> are involved, which make things so much easier.
+    </p>
+    <pre>
+
+const studentListFlat = {
+    0: {
+      id: 0,
+      title: "Kivotos",
+      childIds: [1, 5],
+    },
+    1: {
+      id: 1,
+      title: "Abydos",
+      childIds: [2, 3, 4],
+    },
+    2: {
+      id: 2,
+      title: "Shiroko",
+      childIds: [],
+    },
+    3: {
+      id: 3,
+      title: "Serika",
+      childIds: [],
+    },
+    4: {
+      id: 4,
+      title: "Hoshino",
+      childIds: [],
+    },
+    5: {
+      id: 5,
+      title: "Trinity",
+      childIds: [6, 7, 8],
+    },
+    6: {
+      id: 6,
+      title: "Hanako",
+      childIds: [],
+    },
+    7: {
+      id: 7,
+      title: "Hifumi",
+      childIds: [],
+    },
+    8: {
+      id: 8,
+      title: "Azusa",
+      childIds: [],
+    },
+  };
+    </pre>
+    <p>
+
+    </p>
+</body>
+
+</html>
