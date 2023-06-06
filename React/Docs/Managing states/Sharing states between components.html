@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script type="text/babel" data-type="module" src="Sharing states.jsx"></script>
+    <title>Sharing states between components</title>
+</head>
+
+<body>
+    <h1>Sharing states between components</h1>
+    <p>
+        Sometimes we would like to 'connect' two components' states so that they are always changing with each other. To
+        achieve this, we can use a technique called <b>lifting states up</b>
+    </p>
+    <h2>Lifting states up by example</h2>
+    <p>
+        To understand this technique, we'll write a example from scratch.
+    </p>
+    <p>
+        This example below is a parent 'StudentIntro' component which renders two separate <code>Panels</code>. Each
+        <code>Panel</code> would have a state called <code>isActive</code>, which controls the visibility of the
+        content.
+    </p>
+    <pre>
+    function Panel({ title, children }) {
+    const [isActive, setIsActive] = useState(false);
+    return (
+    &lt;section classname="panel"&gt;
+    &lt;h3&gt;{title}&lt;/h3&gt;
+    {isActive ? (
+    &lt;p&gt;{children}&lt;/p&gt;
+    ) : (
+    &lt;button onClick={() =&gt; setIsActive(true)}&gt;Show&lt;/button&gt;
+    )}
+    &lt;/section&gt;
+    );
+    }
+
+    function StudentInfo() {
+    return (
+    &lt;&gt;
+    &lt;h2&gt;Kuromi Serika&lt;/h2&gt;
+    &lt;Panel title="Basic information"&gt;
+    Kuromi Serika (黒見 セリカ) is a student of Abydos high school in
+    Kivotos. She is the secretary of the Abydos Coutermeasure committee.
+    Age: 15, Birthday: June 25th, Height: 153cm
+    &lt;/Panel&gt;
+    &lt;Panel title="Story (spoiler alter)"&gt;
+    One with many complaints, Serika is the type hesitant to show her
+    emotions. Despite her daily habit of saying "It's fine if this school
+    goes bankrupt", she has a deep love for her school and works tirelessly
+    behind the backs of her clubmates to pay off her school's debt.
+    &lt;/Panel&gt;
+    &lt;/&gt;
+    );
+    }
+
+    </pre>
+    <div id="serika"></div>
+    <p>
+        The panels above are independent from each other, turning one on won't affect the other. However, sometimes we
+        may wish to have only one active panel at a time. To do this, we lift the state up by:
+    </p>
+    <ol>
+        <li><b>Remove</b> state from child components</li>
+        <li><b>Pass</b> harcoded data from the component parent</li>
+        <li><b>Add</b> state to common parent and pass it down together with the event handler</li>
+    </ol>
+    <h2>Step 1: Remove state from child components</h2>
+    <p>
+        We will pass the control of <code>isActive</code> from <code>Panel</code> to its parent component. The
+        <code>Panel</code> state will receive the <code>isActive</code> as a prop from the parent. To do this, we
+        firstly remove the line
+    </p>
+    <p><code>const [isActive, setIsActive] = useState(false)</code></p>
+    <p>
+        Then, add <code>isAcitve</code> to Panel's list of props
+    </p>
+    <p><code>function Panel({ title, children, isActive})</code></p>
+    <p>
+        When this completed, the <code>isActive</code> is now in control from the parent level of <code>Panel</code>.
+    </p>
+    <p>
+        We can then expand the panel by using a button and eventhandler like
+        <code>&lt;button onClick = {() => setIsActive(true)}&gt;</code>
+    </p>
+    <h2>Step 2: Pass hardcoded data from common parent</h2>
+    <p>
+        Then, we locate the closest common parent component of both child components that will be synced. In this
+        example, that will be <code>StudentInfo</code>.
+    </p>
+    <p>
+        We can then pass a hardcoded value of <code>isActive</code> to both panels, which controls whether the panel is
+        active or not.
+    </p>
+    <p>
+        To do this, simply pass it as a prop using
+        <code>&lt;Panel title="Basic information" isActive= {true}&gt;Content&lt;/Panel&gt;</code>
+    </p>
+    <p>
+        Now, the <code>Panel</code> is controlled by the passed true value, which would make them always open. However,
+        we want the user to determine if they should be open or not. This brings us to the last step
+    </p>
+    <h2>Step 3: add state to common parent </h2>
+    <p>
+        Since we are connecting two different states together, we would often change the nature of state. For this
+        example, we want to have only 1 active panel. This means a single boolean won't do the trick. We can use a
+        numeric value instead.
+    </p>
+    <pre>
+        const [activeIndex, setActiveIndex] = useState(0);
+    </pre>
+    <p>
+        Now the parent component have a state holding the index, we can edit the panels so that they corresponds to
+        different indices that controls their expansion.
+    </p>
+    <pre>
+        &lt;&gt;
+        &lt;Panel
+          isActive={activeIndex === 0}
+          onShow={() =&gt; setActiveIndex(0)}
+        &gt;
+          ...
+        &lt;/Panel&gt;
+        &lt;Panel
+          isActive={activeIndex === 1}
+          onShow={() =&gt; setActiveIndex(1)}
+        &gt;
+          ...
+        &lt;/Panel&gt;
+      &lt;/&gt;
+    </pre>
+    <p>
+        Now, in the parent component, this JSX would show two Panels that receives different props, one showing when
+        <code>activeIndex</code> is equal to 0, the other showing at 1. We'll also edit the <code>Panel</code> component
+        so that it also receives <code>onShow</code> as a prop.
+    </p>
+    <pre>
+        function Panel2({ title, children, isActive, onShow }) {
+            return (
+              &lt;section className="Panel"&gt;
+                &lt;h3&gt;{title}&lt;/h3&gt;
+                {isActive ? &lt;p&gt;{children}&lt;/p&gt; : &lt;button onClick={onShow}&gt;Show&lt;/button&gt;}
+              &lt;/section&gt;
+            );
+          }
+    </pre>
+    <div id="serika2"></div>
+    <p>
+        With everything done, we have the above effect in which only one panel stays open at all time.
+    </p>
+    <h2>Contorlled/Uncontrolled component</h2>
+    <p>
+        The very first Panel component that has a <code>isActive</code> state in itself is called <b>Uncontrolled</b>
+        components, which are components that have local states independent from the parent level. They are easy to use
+        and requires less effort but less flexible.
+    </p>
+    <p>
+        On the other hand, the updated Panel component is called <b>controlled</b> component because parent component
+        have full control over its behaviour. They are very flexible and can be coordinated together but requires extra
+        configuration from the parent level.
+    </p>
+</body>
+
+</html>
