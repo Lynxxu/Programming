@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="importmap">
       {
@@ -14,85 +13,91 @@
         }
       }
     </script>
-    <script type="text/babel" data-type="module" src="Preserving and resetting states.jsx"></script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Preserving and resetting states.jsx"
+    ></script>
     <title>Preserving and resetting states</title>
     <style>
-        .counter {
-            border: 2px solid antiquewhite;
-            border-radius: 3px;
-            margin: 10px;
-            padding: 20px;
-            text-align: center;
-            max-width: fit-content
-        }
+      .counter {
+        border: 2px solid antiquewhite;
+        border-radius: 3px;
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        max-width: fit-content;
+      }
 
-        .counters {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
+      .counters {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
 
-        .hover {
-            background-color: azure;
-        }
+      .hover {
+        background-color: azure;
+      }
 
-        * {
-            box-sizing: border-box;
-        }
+      * {
+        box-sizing: border-box;
+      }
 
-        .fancy {
-            border: 4px red solid;
-            color: crimson;
-        }
-    </style>
-</head>
+      .fancy {
+        border: 4px red solid;
+        color: crimson;
+      }
+    </style></head
+  >可乐拉堡鸡翅
 
-<body>
+  <body>
     <h1>Preserving and resetting states</h1>
     <p>
-        States are isolated between components, they are tracked based on their place in UI tree. States can be
-        preserved or reseted between re-renders.
+      States are isolated between components, they are tracked based on their
+      place in UI tree. States can be preserved or reseted between re-renders.
     </p>
     <h2>UI Tree</h2>
     <p>
-        Browers use tree structures to model UI, DOM tree represents HTML element, CSSOM represents CSS. Similarly,
-        React manages UI via a tree structure from the <b>JSX</b>. The React DOM updates the brower DOM element to match
-        the UI tree. Basically, React creates a UI tree from the components. The UI tree is then used by React to render
-        the browser DOM
+      Browers use tree structures to model UI, DOM tree represents HTML element,
+      CSSOM represents CSS. Similarly, React manages UI via a tree structure
+      from the <b>JSX</b>. The React DOM updates the brower DOM element to match
+      the UI tree. Basically, React creates a UI tree from the components. The
+      UI tree is then used by React to render the browser DOM
     </p>
     <h2>State is tied to a position in tree</h2>
     <p>
-        See the example showed below. It is a simple counter that lets the user to vote for a student. Each click will
-        increase the count for one.
+      See the example showed below. It is a simple counter that lets the user to
+      vote for a student. Each click will increase the count for one.
     </p>
     <p>
-        Each counter is made by <code>&Lt;Counter /&gt;</code> tag. They are rendered from the same jsx but in different
-        position in the tree, which makes it two separate counters independent from each other.
+      Each counter is made by <code>&Lt;Counter /&gt;</code> tag. They are
+      rendered from the same jsx but in different position in the tree, which
+      makes it two separate counters independent from each other.
     </p>
     <div id="counters"></div>
     <p>
-        In React, each component has fully isolated states, using the above example, each counter would have their own
-        independent <code>score</code> and <code>hover</code> states. React will keep the state as long as the same
-        component is rendered at the same position.
+      In React, each component has fully isolated states, using the above
+      example, each counter would have their own independent
+      <code>score</code> and <code>hover</code> states. React will keep the
+      state as long as the same component is rendered at the same position.
     </p>
     <p>
-        If we stop rendering the shiroko counter by clicking the checkbox,
-        its states disappears entirely since React destroys the state when it remove a component. Clicking the checkbox
-        again, and React would render the second counter again, with states initialized from scratch and added to the
-        DOM. Basically, React would preserve the state if it's rendered at its position in the UI tree while destroying
-        the states if the components are removed
+      If we stop rendering the shiroko counter by clicking the checkbox, its
+      states disappears entirely since React destroys the state when it remove a
+      component. Clicking the checkbox again, and React would render the second
+      counter again, with states initialized from scratch and added to the DOM.
+      Basically, React would preserve the state if it's rendered at its position
+      in the UI tree while destroying the states if the components are removed
     </p>
     <h2>Preservation of states</h2>
     <p>
-        As mentioned before, React preserves the state if it's the same component at the same position. See the example
-        below.
+      As mentioned before, React preserves the state if it's the same component
+      at the same position. See the example below.
     </p>
     <div id="Fancy" class="counters"></div>
-    <p>
-        This counter is written with this logic:
-    </p>
+    <p>This counter is written with this logic:</p>
     <pre>
         {isFancy ? (
             &lt;Counter isFancy={true} /&gt;
@@ -101,15 +106,18 @@
           )}
     </pre>
     <p>
-        Every time we click the checkbox, the counter state does not reset whether <code>isFancy</code> is true or not.
-        There is always a <code>Counter </code>as the first child of <code>div</code> from the root component.
-        Therefore, it is the same component from the same position in the UI tree, React would think it as the same
-        counter and preserve the state, which is the number count in it.
+      Every time we click the checkbox, the counter state does not reset whether
+      <code>isFancy</code> is true or not. There is always a
+      <code>Counter </code>as the first child of <code>div</code> from the root
+      component. Therefore, it is the same component from the same position in
+      the UI tree, React would think it as the same counter and preserve the
+      state, which is the number count in it.
     </p>
     <p>
-        It is important to note that, what matters is the position in the UI tree. The JSX markup does not matter as
-        long as the components are rendered in the same position in the tree. For example, we can write JSX markup like
-        below:
+      It is important to note that, what matters is the position in the UI tree.
+      The JSX markup does not matter as long as the components are rendered in
+      the same position in the tree. For example, we can write JSX markup like
+      below:
     </p>
     <pre>
         if (isFancy){
@@ -123,32 +131,112 @@
         )
     </pre>
     <p>
-        Since the function only returns once. It will render the UI based on the <code>isFancy</code> boolean. However,
-        by clicking the checkbox to add/remove styling won't reset the states because the both of the
-        <code>Counter</code> components are rendered at the same position in the tree. Therefore, React matches them
-        before and after render, and preserves the state regardless of the JSX markup logic.
+      Since the function only returns once. It will render the UI based on the
+      <code>isFancy</code> boolean. However, by clicking the checkbox to
+      add/remove styling won't reset the states because the both of the
+      <code>Counter</code> components are rendered at the same position in the
+      tree. Therefore, React matches them before and after render, and preserves
+      the state regardless of the JSX markup logic.
     </p>
     <h2>Different components at the same position - reset state</h2>
     <div id="pCounter" class="counters"></div>
     <p>
-        See the example above. You can click the counter for a few times and take a break by cliking the checkbox two
-        times. The counter would show up again but with states re-initilized.
+      See the example above. You can click the counter for a few times and take
+      a break by cliking the checkbox two times. The counter would show up again
+      but with states re-initilized.
     </p>
     <p>
-        What happens in this process is that, we switched to different components at the same position. It was initially
-        <code>Counter</code>, but then changed to <code>p</code>. React recognizes that as a different component, and
-        removes the <code>Counter</code> from the UI tree and destoryes its state. The same process goes again when we
-        switched from <code>p</code> to <code>Counter</code>, as <code>Counter</code> would be added to the UI tree with
-        its states re-initialized.
+      What happens in this process is that, we switched to different components
+      at the same position. It was initially
+      <code>Counter</code>, but then changed to <code>p</code>. React recognizes
+      that as a different component, and removes the <code>Counter</code> from
+      the UI tree and destoryes its state. The same process goes again when we
+      switched from <code>p</code> to <code>Counter</code>, as
+      <code>Counter</code> would be added to the UI tree with its states
+      re-initialized.
     </p>
     <p>
-        It is important to note that, the component reset would affect the entire substructure. See the fancy styling
-        again:
+      It is important to note that, the component reset would affect the entire
+      substructure. See the fancy styling again:
     </p>
     <div id="fancy2" class="counters"></div>
     <p>
-        From the example above, it can be seen that the
+      From the example above, it can be seen that the counter would reset once
+      the style is updated. This is different from the previous example, because
+      the parent level was changed, which leads to reset of the entire sub
+      structure. See the parent wrapper noted above the counter.
     </p>
-</body>
-
+    <p>
+      Therefore, when we wish to preserve a state between re-renders, we have to
+      make sure that the structure of the tree are matched. This is also the
+      reason why we should avoid nesting functions definitions, as the nested
+      function could have very unstable states everytime the parent function
+      re-renders.
+    </p>
+    <h2>Resetting state at the same position</h2>
+    <p>
+      Sometimes we would like to reset the state of a component while it stays
+      at the same position. To override the default behaviour, we can use the
+      following ways :
+    </p>
+    <ol>
+      <li>Render the components in different positions</li>
+      <li>Give each components a unique <code>key</code></li>
+    </ol>
+    <h3>1. Render component in different position</h3>
+    <p>
+      Again using the counter example, if we want them to be independent from
+      each other, we can render them in different position.
+    </p>
+    <div id="diffcounter" class="counters"></div>
+    <p>The above example is written using this logic:</p>
+    <pre>
+    &lt;div&gt;
+        {isNext && &lt;Counter name="奥空アヤネ" /&gt;}
+        {!isNext && &lt;Counter name="小鳥遊 ホシノ" /&gt;}
+    &lt;/div&gt;
+    </pre>
+    <p>
+      Everytime the counter changes by pressing the button, the original
+      component is destoryed and the new component is rendered. This is because
+      they are in a different position. They all belongs to the same parent
+      level but in different position of the UI tree. This method is convenient
+      and could be used when there aren't many components to be rendered in the
+      same place.
+    </p>
+    <h3>2. Resetting with a key</h3>
+    <p>
+      A second way to reset the state of a component is via a key. They have
+      been present in
+      <a href="../Describing UI/Rendering.html">Rendering lists</a>. But they
+      are more than that, React could distinguish between any components by
+      keys.
+    </p>
+    <p>
+      by default, React uses order within parent to discern components (first,
+      second, third, etc). With keys, React would know that the component is a
+      specifc one to the key, instead of recognizing via the order.
+    </p>
+    <p>
+      For example, with keys, we are able to have the following effect, where
+      the two components are at the same position but resets everytime the
+      button is clicked.
+    </p>
+    <div id="resetC" class="counters"></div>
+    <p>
+      The example above is created by the logic below. Note that the components
+      are at the same position. If the keys are removed, React would easily
+      recognize them as the same element.
+    </p>
+    <pre>
+    &lt;&gt;
+        {isNext ? (
+        &lt;Counter key="Akane" name="奥空アヤネ" /&gt;
+        ) : (
+        &lt;Counter key="Hoshino" name="小鳥遊 ホシノ" /&gt;
+        )}
+        &lt;button onClick={() =&gt; setIsNext(!isNext)}&gt;Next Student&lt;/button&gt;
+    &lt;/&gt;
+    </pre>
+  </body>
 </html>

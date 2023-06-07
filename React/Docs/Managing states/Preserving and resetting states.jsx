@@ -159,3 +159,41 @@ function FancyCounter2() {
 const fancy2 = createRoot(document.getElementById("fancy2"));
 fancy2.render(<FancyCounter2 />);
 
+function DifCounter() {
+  const [isNext, setIsNext] = useState(false);
+  return (
+    <>
+      {isNext && <Counter name="奥空アヤネ" />}
+      {!isNext && <Counter name="小鳥遊 ホシノ" />}
+      <label>
+        <button
+          onClick={() => {
+            setIsNext(!isNext);
+          }}
+        >
+          Next Student
+        </button>
+      </label>
+    </>
+  );
+}
+
+const diffcounter = createRoot(document.getElementById("diffcounter"));
+diffcounter.render(<DifCounter />);
+
+function ResetCounter() {
+  const [isNext, setIsNext] = useState(false);
+  return (
+    <>
+      {isNext ? (
+        <Counter key="Akane" name="奥空アヤネ" />
+      ) : (
+        <Counter key="Hoshino" name="小鳥遊 ホシノ" />
+      )}
+      <button onClick={() => setIsNext(!isNext)}>Next Student</button>
+    </>
+  );
+}
+
+const resetC = createRoot(document.getElementById("resetC"));
+resetC.render(<ResetCounter />);
