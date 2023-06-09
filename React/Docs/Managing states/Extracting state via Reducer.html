@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Extract State vai Reducer.jsx"
+    ></script>
+    <title>Extracting state logic into a Reducer</title>
+  </head>
+  <body>
+    <h1>Extracting state logic into a Reducer</h1>
+    <p>
+      Components could get very complicated when they spread acorss many event
+      handlers. Their states can be updated outside the component scope, in a
+      single function called <b>reducer</b>
+    </p>
+    <h2>Consolidate state logic with reducer</h2>
+    <p>
+      When components grows more complex, they can be difficult to analyze. For
+      example, the list below has an array of students in state, and uses three
+      event handlers to add, remove and edit student's info.
+    </p>
+    <div id="studentList"></div>
+    <p>
+      In this example, each of the event handlers would call
+      <code>studentList</code> state, which stores the array of students, to
+      update the states. The logic would grow increasing complex as component
+      grows. To reduce complexity, we can move all the state logic into a single
+      function outside the component called <b>reducer</b>
+    </p>
+    <p>
+      Generally, we can change from <code>useState</code> to
+      <code>useReducer</code> in three steps
+    </p>
+    <ol>
+      <li>Move from setting state to dispatching actions</li>
+      <li>Write a reducer function</li>
+      <li>Use the reducer from the component</li>
+    </ol>
+    <h2>Step 1: Move from setting states to dispathcing actions</h2>
+    <p>
+      The event handlers will specify what to do by setting the state. The
+      example below is the three event handlers from the student list. They sets
+      the state.
+    </p>
+    <pre>
+      
+      function handleAddStudent(name) {
+        setStudentList([
+          ...studentList,
+          {
+            id: nextId++,
+            name: name,
+            done: false,
+          },
+        ]);
+      }
+
+      function handleChangeStudents(student) {
+        setStudentList(
+          studentList.map((s) => {
+            if (s.id === student.id) {
+              return student;
+            } else {
+              return s;
+            }
+          })
+        );
+      }
+
+      function handleDeleteStudent(studentId) {
+        setStudentList(studentList.filter((s) => s.id !== studentId));
+      }
+    </pre>
+    <p>Discard all the state setting logic, then we would have:</p>
+    <ul>
+      <li><code>handleAddStudent</code>, when the user presses Add</li>
+      <li>
+        <code>handleChangeStudent</code> when the user presses edit or save
+      </li>
+      <li><code>handleDeleteStudent</code> when the user presses delete</li>
+    </ul>
+    <p>
+      Managing states via reducer is different from setting states, since we are
+      telling React what the user did, instead of what to do (which is setting
+      the state). We specify what the user did by dispatching actions from the
+      event handlers, and the state update will in somewhere else. This is a
+      more descriptive of the user's intent.
+    </p>
+    <pre>
+      function handleAddStudent(name) {
+        dispatch({
+          type: "added",
+          id: nextId++,
+          name: name,
+        });
+      }
+      
+      function handleChangeStudent(student) {
+        dispatch({
+          type: "changed",
+          student: student,
+        });
+      }
+      
+      function handleDeleteStudent(studentId) {
+        dispatch({
+          type: "deleted",
+          id: studentId,
+        });
+      }
+    </pre>
+    <p>
+      In these functions, we pass objects to <code>dispatch</code>. These
+      objects are called actions, which are regular JS object that contains
+      minmal information about what happen.
+    </p>
+    <p>
+      The action object can have any shape, it is common to give a string
+      <code>type</code> that describes what happened. Any additional details are
+      passed in other field. It is important to note that the
+      <code>type</code> is specific to a component, so choose a name that best
+      describe what happens
+    </p>
+    <h3>Step 2: Write a reducer function</h3>
+    <p>
+      a reducer function is where the state logic lives in. It usually takes two
+      argument, the current state and the action object, returning the next
+      state. It will have a basic structure of the following:
+    </p>
+    <pre>
+      function yourReducer(state, action){
+        // return next state for React to set
+      }
+    </pre>
+    <p>
+      To change the state setting logic from event handlers to reducer, we will:
+    </p>
+    <ol>
+      <li>Declare current state(students) as the first argument</li>
+      <li>Decalre <code>action</code> object as the second argument</li>
+      <li>
+        Return the next state from the reducer, which React will set the state
+        to
+      </li>
+    </ol>
+    <p>Migrate all stete setting logics into reducer function:</p>
+    <pre>
+      function studentReducer(studentList, action) {
+        if (action.type === "added") {
+          return [
+            ...studentList,
+            {
+              id: action.id,
+              name: action.name,
+              done: false,
+            },
+          ];
+        } else if (action.type === "changed") {
+          return studentList.map((s) => {
+            if (s.id === student.id) {
+              return student;
+            } else {
+              return s;
+            }
+          });
+        } else if (action.type === "deleted") {
+          return studentList.filter((s) => s.id !== studentId);
+        } else {
+          throw Error("Unknwon action: " + action.type);
+        }
+      }
+      
+    </pre>
+    <p>
+      This reducer function takes state <code>studentList</code> as an argument,
+      which can be declared outside of the component to increase readability.
+      However, this code still feels daunting at a glance. We can use
+      <code>switch</code> statements, which is actually the convention
+    </p>
+    <pre>
+    
+    function studentReducer(studentList, action) {
+      switch (action.type) {
+        case "added": {
+          return [
+            ...studentList,
+            {
+              id: action.id,
+              name: action.name,
+              done: false,
+            },
+          ];
+        }
+        case "changed": {
+          return studentList.map((s) => {
+            if (s.id === student.id) {
+              return student;
+            } else {
+              return s;
+            }
+          });
+        }
+        case "deleted": {
+          return studentList.filter((s) => s.id !== studentId);
+        }
+        default: {
+          throw Error("Unknwon action: " + action.type);
+        }
+      }
+    }
+    </pre>
+    <h2>Step 3: Use the reducer from componnet</h2>
+    <p>
+      When the reducer function is completed, we need to hook it up with the
+      component. We can import it from React:
+      <code>import { useReducer } from "react";</code>
+    </p>
+    <p>
+      Then, replace useState
+      <code>const [studentList, setStudentList] = useState(initialList)</code
+      >with use reduce like
+      <code
+        >const [studentList, dispatch] = useReducer(studnetReducer,
+        initialList)</code
+      >
+    </p>
+    <p>
+      The <code>useReducer</code> hook takes an initial state and return a
+      stateful value, and a way to setup the state (dispatch function)
+    </p>
+    <p>It takes two argument: 1. A reducer function, 2. An initial state</p>
+    <p>
+      returning: 1. A stateful value 2. A dispatch function (to dispatch user
+      actions to reducer)
+    </p>
+    <pre>
+      
+    export default function studentReducer(studentList, action) {
+      switch (action.type) {
+        case "added": {
+          return [
+            ...studentList,
+            {
+              id: action.id,
+              name: action.name,
+              done: false,
+            },
+          ];
+        }
+        case "changed": {
+          return studentList.map((s) => {
+            if (s.id === student.id) {
+              return student;
+            } else {
+              return s;
+            }
+          });
+        }
+        case "deleted": {
+          return studentList.filter((s) => s.id !== studentId);
+        }
+        default: {
+          throw Error("Unknwon action: " + action.type);
+        }
+      }
+    }
+    </pre>
+  </body>
+</html>
