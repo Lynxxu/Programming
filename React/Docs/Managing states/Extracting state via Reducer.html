@@ -18,6 +18,11 @@
       data-type="module"
       src="Extract State vai Reducer.jsx"
     ></script>
+    <style>
+      li {
+        list-style-type: none;
+      }
+    </style>
     <title>Extracting state logic into a Reducer</title>
   </head>
   <body>
@@ -57,7 +62,6 @@
       the state.
     </p>
     <pre>
-      
       function handleAddStudent(name) {
         setStudentList([
           ...studentList,
@@ -248,7 +252,6 @@
       actions to reducer)
     </p>
     <pre>
-      
     export default function studentReducer(studentList, action) {
       switch (action.type) {
         case "added": {
@@ -279,5 +282,22 @@
       }
     }
     </pre>
+    <div id="studentList2"></div>
+    <p>
+      In this case, the event handlers only specify what happens when actions are dispatched, while reducer function
+      determines how the state updates responding to the dispatched actions.
+    </p>
+    <p>
+      Generally, <code>useState</code> is preferred in less complicated code, since it's straightforward. With more event
+      handlers, <code>useReducer</code> could compress the code size. In terms of debugging, <code>useReducer</code> is
+      better, as the state setting logic and the dispatch are separate from each other, and a console log can be added in
+      each code chunk for debuggings. Also, A reducer is purely a function that is independent from other logic. It can be
+      exported and tested in a isolated environment.
+    </p>
+    <p>
+      Reducers, like state updater functions, must be pure. They should have the same outcome from the same input, and does
+      not mutate object and arrays while updating them. Each action in a reducer describes only the user interaction. Even
+      if there's multiple outcome due to one interaction, only the interaction is dispatched.
+    </p>
   </body>
 </html>

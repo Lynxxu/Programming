@@ -1,19 +1,18 @@
 import React, { useState, useReducer } from "react";
 import { createRoot } from "react-dom/client";
-import { studentReducer2 } from "Extract Reducer.jsx";
 
 function StudentList({ list, onEditList, onDeleteList }) {
   return (
     <>
       {list.map((student) => (
-        <label key={student.id}>
+        <span key={student.id}>
           <br />
           <Student
             student={student}
             onEdit={onEditList}
             onDelete={onDeleteList}
           />
-        </label>
+        </span>
       ))}
     </>
   );
@@ -22,13 +21,7 @@ function StudentList({ list, onEditList, onDeleteList }) {
 function Student({ student, onEdit, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   let studentInfo;
-  if (!isEditing) {
-    studentInfo = (
-      <>
-        {student.name} <button onClick={() => setIsEditing(true)}>Edit</button>
-      </>
-    );
-  } else {
+  if (isEditing) {
     studentInfo = (
       <>
         <input
@@ -40,21 +33,26 @@ function Student({ student, onEdit, onDelete }) {
         <button onClick={() => setIsEditing(false)}>Save</button>
       </>
     );
+  } else {
+    studentInfo = (
+      <>
+        {student.name}
+        <button onClick={() => setIsEditing(true)}>Edit</button>
+      </>
+    );
   }
   return (
-    <>
-      <label>
-        <input
-          type="checkbox"
-          checked={student.present}
-          onChange={(e) => {
-            onEdit({ ...student, present: e.target.checked });
-          }}
-        />
-        {studentInfo}
-        <button onClick={() => onDelete(student.id)}>Delete</button>
-      </label>
-    </>
+    <label>
+      <input
+        type="checkbox"
+        checked={student.present}
+        onChange={(e) => {
+          onEdit({ ...student, present: e.target.checked });
+        }}
+      />
+      {studentInfo}
+      <button onClick={() => onDelete(student.id)}>Delete</button>
+    </label>
   );
 }
 
@@ -95,7 +93,7 @@ function StudentListApp() {
       {
         id: nextId++,
         name: name,
-        done: false,
+        present: false,
       },
     ]);
   }
@@ -131,3 +129,79 @@ function StudentListApp() {
 
 const studentList = createRoot(document.getElementById("studentList"));
 studentList.render(<StudentListApp />);
+
+let nextId2 = 3;
+const initialList2 = [
+  { id: 0, name: "銀鏡イオリ", present: true },
+  { id: 1, name: "赤司ジュンコ", present: false },
+  { id: 2, name: "黒舘ハルナ", present: false },
+];
+
+function studentReducer(studentList, action) {
+  switch (action.type) {
+    case "added": {
+      return [
+        ...studentList,
+        {
+          id: action.id,
+          name: action.name,
+          present: false,
+        },
+      ];
+    }
+    case "changed": {
+      return studentList.map((s) => {
+        if (s.id === action.student.id) {
+          return action.student;
+        } else {
+          return s;
+        }
+      });
+    }
+    case "deleted": {
+      return studentList.filter((s) => s.id !== action.id);
+    }
+    default: {
+      throw Error("Unknwon action: " + action.type);
+    }
+  }
+}
+
+function StudentListAppRed() {
+  const [studentList, dispatch] = useReducer(studentReducer, initialList2);
+  function handleAddStudent(name) {
+    dispatch({
+      type: "added",
+      id: nextId2++,
+      name: name,
+    });
+  }
+
+  function handleChangeStudent(student) {
+    dispatch({
+      type: "changed",
+      student: student,
+    });
+  }
+
+  function handleDeleteStudent(studentId) {
+    dispatch({
+      type: "deleted",
+      id: studentId,
+    });
+  }
+  return (
+    <>
+      <h2>Gehanna Student List</h2>
+      <AddStudent onAddStudent={handleAddStudent} />
+      <StudentList
+        list={studentList}
+        onEditList={handleChangeStudent}
+        onDeleteList={handleDeleteStudent}
+      />
+    </>
+  );
+}
+
+const studentList2 = createRoot(document.getElementById("studentList2"));
+studentList2.render(<StudentListAppRed />);

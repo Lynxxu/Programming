@@ -1,28 +1,3 @@
-import React, { useState } from "react";
-import { createRoot } from "react-dom/client";
-
-function handleAddStudent(name) {
-  dispatch({
-    type: "added",
-    id: nextId++,
-    name: name,
-  });
-}
-
-function handleChangeStudent(student) {
-  dispatch({
-    type: "changed",
-    student: student,
-  });
-}
-
-function handleDeleteStudent(studentId) {
-  dispatch({
-    type: "deleted",
-    id: studentId,
-  });
-}
-
 function studentReducer1(studentList, action) {
   if (action.type === "added") {
     return [
