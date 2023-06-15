@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script type="text/babel" data-type="module" src="Passing data with context.jsx"></script>
+    <style>
+        .section {
+            border: 1px gray solid;
+            border-radius: 2%;
+            padding: 3%;
+
+        }
+    </style>
+    <title>Passing data deeply with context</title>
+</head>
+
+<body>
+    <h1>Passing data deeply with context</h1>
+    <p>
+        To transfer data through components in a UI tree, props are a great way, but they could be very inconvenient
+        when they are needed in a component deep in the tree, or if they are needed in multiple components. To solve
+        this problem, we can use a technique called <code>context</code> to 'teleport' data to components in the tree
+        without using props.
+    </p>
+    <h2>Context</h2>
+    <p>
+        Using context, a parent component could pass data down to all the child nodes beneathe it. Considering an
+        the example below, it is composed of headings wrapped with sections. The size of the headings are controlled by
+        props. They have a general structure below:
+    </p>
+    <pre>
+        &lt;Section&gt;
+            &lt;Heading level={2}&gt;Abydos&lt;/Heading&gt;
+            &lt;Heading level={2}&gt;Trinity&lt;/Heading&gt;
+            &lt;Heading level={2}&gt;Gehanna&lt;/Heading&gt;
+            &lt;Heading level={2}&gt;Millennium&lt;/Heading&gt;
+        &lt;/Section&gt;
+    </pre>
+    <div id="Kivotos"></div>
+    <p>
+        This is repetitive, it would be much better if we are able to pass the level using the parent
+        <code>&lt;Section&gt;</code> like below:
+    </p>
+    <pre>
+    &lt;Section level={2}&gt;
+        &lt;Heading&gt;Abydos&lt;/Heading&gt;
+        &lt;Heading&gt;Trinity&lt;/Heading&gt;
+        &lt;Heading&gt;Gehanna&lt;/Heading&gt;
+        &lt;Heading&gt;Millennium&lt;/Heading&gt;
+    &lt;/Section&gt;
+    </pre>
+    <p>
+        To achieve this effect, the <code>Heading</code> component need to ask for data from the higher component in the
+        tree. Context would do the trick, it lets a parent to provide information to the entire subtree in three steps:
+    </p>
+    <ol>
+        <li>Create a context, it can be named as <code>LevelContext</code> for this example </li>
+        <li>Use the context from the component taht needs the data (<code>Heading</code> in this example)</li>
+        <li>Provide the context from the component that specifys the data(<code>Section</code>)</li>
+    </ol>
+    <h2>Step 1: create context</h2>
+    <p>
+        The context can be created using <code>const LevelContext = createContext(1)</code>. Note that
+        <code>createContext()</code> only takes one value, as the default value. In here, <code>1</code> refers to the
+        biggest heading size, but any form of values can be passed into it.
+    </p>
+    <h2>Step 2: using context</h2>
+    <p>
+        The context can easily be used by <code>useContext</code> hook:
+        <code>const level = useContext(LevelContext)</code>. This hook needs to be written in the component that asks
+        for the information, in this case, the <code>Heading</code> component
+    </p>
+    <p>
+        Now, edit the section so that it receives the context:
+    </p>
+    <pre>
+    &lt;Section level={2}&gt;
+        &lt;Heading&gt;Abydos&lt;/Heading&gt;
+        &lt;Heading&gt;Trinity&lt;/Heading&gt;
+        &lt;Heading&gt;Gehanna&lt;/Heading&gt;
+        &lt;Heading&gt;Millennium&lt;/Heading&gt;
+    &lt;/Section&gt;
+    </pre>
+    <p>
+        This example however, is not complete as the context are not provided yet, so React doesn't know where to get
+        it. If no context are provided, React would use the default value that is provided. In this case, all
+        <code>Heading</code>s would be in <code>h1</code>.
+    </p>
+    <h2>Step 3: Proivde context</h2>
+    <p>
+        The <code>Section</code> component needs to be modified to provide the <code>LevelContext</code> to them. This
+        can be done by wrapping them with a context provider:
+    </p>
+    <pre>
+        Section ({ level, children }){
+            return(
+                &lt;section className ="section"&gt;
+                    &lt;LevelContext.Provider value={level}&gt;
+                    children
+                    &lt;/LevelContext.Provider&gt;
+            )   &gt;section
+        }
+    </pre>
+    <p>
+        This wrapper would tell React that, if any component in the <code>&lt;Section&gt;</code> asks for
+        <code>LevelContext</code>, return them this level. The component would use the nearest's context provider's
+        value in the tree.
+    </p>
+    <p>
+        Now, the code works. The <code>LevelContext</code> is created as a global variable. <code>Section</code>, as the
+        context provider, would receive the <code>level</code> via prop, then provide it to any children nodes as a
+        context provider. <code>Heading</code> component would ask for the <code>level</code> prop from the nearest
+        provider by <code>level = useContext(LevelContext)</code>. Boom, we have the following result:
+    </p>
+    <div id="KivotosL"></div>
+    <h2>Use and provide context in the same component</h2>
+    <p>
+        Now we have a perfectly working example, but we can make it even better by reading from themselves. To do that,
+        we will define the context AND provide the context at the <code>Section</code> component:
+    </p>
+    <pre>
+        function Section({ children }) {
+            const level = useContext(LevelContext);
+            return (
+              &lt;section className="section"&gt;
+                &lt;LevelContext.Provider value={level + 1}&gt;
+                  {children}
+                &lt;/LevelContext.Provider&gt;
+              &lt;/section&gt;
+            );
+          }
+    </pre>
+    <p>
+        Now, each <code>Section</code> would read from the previous <code>Section</code>, which passes
+        <code>level + 1</code>. This would also provide such context to the <code>Heading</code> components, so there is
+        no need to pass any prop, the headings will configure themselves starting from the default value.
+    </p>
+    <p>
+        An important thing to note is that, even if components are neseted, the context will still be properly delivered
+        to the components that asks for it. This is simliar to CSS, in a way that all components will be influenced
+        equally when properties are set, and they won't override each other. The context for a component are unique and
+        independent from other context
+    </p>
+    <h2>Context: think twice before using them</h2>
+    <p>
+        Although context seemed convenient and widely applicable. They should only be used under certain circumstances.
+        Some alternatives for context are:
+    </p>
+    <ul>
+        <li>Passing props: although it may feel very ugly and inconvenient, but passing props provides a very clear flow
+            of the data and the components which uses the data.</li>
+        <li>Extract components and pass JSX via <code>children</code>: if some data are required through many
+            intermediate component that don't use it, we can extract the components and pass JSX as
+            <code>children</code> to them. For example, we can write
+            <code>&lt;Layout&gt;&lt;Posts posts={posts}/&gt;&lt;/Layout&gt;</code>
+        </li>
+    </ul>
+    <p>
+        Generally, we use context with:
+    </p>
+    <ul>
+        <li>Theming: Apps that enables change of appearance like dark mode would be a good application of context, a
+            context provider can be constructed at the top, then contexts can be used in components that requires
+            adjustment of appearance
+        </li>
+        <li>
+            Current Account: Many components may need to know the current logged in user to put in proper text, like
+            greeting. Putting it into context makes it convenient to read in any location of the tree.
+        </li>
+        <li>
+            Routing: Most routing solutions would hold the current route internally via context, so every link would
+            know whether it's active or not.
+        </li>
+        <li>
+            Managing states: As app grows, there could be states located on top of the tree that would be changed by
+            distant components. Large apps would have very complicated structures. We can use a reducer with context to
+            manage complex states.
+        </li>
+    </ul>
+    <p>
+        Another important thing to note is that, context is not just about static values, the values can also be
+        updated, where React will automatically update all realted components. Generally, if information are needed in
+        distant components down the tree, context would be a good way to monitor the states.
+    </p>
+</body>
+
+</html>
