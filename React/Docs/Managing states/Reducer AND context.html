@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="importmap">
       {
@@ -13,24 +12,114 @@
         }
       }
     </script>
-    <script type="text/babel" data-type="module" src="Reducer AND context.js"></script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Reducer AND context.jsx"
+    ></script>
 
     <title>Scaling up with Reducer And Context</title>
-</head>
-
-<body>
+  </head>
+  <body>
     <h1>Using reducer AND context together</h1>
     <p>
-        Reducer consolidates a component's state update logic while context allows the passing of information down to
-        other components
+      Reducer consolidates a component's state update logic while context allows
+      the passing of information down to other components
     </p>
     <h2>Combining reducer with context</h2>
     <p>
-
+      Remember the previous example where we have a editable student list. It
+      uses a reducer function to contain all of the state update logics.
     </p>
-    <div id="StudentList">
+    <div id="StudentList"></div>
+    <p>
+      Now, the <code>studentList</code> state and <code>dispatch</code> are only
+      avaliable in the top level <code>StudentListAppRed</code> component. They
+      can only be passed down to other components explicitly via prop drilling.
+      This could be very complicated and verbose when the logic grows.
+      Therefore, we can use reducer and context at the same time by putting the
+      state and dispatch function into context
+    </p>
+    <p>
+      To do such, we only need three steps: create context, put state and
+      dispatch into context, use context in the tree
+    </p>
+    <h3>Step 1: Create Context</h3>
+    <p>
+      The <code>useReducer</code> Hook returns current
+      <code>studentList</code> and dispatch function that enables update on the
+      state. To pass it down the tree, we can create two separate contexts:
+    </p>
+    <ol>
+      <li>
+        <code>StudentListContext</code>, which provides the current list of
+        students
+      </li>
+      <li>
+        <code>StudentDispatchContext</code>, which provides the function that
+        lets component to dispatch actions
+      </li>
+    </ol>
+    <pre>
+      const StudentListContext = createContext(null);
+      const StudentDispatchContext = createContext(null);
+    </pre>
+    <p>
+      We pass <code>null</code> as the default value, the actual values will be
+      provided by the component.
+    </p>
+    <h3>Put state and dispatch into context</h3>
+    <p>
+      Now in the app, we can import both contexts, which should take the state
+      and dispatch returned by <code>useReducer</code> and provide it down the
+      tree.
+    </p>
 
-    </div>
-</body>
+    <pre>
+      const StudentListContext = createContext(null);
+      const StudentDispatchContext = createContext(null);
 
+      export default function StudentListAppRed() {
+        const [studentList, dispatch] = useReducer(studentReducer, initialList2);
+       //....
+        return (
+          &lt;StudentListContext.Provider value={studentList}&gt;
+            &lt;StudentDispatchContext.Provider value={dispatch}&gt;
+              //...
+            &lt;/StudentDispatchContext.Provider&gt;
+          &lt;/StudentListContext.Provider&gt;
+        )
+      }
+    </pre>
+    <p>
+      Now the contexts have been provided, we now need to use it in the tree
+      where needed.
+    </p>
+    <h3>Step 3: Use context anywhere in the tree</h3>
+    <p>
+      Now, as the information are asked from the provider instead of received by
+      prop, we can remove the event handlers and other values.
+    </p>
+    <pre>
+      export default function StudentListAppRed() {
+        const [studentList, dispatch] = useReducer(studentReducer, initialList2);
+       //....
+        return (
+          &lt;StudentListContext.Provider value={studentList}&gt;
+            &lt;StudentDispatchContext.Provider value={dispatch}&gt;
+            &lt;h2&gt;Gehanna Student List&lt;/h2&gt;
+            &lt;AddStudent /&gt;
+            &lt;StudentList /&gt;
+            &lt;/StudentDispatchContext.Provider&gt;
+          &lt;/StudentListContext.Provider&gt;
+        )
+      }
+    </pre>
+    <p>
+      Components that need the corresponding information would need to read it
+      from their context:
+    </p>
+    <pre></pre>
+    <p></p>
+  </body>
 </html>
