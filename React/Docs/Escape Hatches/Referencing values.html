@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Referencing values.jsx"
+    ></script>
+    <title>Referencing values with refs</title>
+  </head>
+  <body>
+    <h1>Referencing values with refs</h1>
+    <p>
+      Sometimes, we would like a component to remember certain information
+      without triggering a re-render. We can do such by using a ref
+    </p>
+    <h2>Adding ref to a component</h2>
+    <p>Ref can be added by importing <code>useRef</code> hook from React:</p>
+    <pre>
+      import {useRef} from 'react'
+    </pre>
+    <p>
+      And inside the component, call the Hook and pass the initial value that
+      you would like to reference as the one and only argument
+    </p>
+    <pre>
+      const ref = useRef(0)
+    </pre>
+    <p><code>useRef</code> would return an object like below:</p>
+    <pre>
+      {
+        current: 0
+      }
+    </pre>
+    <p>
+      <code>useRef</code> would store the initial value in such object as the
+      value of <code>current</code>. We can access this value by
+      <code>ref.current</code>. The value is mutable, and is not tracked by
+      React, so re-renders won't be triggered when it was updated.
+    </p>
+    <p>
+      Here's a button that will increment <code>countRef.current</code> by one
+      for every click.
+    </p>
+    <div id="btn"></div>
+    <p>It's enabled by the following code:</p>
+    <pre>
+      function Button() {
+        const countRef = useRef(0);
+        return (
+          &lt;button
+            onClick={() =&gt; {
+              countRef.current++,
+                alert("you have clicked " + countRef.current + " times");
+            }}
+          &gt;
+            Click Me
+          &lt;/button&gt;
+        );
+      }
+    </pre>
+    <p>
+      This is a pretty simple example that uses <code>useRef</code> hook storing
+      a value. However, the ref can store be any type of data, it is a JS object
+      with <code>current</code> property that is muta ble. Unlike state, they do
+      NOT trigger re-render when updated
+    </p>
+    <h2>Example: Stopwatch</h2>
+    <p>a Stopwatch as follow can be constructed with code presented:</p>
+    <div id="stopwatch"></div>
+    <pre>
+    function Stopwatch() {
+      const [startTime, setStartTime] = useState(null);
+      const [now, setNow] = useState(null);
+      const intervalRef = useRef(null);
+    
+      function handleStart() {
+        setStartTime(Date.now());
+        setNow(Date.now());
+    
+        clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(() => {
+          setNow(Date.now(), 10);
+        });
+      }
+    
+      function handleStop() {
+        clearInterval(intervalRef.current);
+      }
+    
+      let secondsPassed = 0;
+      if (startTime != null && now != null) {
+        secondsPassed = (now - startTime) / 1000;
+      }
+    
+      return (
+        &lt;&gt;
+          &lt;h1&gt;Time passed: {secondsPassed.toFixed(2)}&lt;/h1&gt;
+          &lt;button onClick={handleStart}&gt;Start&lt;/button&gt;
+          &lt;button onClick={handleStop}&gt;Stop&lt;/button&gt;
+        &lt;/&gt;
+      );
+    }
+    </pre>
+    <p>
+      This stopwatch uses both state and ref. It stores a start time in state
+      <code>startTime</code> and current time in state <code>now</code>. When
+      the button is clicked, they stores the current time in both states and
+      clear any repetitive calls if avaliable. Then, a repetitive call is set,
+      updating the state <code>now</code> every 10 ms using
+      <code>setInterval</code>. The ID of such call is stored in
+      <code>intervalRef</code>
+    </p>
+    <p>
+      Now, the time passed will be calculated by subtracting both states
+      <code>now</code> and <code>startTime</code>, stored in
+      <code>secondsPassed</code>. the timer updates every 10ms as called in the
+      interval. When the stop button is clicked, the interval is cleared by
+      calling <code>clearInterval()</code> with the ID stored in
+      <code>intervalRef.current</code>
+    </p>
+    <h2>Difference between ref & state</h2>
+    <p>
+      Most of the time, states are sufficient. However, Refs are escape hatches
+      that React don't track. They does not trigger re-render when updated,
+      therefore it should not be edited during rendering.
+    </p>
+    <p>
+      For example, if we want to build a button that shows how many times it's
+      clicked, we can only do so by state.
+    </p>
+    <div id="btn2"></div>
+    <pre>
+      function Btn() {
+        const [clickedTimes, setClickedTimes] = useState(0);
+        return (
+          &lt;button
+            onClick={() =&gt; {
+              setClickedTimes(clickedTimes + 1);
+            }}
+          &gt;
+            You have Clicked {clickedTimes} times
+          &lt;/button&gt;
+        );
+      }
+    </pre>
+    <p>
+      Imagine storing the <code>clickedTimes</code> in a ref, that would not
+      serve the purpose of such button, since it won't be updated when it is
+      edited.
+    </p>
+    <h2>When to use refs</h2>
+    <p>
+      Most of the time, we would use refs when a component requires to 'escape'
+      from React and communciate with exteranl APIs. Some examples include:
+    </p>
+    <ol>
+      <li>Storing timeout IDs</li>
+      <li>Storing and manipulating DOM elements</li>
+      <li>Storing other objects that are not essential in calculating JSX</li>
+    </ol>
+    <p>
+      Since refs are essentially 'outside' of React, we should keep that in mind
+      while using it in the component. The main logic and data should NOT be
+      stored in refs. Also, ref.current should not be edited during rendering,
+      because React does not know when they would change, making the component
+      rather unpredicatble.
+    </p>
+  </body>
+</html>

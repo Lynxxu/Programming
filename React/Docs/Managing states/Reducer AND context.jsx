@@ -1,25 +1,21 @@
 import React, { useState, useReducer, useContext, createContext } from "react";
 import { createRoot } from "react-dom/client";
 
-function StudentList({ onEditList, onDeleteList }) {
+function StudentList({}) {
   const list = useContext(StudentListContext);
   return (
     <>
       {list.map((student) => (
         <span key={student.id}>
           <br />
-          <Student
-            student={student}
-            onEdit={onEditList}
-            onDelete={onDeleteList}
-          />
+          <Student student={student} />
         </span>
       ))}
     </>
   );
 }
 
-function Student({ student, onEdit, onDelete }) {
+function Student({ student }) {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useContext(StudentDispatchContext);
   let studentInfo;
@@ -30,8 +26,11 @@ function Student({ student, onEdit, onDelete }) {
           value={student.name}
           onChange={(e) => {
             dispatch({
-              ...student,
-              name: e.target.value,
+              type: "changed",
+              student: {
+                ...student,
+                name: e.target.value,
+              },
             });
           }}
         />
@@ -52,7 +51,10 @@ function Student({ student, onEdit, onDelete }) {
         type="checkbox"
         checked={student.present}
         onChange={(e) => {
-          dispatch({ ...student, present: e.target.checked });
+          dispatch({
+            type: "changed",
+            student: { ...student, present: e.target.checked },
+          });
         }}
       />
       {studentInfo}

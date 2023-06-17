@@ -117,9 +117,44 @@
     </pre>
     <p>
       Components that need the corresponding information would need to read it
-      from their context:
+      from their context. For example, the <code>StudentList</code> component
+      used <code>list</code> state, which was passed via props, so it should be
+      changed to:
     </p>
-    <pre></pre>
-    <p></p>
+    <pre>
+    function StudentList({}) {
+      const list = useContext(StudentListContext);
+      //...
+    }
+    </pre>
+    <p>
+      Similarly, any component that uses the event handlers or any actions
+      should read from dispatch context AND call it.
+    </p>
+    <pre>
+    function AddStudent() {
+      const [addName, onAddName] = useState("");
+      const dispatch = useContext(StudentDispatchContext);
+      return (
+        //...
+          &lt;button
+            onClick={() =&gt; {
+              onAddName("");
+              dispatch({
+                type: "added",
+                id: nextId2++,
+                name: addName,
+              });
+            }}
+          &gt;
+            Add
+          &lt;/button&gt;
+        );
+      }
+    </pre>
+    <p>
+      With these modifications, the states are managed in the top level
+      component, but can be read from anywhere in the tree via contexts.
+    </p>
   </body>
 </html>
