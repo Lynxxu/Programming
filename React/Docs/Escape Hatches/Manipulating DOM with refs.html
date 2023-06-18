@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="DOM and refs.jsx"
+    ></script>
+    <style>
+      .gallery {
+        display: flex;
+      }
+      .gallery img {
+        width: 900px;
+        margin: 5%;
+      }
+    </style>
+    <title>Manipulating DOM with refs</title>
+  </head>
+  <body>
+    <h1>Manipulating DOM with refs</h1>
+    <p>
+      React would automatically update the DOM to match the render output. The
+      components don't have to do anything. However, sometimes we may wish to
+      access React's DOM element for some purpose. We can do such with refs, as
+      there's no built-in method for it.
+    </p>
+    <h2>ref to node</h2>
+    <p>
+      To access DOM managed by React, import and decalre the ref in the
+      component, and pass the ref as a <code>ref</code> attribute to JSX tag for
+      the desired node:
+    </p>
+    <pre>
+        import { useRef } from "react";
+        const myRef = useRef(null);
+
+        function Example() {
+        return &lt;div ref={myRef}&gt;Text&lt;/div&gt;;
+        }
+    </pre>
+    <p>
+      With the above code, React puts a reference to the
+      <code>div</code> element that it creates into <code>myRef.current</code>.
+      Now this DOM element can be accessed using event handlers and built-in
+      browser APIs like <code>myRef.current.scrollIntoView()</code>
+    </p>
+    <p>
+      For example, we can create a input with a button that can focus the input
+    </p>
+    <div id="input"></div>
+    <pre>
+    function InputButton() {
+        const inputRef = useRef(null);
+        return (
+            &lt;&gt;
+            &lt;input ref={inputRef} /&gt;
+            &lt;button
+                onClick={() =&gt; {
+                inputRef.current.focus();
+                }}
+            &gt;
+                Focus the input
+            &lt;/button&gt;
+            &lt;/&gt;
+        );
+        }
+    </pre>
+    <p>
+      This is done by storing the input DOM element in a ref, and manipulate the
+      eleemnt by calling <code>focus()</code> method on it. This is the main use
+      case for refs, but refs can certainly be used in other situations like API
+      calls.
+    </p>
+    <div id="gallery"></div>
+    <p>
+      See the gallery above, it is composed of three buttons and three images.
+      The three images are created each with a specific ref. The refs are
+      manipulated by the corresponding buttons by
+      <code>scrollIntoView()</code> method.
+    </p>
+    <h2>Accessing other component's DOM</h2>
+    <p>
+      When a ref is set on a built-in component that renders a browser element.
+      They works fine, react would set the ref's <code>current</code> property
+      to the corresponding DOM node.
+    </p>
+    <p>
+      However, when a ref is placed on a custom component build by your own,
+      they'll get null. For example:
+    </p>
+    <pre>
+    
+    function MyInput(props) {
+      return &lt;input {...props} /&gt;;
+    }
+
+    export default function MyForm() {
+      const inputRef = useRef(null);
+
+      function handleClick() {
+        inputRef.current.focus();
+      }
+
+      return (
+        &lt;&gt;
+          &lt;MyInput ref={inputRef} /&gt;
+          &lt;button onClick={handleClick}&gt;
+            Focus the input
+          &lt;/button&gt;
+        &lt;/&gt;
+      );
+    }  
+    </pre>
+    <p style="color: red">
+      Warning: Function components cannot be given refs. Attempts to access this
+      ref will fail. Did you mean to use React.forwardRef()?
+    </p>
+    <p>
+      This occurs since React does not let a component access others' DOM node
+      for the purpose of making the code stronger. To access another component's
+      DOM, the component must expose their DOM nodes to opt in to that
+      behaviour. The component can specify that it forwards its ref to children,
+      so the ref will be passed down.
+    </p>
+    <pre>
+      const MyInput = forwardRef((props, ref)=>{
+        return &lt;input {...props} ref={ref}/&gt;;
+      });
+    </pre>
+    <p>
+      <code>&lt;MyInput ref={inputRef}&gt;</code> would tell React to put the
+      DOM node into <code>inputRef.current</code>, but that component is not
+      opted in to such behaviour, so the ref would have a <code>null</code>.
+    </p>
+    <p>
+      When <code>MyInput</code> component is declared using
+      <code>forwardRef</code>, it opts it into receiving
+      <code>inputRef</code> from above, as the second <code>ref</code> argument,
+      declared after props. Then, <code>MyInput</code> would pass the
+      <code>ref</code> that it receives into the <code>input</code> in it.
+    </p>
+    <pre>
+      
+    const MyInput = forwardRef((props, ref) =&gt; {
+      return &lt;input {...props} ref={ref} /&gt;;
+    });
+
+    function Form() {
+      const inputRef = useRef(null);
+      return (
+        &lt;&gt;
+          &lt;MyInput ref={inputRef} /&gt;
+          &lt;button onClick={() =&gt; inputRef.current.focus()}&gt;Focus&lt;/button&gt;
+        &lt;/&gt;
+      );
+    }
+    </pre>
+    <p>
+      This is a pretty standard pattern for low-level components like buttons
+      and inputs to forward their ref to their DOM nodes. Higher level DOMs like
+      forms, lists and page sections won't expose their DOM to avoid unnecessary
+      dependencies on DOM.
+    </p>
+    <div id="form"></div>
+    <h2>Process of attaching refs</h2>
+    <p>
+      In React, every update is split into two phases: render and commit. Render
+      is where React calls the component to figure out what to show on scree,
+      commit is where React applies the change to DOM.
+    </p>
+    <p>
+      Generally, we don't want to access refs during rendering. Since during
+      first render, DOM nodes are not yet created, so
+      <code>ref.current</code> would be null. React would set
+      <code>ref.current</code> during commit, before updating DOM,
+      <code>ref.current</code> would have value to null. After updating, React
+      sets them to the corresponding DOM nodes.
+    </p>
+    <h2>Best practices for DOM manipulation with ref</h2>
+    <p>
+      Before using Refs, remember that they are escape hatches. They should only
+      be used when you have to step outside React. This includes managing focus,
+      scroll position or calling APIs. Non-destructive actions like focusing and
+      scrolling should be fine. However, when DOM is modified manually by refs,
+      it is possible to conflict with changes React is making
+    </p>
+    <p>
+      As a rule of thumb, avoid changing DOM element managed by React. This
+      include modifying, adding children to, or removing children from elements
+      managed by React, as it could lead to inconsistent visual results or
+      crashes. For DOM element that React won't update, they can be safely
+      modified. For example, if a <code>div</code> is always empty in JSX, React
+      won't access it at all, so you can edit it as you wish.
+    </p>
+  </body>
+</html>
