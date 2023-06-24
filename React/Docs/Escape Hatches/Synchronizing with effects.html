@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synchronizing changes with effects</title>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Synchronizing with effects.jsx"
+    ></script>
+    <style>
+      .video {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        align-items: center;
+      }
+      .video * {
+        margin: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Synchronizing changes with effects</h1>
+    <p>
+      Some components may need to synchronize with external systems. For
+      example, you may wish to send some logs when a component appears on
+      screen. This can be done by Effects, which allows you to run some code
+      after rendering.
+    </p>
+    <h2>Effects: what are they</h2>
+    <p>
+      Before learning Effects, we should know that there are two types of
+      important logic in React:
+    </p>
+    <ol>
+      <li>
+        Rendering code: living in the top level of component, where it takes
+        props and states, returning JSX you wish to see in screen. Rendering
+        code must be pure, so no modification should be done.
+      </li>
+      <li>
+        Event handlers: nested functions inside components that do things in
+        response to certain events. They might contain 'side effects' caused by
+        user actions (the 'certain events')
+      </li>
+    </ol>
+    <p>
+      Sometimes, these two types of logic are not enough. For example, we would
+      wish to establish connection to another server when the control panel is
+      rendered and visible in screen. This can't be done during rendering since
+      it's an side effect. It's also impossible to complete via event handlers,
+      since there are no events that cause the control panel to open.
+    </p>
+    <p>
+      Effects enables specifying side effects that are caused by rendering
+      itself, instead of any particluar event like a event handler. They run
+      after the end of a commit after screen update, which is a good time for
+      syncing with external AIPs
+    </p>
+    <h2>Writing a Effect</h2>
+    <p>The three steps would create an Effect:</p>
+    <ol>
+      <li>Declare an Effect: They will run after every render by default</li>
+      <li>
+        Specify Effect dependencies: most of them should only run when needed,
+        rather than after every render. For example, a fade-out animination
+        should only be triggered when a component is closed.
+      </li>
+      <li>
+        Add cleanup if needed: some effect need to specify how to stop, undo or
+        clean after their have performed their job. For example,
+        subscribe-unsubscribe, connect-reconnect-disconnect. This is known as
+        cleanup function
+      </li>
+    </ol>
+    <h2>Step 1: Declare an Effect</h2>
+    <p>
+      First, import the <code>useEffect</code> hook. Then call it at the top
+      level of component, and put some code in the Effect.
+    </p>
+    <pre>
+      import { useEffect } from 'react';
+
+      function MyComponent(){
+        useEffect(()=> {
+          //Code that runs after every render
+        })
+        return &lt;div/&gt;
+      }
+    </pre>
+    <p>
+      React would recognize the Effect, and 'delay' the code in Effect to run
+      after render is completed. Considering a example of a video player:
+    </p>
+    <pre>
+      function VideoPlayer({ src, isPlaying }) {
+        const ref = useRef(null);
+      
+        if (isPlaying) {
+          ref.current.play();  
+        } else {
+          ref.current.pause(); 
+        }
+        // rest of the code
+      }
+    </pre>
+    <p>
+      This code would actually crash when rendered because it runs during
+      render. The DOM does not exist yet when it's called, therefore returning
+      an error
+    </p>
+    <p>
+      To solve this problem, we can either use a separate button tied with a
+      event handler that controls the action, or we can use Effect to delay the
+      code after rendering is done.
+    </p>
+    <p>
+      function VideoPlayer({ src, isPlaying }) { const ref = useRef(null);
+      useEffect(() => { if (isPlaying) { ref.current.play(); } else {
+      ref.current.pause(); } }); return &lt;video ref={ref} src={src} loop
+      playsInline /&gt;; }
+    </p>
+    <p>
+      In this case, we wrapped the DOM in Effect, so React would update the
+      screen. Then, the Effect runs. When the <code>VideoPlayer</code> component
+      renders, React would update the screen, creating a
+      <code>&lt;video&gt;</code> tag in DOM with correct props. React would then
+      run the Effect, which will call <code>play()</code> or
+      <code>pause()</code> depending on the value of <code>isPlaying</code>
+    </p>
+    <div class="video" id="video"></div>
+    <p>
+      In this example, the external system that was synchronized with React was
+      the browser media API.
+    </p>
+    <p>
+      A very important thing to note is that, Effect may lead to infinite loops
+      when incorrectly used. For example:
+    </p>
+    <pre>
+      const [count, setCount] = useState(0);
+      useEffect(()=>{
+        setCount(count + 1)
+      })
+    </pre>
+    <p>
+      Since Effect runs after render, and updating a state would trigger a
+      re-render. This code would lead to infinite re-renders as a closed
+      infinite loop. Therefore, Effects should usually synchronize the component
+      with an external system.
+    </p>
+    <h2>Stpe 2: Setting Effect dependencies</h2>
+    <p>
+      Effect runs after every render by default. However, this might not be what
+      you want since it's slow and may cause unnecessary runs.
+    </p>
+    <p>
+      For exmaple, we could have a input at the same level of the video example
+      before, where each inupt would trigger an update in the entire parent
+      level. This would also trigger Effect after each render, which is not
+      needed.
+    </p>
+    <p>
+      To solve this problme, we can tell React to skip Effect by specifying an
+      array of dependencies as the second argument in the
+      <code>useEffect</code> call.
+    </p>
+    <p>
+      There are three different possible configurations in Effect dependencies:
+    </p>
+    <ol>
+      <li>
+        useEffect(()=>{ <br />
+        <i>// This runs after every render</i> <br />
+        })
+      </li>
+      <li>
+        useEffect(()=>{ <br />
+        <i
+          >// This runs only on mount (when the component appears for the first
+          time)</i
+        >
+        <br />
+        }, [])
+      </li>
+      <li>
+        useEffect(()=>{ <br />
+        <i
+          >// This runs on mount AND if either a or b have changed since last
+          render.</i
+        >
+        <br />
+        },[a,b])
+      </li>
+    </ol>
+    <p>
+      Back in our video player example, we shall only use the third option
+      containing <code>isPlaying</code> as the dependency. Because the Effect
+      starts with <code>if (isPlaying)</code>, so it must be included as a
+      dependency.
+    </p>
+    <p>Therefore, the code after we added a dependency is modified to:</p>
+    <pre>
+    useEffect(() => {
+      if (isPlaying) {
+        ref.current.play();
+      } else {
+        ref.current.pause();
+      }
+    },[isPlaying]);
+    </pre>
+    <p>
+      Now it would skip the code in Effect if <code>isPlaying</code> is the same
+      after render. Note that the <code>ref</code> is omitted in the dependency
+      because it has a stable identity that React will always remember: it will
+      never change by it self. However, if the ref is passed from the parent
+      level component, then it must be specified in dependencies, since the
+      Effect can't tell if the ref passed down is always the same
+    </p>
+    <h2>Step 3: Add cleanup (if needed)</h2>
+    <p>
+      Imagine building a chatroom with React. We would wish to render it only
+      once - on mount. This can easily be achived by using an empty array as
+      dependency like:
+    </p>
+    <pre>
+      useEffect(()=>{
+        const connection = createConnection();
+        connection.connect();
+      },[]);
+    </pre>
+    <p>
+      However, imagine the user decided to check something in his profile during
+      chatting, so he left the chatroom and return a while later. Now the page
+      has refreshed, and the connection would be started again. But the previous
+      connection wasn't destroyed yet, which may cause problems.
+    </p>
+    <p>
+      To solve this issue, we can add a cleanup function by the
+      <code>return</code> syntax.
+    </p>
+    <pre>
+      useEffect(()=>{
+        const connection = createConnection();
+        connection.connect();
+        return()=>{
+          connection.disconnect();
+        };
+      },[]);
+    </pre>
+    <p>
+      React would call the cleanup function each time before the Effect runs
+      again, and one time when the component unmounts (removed). This is the
+      correct behaviour in development since there should always be cleanup
+      function that undo the Effect's changes. The users shouldn't be able to
+      distinguish the difference between <i>mount</i> and
+      <i>mount-cleanup(unmount)-mount</i>.
+    </p>
+    <h3>Example: Controlling non-React widgets</h3>
+    <p>
+      Sometimes we may wish to add UI pieces that are from external APIs. For
+      example, using browser API <code>showModal</code> to trigger a dialog box.
+      We shall add a cleanup function so that it won't be triggered twice
+      causing bugs.
+    </p>
+    <pre>
+      useEffect(()=> {
+        const dialog = dialog.Ref.current;
+        dialog.showModal();
+        return() => dialog.close();
+      }, []);
+    </pre>
+    <h3>Example: Subscribing to events</h3>
+    <p>
+      if your Effect subscribes to something, the cleanup function should
+      unsubscribe so that there is no multiple subscription at a time.
+    </p>
+    <pre>
+      useEffect(()=>{
+        function handleSomething(){
+          // some actions
+        }
+        something.addEventListener('action', handleSomething)
+        return()=> something.removeEventListener('action', handleSomething)
+      }, [])
+    </pre>
+    <h3>Exmaple: triggering animation</h3>
+    <p>
+      If the Effect animates something in, the cleanup function should restore
+      it to the initial values so that when it runs again, it will start from
+      scratch instead of where it's left in last render.
+    </p>
+    <pre>
+      useEffect(()=>{
+        const node = ref.current;
+        node.style.opacity = 1;
+        return()=> {
+          node.style.opacity = 0;
+        };
+      },[])
+    </pre>
+    <h3>Example: Fetching data</h3>
+    <p>
+      If the Effect fetches somthing, the cleanup should either abort the fetch
+      or ignore the result
+    </p>
+    <pre>
+      useEffect(()=> {
+        let ignore = false;
+        
+        async function startFetching(){
+          const json = await fetchInfo(userId);
+          if(!ignore){
+            setInfo(json);            
+          }
+        }
+        
+        startFetching()
+
+        return()=> {
+          ignore = true;
+        }
+      }, [userId])
+    </pre>
+    <p>
+      Unlike previous example, a network request can't be undone. However, the
+      cleanup function should stop the fetch that's not requested anymore. For
+      example, if the <code>userId</code> changed after cleanup, the information
+      that arrived will still be ignored.
+    </p>
+    <h3>Exmaple: Initializing the application</h3>
+    <p>
+      if some logic are meant to only run once when the application starts, it
+      can be placed outside of the component. This is to ensure that it will
+      only run once after browser runs the page:
+    </p>
+    <pre>
+      if (typeof window !== 'undefined'){
+        checkSomething()
+      }
+      
+      function App(){
+        // ...
+      }
+    </pre>
+    <h3>Example: buying a product</h3>
+    <p>
+      Buying a product should NOT be placed in a Effect. Because you don't wish
+      the user to purchase the same thing when they pressed the back button or
+      everytime they revisit the page. It should be user-action inflicted like a
+      eventListener.
+    </p>
+  </body>
+</html>
