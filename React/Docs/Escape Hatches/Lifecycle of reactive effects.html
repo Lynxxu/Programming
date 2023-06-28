@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="Lifecycle of Reactive Effects.jsx"
+    ></script>
+    <title>Lifecycle of reactive effects</title>
+  </head>
+  <body>
+    <h1>Lifecycle of reactive effects</h1>
+    <p>
+      Effects have different lifecycle from components, a component could mount,
+      update or unmount. An Effect could only start synchronize or stop
+      synchronizing it. This cycle could happen multiple times if the Effect
+      depends on props and state that change over time.
+    </p>
+    <p>
+      For example, if we have a chatroom application that allows the user to
+      switch to different chatrooms, the component may need to synchronize
+      multiple times, which will be reflected by Effect.
+    </p>
+    <pre>
+    function ChatRoom({ roomId }) {
+        const serverUrl = "https://lynx1027.com";
+        
+        useEffect(() => {
+            const connection = createConnection(serverUrl, roomId);
+            connection.connect();
+            return () => {
+            connection.disconnect();
+            };
+        }, [roomId]);
+        return &lt;h1&gt;Welcome to the {roomId} room!&lt;/h1&gt;;
+    }
+    </pre>
+    <div id="app"></div>
+    <p>
+      When the user selects the <code>general</code> chatroom, the
+      <code>roomId</code> will be <code>general</code>. When the UI is done
+      rendering, React runs the Effect and starts synchronizing, which connects
+      to the <code>general</code> room. Now everything worked well
+    </p>
+    <p>
+      Then, the user decided to switch to the travel chatroom. This would change
+      the <code>roomId</code> to <code>travel</code>. The first thing happens is
+      that React updates the UI: <br />
+      <code>return &lt;h1&gt;Welcome to the {roomId} room!&lt;/h1&gt;;</code>
+    </p>
+    <p>
+      Then, since during the last run, the Effect is connected ot
+      <code>general</code>. But we know how to deal with it: cleanup function.
+      So React runs the cleanup function before starting the new render, which
+      stops synchronizing with the old <code>roomId</code> (disconnected). When
+      that is done, the new <code>roomId</code> is used for starting the new
+      synchronization
+    </p>
+    <h2>Thinking from React's perspective</h2>
+    <p>
+      Lets say that a user starts the chatroom, selecting the general. Then the
+      switched to travel, which later changed to the music room and he left the
+      room eventually.From React's view, the following events happened:
+    </p>
+    <ol>
+      <li>
+        <code>ChatRoom</code> mounted with <code>roomId</code> set to
+        <code>general</code>
+      </li>
+      <li>
+        <code>ChatRoom</code> mounted with <code>roomId</code> set to
+        <code>travel</code>
+      </li>
+      <li>
+        <code>ChatRoom</code> mounted with <code>roomId</code> set to
+        <code>music</code>
+      </li>
+      <li><code>ChatRoom</code> unmounted</li>
+    </ol>
+    <p>During each of these points, the Effect:</p>
+    <ol>
+      <li>connected to general room</li>
+      <li>disconnected from general and connected to travel room</li>
+      <li>disconnected from travel and connected to music room</li>
+      <li>disconnected from music room</li>
+    </ol>
+    <h3>Each Effect represents a separate synchronization process</h3>
+    <p>
+      Imagine adding a extra piece of code in the Effect, which sends a log of
+      the user's visit to the room. This should not be done, since the Effect
+      may re-syncrhonize and calling the log function again, which is not
+      intended.
+    </p>
+    <p>
+      To solve this problem, check if the Effect have certain logic that could
+      be separated and independent from each other, if so, delete them and put
+      them in a separate Effect. Each Effect in the code should represent a
+      independent synchronization process.
+    </p>
+    <h3>Dependencies in Effect</h3>
+    <p>
+      In our example, we passed only the <code>roomId</code> as the dependency,
+      but not <code>serverUrl</code>. This is because <code>serverUrl</code> is
+      a immutable value, meaning it will never be changed. However, props,
+      states and other values declared in a component are
+      <i>'reactive'</i> since they are only calculated during rendering.
+    </p>
+    <p>
+      Mutable values and gloabl values cannot be dependencies, since they are
+      not reactive. For mutable values, they can be changed at any time outside
+      of React rendering data flow. Changing such won't trigger a re-render of
+      the component, so even if they are included in a dependency, React won't
+      re-synchronize the Effect when it changes.
+    </p>
+    <p>
+      For simliar reason, <code>ref.current</code> also can't be a dependency,
+      since it's intentionally mutable as a escape hatch. The object returned by
+      <code>useRef</code> can be used as a dependency though.
+    </p>
+  </body>
+</html>

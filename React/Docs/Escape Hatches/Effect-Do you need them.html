@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Effect: Do you really need them</title>
+  </head>
+  <body>
+    <h1>Effect: Do you really need them</h1>
+    <p>
+      Effects are escape hatches that allows your program to 'leave' React and
+      synchronize with external systems. If there are no such interaction,
+      Effect should not be involved as they may lead to bugs.
+    </p>
+    <h2>Unnecessary Effects</h2>
+    <p>Generally, there are two scenarios where Effects can be removed.</p>
+    <ul>
+      <li>
+        Transforming data for rendering: For example, a component may render a
+        list based on some conditions. This may include applying methods that
+        could calculate the desired result like <code>filter()</code>. This
+        should NOT be done in Effect, since they would require rendering as the
+        prerequsite condition, which could slow the program and even leading to
+        inifinte loops
+      </li>
+      <li>
+        Handling user events: For example, in a online shopping mall website,
+        the user may click the buy button to checkout from their cart. This
+        should be done via event handlers since Effect can't listen to a
+        specific user-interaction
+      </li>
+      <p>
+        When the program involves syncing with external systems, Effect should
+        be used. Here are some example:
+      </p>
+      <h3>Updating states based on props</h3>
+      <p>
+        Say we would like to write a simple program that could calculate the
+        whole name of a user based on their first and last name from the props:
+        <code>firstName</code> and <code>lastName</code>. It should be written
+        with only states, Effects should not be considered.
+      </p>
+      <pre>
+        function Name(){
+            const [firstName, setFirstName] = 'Chalin',
+            const [lastName, setLastName] = 'Hu'
+            
+            const fullName = firstName + ' ' + lastName
+        }
+      </pre>
+    </ul>
+    <p>
+      Generally, if things can be calculated via existing props and states,
+      don't put it into states, calculate it DURING rendering. This would make
+      the code faster and simpler, and would also avoid variables getting
+      out-of-sync.
+    </p>
+    <h3>Caching expensive calculations</h3>
+    <p>
+      Imagining the user would like to search for something in a database. As
+      mentioned before, this should not be done in Effect:
+    </p>
+    <pre>
+    function Search({ item, filter }){
+        const [item, setItem] = useState('');
+        const visibleItems = getFilteredItems(items, filter)
+    }
+    </pre>
+    <p>
+      However, if the database is extremely huge, or the user have a very
+      specific scope of search, it may be a 'expensive' calculation that takes a
+      long time and slows down the program. We can cache the expensive
+      calculation result using <code>useMemo</code> hook
+    </p>
+    <pre>
+    function Search({ item, filter }){
+        const [item, setItem] = useState('');
+        const visibleItems = useMemo(()=> {
+            getFilteredItems(items, filter);
+        }, [items, filter])
+    }
+    </pre>
+    <p>
+      Now the function will only re-calculate the result if <code>item</code> or
+      <code>filter</code> have changed. React would remember the return value of
+      <code>getFilteredItems</code> and check if <code>item</code> and
+      <code>filter</code> are the same in next render. If so,
+      <code>useMemo</code> would return the value stored in the last time.
+    </p>
+    <p>
+      Note that <code>useMemo</code> runs during rendering, so it only works for
+      pure calculation
+    </p>
+    <h3>Resetting all states when a prop changes</h3>
+    <p>
+      Using an example of a web game. The user could switch account, and the
+      information of the account like KDI and account age should be changed
+      accordingly. Effect should NOT be used here, as they runs after render, so
+      the program would display a set of wrong old information before showing
+      the desired screen. Also, it is extremely inefficient, since they need to
+      be declared in every component that requires a reset.
+    </p>
+    <p>
+      To solve this problem, we can let React create distinct DOM by passing the
+      component a key
+    </p>
+    <pre>
+        function UserPage({ userId }){
+            return (
+                &lt;Profile
+                userId = {userId}
+                key = {userId}
+                /&gt;
+            )
+        }
+    </pre>
+    <p>
+      Now whenever the <code>key</code> has changed, the DOM will be recreated
+      and all states reset.
+    </p>
+    <h3>Sharing logic between events</h3>
+    <p>
+      Say a product page have two buttons, buying and checking out. When they
+      are pressed, they shall both let you buy the product and show a
+      notification when the product is placed in the car by user. Again in this
+      case Effect is NOT a good choice since it may run incorrectly. The proper
+      way to configure the logic is to write the same logic in a function, then
+      call it in the respective container.
+    </p>
+  </body>
+</html>

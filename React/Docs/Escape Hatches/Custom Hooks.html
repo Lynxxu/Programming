@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react?dev",
+          "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+      }
+    </script>
+    <script
+      type="text/babel"
+      data-type="module"
+      src="custom hooks.jsx"
+    ></script>
+    <title>Custom Hooks</title>
+  </head>
+  <body>
+    <h1>Custom Hooks: Reuse Logic</h1>
+    <p>
+      React have many built-in Hooks like <code>useState</code> and
+      <code>useContext</code>. However, sometimes you may wish to have your own
+      hooks for some specific purposes since React may not provide them. This is
+      known as custom hooks
+    </p>
+    <h2>Custom Hooks: sharing logic</h2>
+    <p>
+      Imagine building an app that relies on network, we want to tell the user
+      that their actions may turn network off. To do this, we can use a state
+      representing the current status of network and an Effect that subscribes
+      to global network event that updates the states.
+    </p>
+    <p>
+      The function below is the implemented code. It renders a button that is
+      disabled while <code>isOnline</code> is false and logs
+      <code>'progress saved'</code> when <code>isOnline</code> is true.
+    </p>
+    <pre>
+    function SaveButton() {
+      const [isOnline, setIsOnline] = useState(true);
+      useEffect(() => {
+        function handleOnline() {
+          setIsOnline(true);
+        }
+        function handleOffline() {
+          setIsOnline(false);
+        }
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+        return () => {
+          window.removeEventListener('online', handleOnline);
+          window.removeEventListener('offline', handleOffline);
+        };
+      }, []);
+
+      function handleSaveClick() {
+        console.log('✅ Progress saved');
+      }
+
+      return (
+        &lt;button disabled={!isOnline} onClick={handleSaveClick}&gt;
+          {isOnline ? 'Save progress' : 'Reconnecting...'}
+        &lt;/button&gt;
+      );
+    }
+    </pre>
+    <p>
+      say we have another function that shows the current network status of the
+      user. It will have a very simliar logic with the button:
+    </p>
+    <pre>
+    function StatusBar() {
+      const [isOnline, setIsOnline] = useState(true);
+      useEffect(() => {
+        function handleOnline() {
+          setIsOnline(true);
+        }
+        function handleOffline() {
+          setIsOnline(false);
+        }
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+        return () => {
+          window.removeEventListener('online', handleOnline);
+          window.removeEventListener('offline', handleOffline);
+        };
+      }, []);
+
+      return &lt;h1&gt;{isOnline ? '✅ Online' : '❌ Disconnected'}&lt;/h1&gt;;
+    }
+    </pre>
+    <p>
+      Now, if we would like to use both of them together, they works completely
+      fine and ok. But the duplcation in logic is verbose, we can use custom
+      hook to extract the similar logic
+    </p>
+    <h2>Extracting custom hook from a component</h2>
+    <p>
+      We can see from the examples that both component shares the same piece of
+      logic where the Effect returns <code>isOnline</code> based on the current
+      status of network using browser API. Thus, we can extract them in our
+      custom hooks
+    </p>
+    <pre>
+      function useOnlineStatus(){
+        const [isOnline, setIsOnline] = useState(true);
+        useEffect(()=>{
+          function handleOnline(){
+            setIsOnline(true);
+          }
+          function handleOffline(){
+            setIsOnline(false);
+          }
+
+          window.addEventListener('online', handleOnline);
+          window.addEventListener('offline', handleOffline);
+          return ()=>{
+            window.removeEventListener("online", handleOnline);
+            window.removeEventListener("offline", handleOffline);
+          };
+        },[])
+        return isOnline;
+      }
+    </pre>
+    <p>Now we can use them like any other hooks:</p>
+    <pre>     
+    function StatusBar() {
+      const isOnline = useOnlineStatus();
+      return <h1>{isOnline ? "✅ Online" : "❌ Disconnected"}</h1>;
+    }
+
+    function SaveButton() {
+      const isOnline = useOnlineStatus();
+
+      function handleSaveClick() {
+        console.log("✅ Progress saved");
+      }
+
+      return (
+        &lt;button disabled={!isOnline} onClick={handleSaveClick}&gt;
+          {isOnline ? "Save progress" : "Reconnecting..."}
+        &lt;/button&gt;
+      );
+    }
+    </pre>
+    <div id="app"></div>
+    <h2>Hook name always starts with <code>use</code></h2>
+    <p>
+      When building custom hooks, the naming convention is that React component
+      starts with capital letter like <code>StatusBar</code> while Hooks must
+      start with <code>use</code> followed by capital letter like
+      <code>useState</code>
+    </p>
+    <p>
+      This convention helps in a way that we can distinguish the React parts
+      from others. For example, anything that starts with <code>get</code> will
+      not contain a react state, since it's not a hook, which starts with
+      <code>use</code>
+    </p>
+    <p>
+      For similar reason, name the functions that does not call any hooks as
+      regular functions that does not start with <code>use</code>. The
+      <code>use</code> prefix should only be used with a function that uses a
+      hook (which makes it a hook)
+    </p>
+    <h2>Custom hooks enables sharing stateful logic, but not state.</h2>
+    <p>
+      One important thing to note is that, custom hook only shares the
+      duplicated logic, not the state. Even in the previous example, they return
+      the same state variable, that does not make it a shared common variable.
+    </p>
+    <p>
+      For example, if we have a form that lets the user to enter their first and
+      last name, which generates a greeting containing their name. There would
+      be duplicated code in defining state, handler and attribute like:
+    </p>
+    <pre>
+      const [firstName, setFirstName] = useState('Mary');
+      const [lastName, setLastName] = useState('Poppins');
+    
+      function handleFirstNameChange(e) {
+        setFirstName(e.target.value);
+      }
+    
+      function handleLastNameChange(e) {
+        setLastName(e.target.value);
+      }
+    
+      return (
+        //...
+            First name:
+            &lt;input value={firstName} onChange={handleFirstNameChange} /&gt;
+        //...
+            Last name:
+            &lt;input value={lastName} onChange={handleLastNameChange} /&gt;
+      );
+    </pre>
+    <p>We can extract the duplicated logic into a custom hook:</p>
+    <pre>
+      function useFormInput(initialValue) {
+        const [value, setValue] = useState(initialValue);
+        
+        function handleChange(e){
+          setValue(e.target.value)
+        }
+
+        const inputProps ={
+          value: value,
+          onChange: handleChange
+        };
+        
+        return inputProps;
+      }
+    </pre>
+    <p>
+      Then we declare two state variables that accepts the custom hook, and use
+      the object from the hook to finish the logic:
+    </p>
+    <pre>
+      const firstNameProps= useFormInput('Mary');
+      const lastNameProps = useFormInput('Poppins');
+    
+      return (
+        //...
+            First name:
+            &lt;input {...firstNameProps} /&gt;
+        //...
+            Last name:
+            &lt;input {lastNameProps} /&gt;
+      );
+    </pre>
+    <p>
+      See, the object returned from the custom <code>useFormInput</code> hook
+      have a <code>value</code> containing the state variable. It was declared
+      twice as a variable in the function. This shows how custom hook enables
+      sharing of logic but not states. Each call to the hook is completely
+      independent. To share a state, use prop lifting.
+    </p>
+    <h2>Passing reactive values between Hooks</h2>
+    <p>
+      The code inside custom hook would re-run during every render with the
+      component, thus, it must be pure like components. This also means that the
+      Hooks would always receive the latest props and state.
+    </p>
+    <p>
+      Remember the previous chatroom example in
+      <a href="Lifecycle of reactive effects.html"
+        >Lifecycle of reactive Effects</a
+      >? Now we also make the URL editable by passing it down as props:
+    </p>
+    <pre>
+      function ChatRoom({ roomId }) {
+        const [serverUrl, setServerUrl] = useState('https://somewebsite')
+        useEffect(() => {
+          const options = {
+            serverUrl: serverUrl,
+            roomId: roomId,
+          };
+          const connection = createConnection(options);
+          connection.connect();
+          return () => {
+            connection.disconnect();
+          };
+        }, [roomId, serverUrl]);
+      
+        return (
+          &lt;&gt;
+          &lt;label&gt;
+            Server URL: 
+            &lt;input value={serverUrl} onChange={e=&gt; setServerUrl(e.target.value)} /&gt;
+          &lt;/label&gt;
+          &lt;h1&gt;
+            Welcome to the {roomId} room! (connected in {serverUrl})
+          &lt;/h1&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <p>
+      We can move the Effect's code into a custom hook, passing
+      <code>serverUrl</code> state via props:
+    </p>
+    <pre>
+      function useChatRoom({ serverUrl, roomId }) {
+        useEffect(() => {
+          const options = {
+            serverUrl: serverUrl,
+            roomId: roomId,
+          };
+          const connection = createConnection(options);
+          connection.connect();
+          return () => {
+            connection.disconnect();
+          };
+        }, [roomId, serverUrl]);
+      }
+      
+      function ChatRoomViaHook({ roomId }) {
+        const [serverUrl, setServerUrl] = useState("https://somewebsite");
+      
+        useChatRoom({
+          roomId: roomId,
+          serverUrl: serverUrl,
+        });
+      
+        return (
+          &lt;&gt;
+            &lt;label&gt;
+              Server URL:
+              &lt;input
+                value={serverUrl}
+                onChange={(e) =&gt; setServerUrl(e.target.value)}
+              /&gt;
+            &lt;/label&gt;
+            &lt;h1&gt;
+              Welcome to the {roomId} room! (connected in {serverUrl})
+            &lt;/h1&gt;
+          &lt;/&gt;
+        );
+      }
+    </pre>
+    <div id="chat"></div>
+    <p>
+      Now, every time the <code>ChatRoomViaHook</code> re-renders, it passes the
+      latest <code>roomId</code> and <code>serverUrl</code> to the custom Hook
+      <code>useChatRoom</code>. This lets the Effect re-connects to the chat
+      when the values are different from last render.
+    </p>
+    <h2>When to use custom Hook</h2>
+    <p>
+      There's no need to use custom hook for every little pieces of duplicated
+      code. However, while writing an Effect, consider if the Effect would be
+      clearer to wrap it in a custom hook. Since using Effect means stepping
+      outside of React, wrapping it in a custom hook could precisely tell the
+      purpose of the code, and the data flowing through it.
+    </p>
+    <p>
+      As a general rule, choose a clear name for the Hook, it should be clear
+      enough for anyone to grasp what the hook does, takes and returns without
+      looking into the code inside the hook. Also, keep custom hook focused on
+      high level use cases. Don't create hooks for 'lifecycles' as an escape for
+      <code>useEffect()</code>
+    </p>
+  </body>
+</html>

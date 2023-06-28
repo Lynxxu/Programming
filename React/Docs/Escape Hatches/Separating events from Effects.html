@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Separating Events from Effects</title>
+  </head>
+  <body>
+    <h1>Separating Events from Effects</h1>
+    <p>
+      Event handlers re-run only when the interaction occurs again. Effect on
+      the other hand, runs again if their dependencies have changed from last
+      render.
+    </p>
+    <p></p>
+    <h2>Reactive values & reactive logic</h2>
+    <p>
+      Most of time, we shall say that event handlers are triggered 'manually'.
+      For example, clicking a button. Effect on the other hand, should be
+      automatic, where they run and re-run as needed for synchonization.
+    </p>
+    <p>
+      Props, state and variables delcared inside a component are called reactive
+      values. They can change due to a re-render. For example, the
+      <code>roomId</code> and <code>message</code> below are reactive values
+      while <code>serverUrl</code> is not reactive.
+    </p>
+    <pre>
+    const serverUrl = 'https://localhost:1234';
+
+    function ChatRoom({ roomId }) {
+        const [message, setMessage] = useState('');
+    
+        useEffect(() => {
+        const connection = createConnection(serverUrl, roomId);
+        connection.connect();
+        return () => connection.disconnect();
+        }, [roomId]);
+    
+        function handleSendClick() {
+        sendMessage(message);
+        }
+    }
+    </pre>
+    <p>
+      The reactive values like <code>message</code> and <code>roomId</code> can
+      be edited by the user, which triggers a re-render. Generally, logic inside
+      event handlers are not reactive, since they won't run again until the user
+      triggers it. The logic inside Effect are reactive, they can receive
+      reactive values due to re-render via dependencies.
+    </p>
+    <p></p>
+  </body>
+</html>
