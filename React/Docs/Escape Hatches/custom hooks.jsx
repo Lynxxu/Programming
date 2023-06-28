@@ -65,35 +65,35 @@ function createConnection({ serverUrl, roomId }) {
   };
 }
 
-function ChatRoom({ roomId }) {
-  const [serverUrl, setServerUrl] = useState("https://somewebsite");
-  useEffect(() => {
-    const options = {
-      serverUrl: serverUrl,
-      roomId: roomId,
-    };
-    const connection = createConnection(options);
-    connection.connect();
-    return () => {
-      connection.disconnect();
-    };
-  }, [roomId, serverUrl]);
+// function ChatRoom({ roomId }) {
+//   const [serverUrl, setServerUrl] = useState("https://somewebsite");
+//   useEffect(() => {
+//     const options = {
+//       serverUrl: serverUrl,
+//       roomId: roomId,
+//     };
+//     const connection = createConnection(options);
+//     connection.connect();
+//     return () => {
+//       connection.disconnect();
+//     };
+//   }, [roomId, serverUrl]);
 
-  return (
-    <>
-      <label>
-        Server URL:
-        <input
-          value={serverUrl}
-          onChange={(e) => setServerUrl(e.target.value)}
-        />
-      </label>
-      <h1>
-        Welcome to the {roomId} room! (connected in {serverUrl})
-      </h1>
-    </>
-  );
-}
+//   return (
+//     <>
+//       <label>
+//         Server URL:
+//         <input
+//           value={serverUrl}
+//           onChange={(e) => setServerUrl(e.target.value)}
+//         />
+//       </label>
+//       <h1>
+//         Welcome to the {roomId} room! (connected in {serverUrl})
+//       </h1>
+//     </>
+//   );
+// }
 
 function useChatRoom({ serverUrl, roomId }) {
   useEffect(() => {
@@ -109,7 +109,7 @@ function useChatRoom({ serverUrl, roomId }) {
   }, [roomId, serverUrl]);
 }
 
-function ChatRoomViaHook({ roomId }) {
+function ChatRoom({ roomId }) {
   const [serverUrl, setServerUrl] = useState("https://somewebsite");
 
   useChatRoom({
@@ -133,5 +133,23 @@ function ChatRoomViaHook({ roomId }) {
   );
 }
 
+function App2() {
+  const [roomId, setRoomId] = useState("general");
+  return (
+    <>
+      <label>
+        choose the chat room : {""}
+        <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
+          <option value="general">general</option>
+          <option value="travel">travel</option>
+          <option value="music">music</option>
+        </select>
+      </label>
+      <hr />
+      <ChatRoom roomId={roomId} />
+    </>
+  );
+}
+
 const chat = createRoot(document.getElementById("chat"));
-chat.render(<ChatRoomViaHook />);
+chat.render(<App2 />);
